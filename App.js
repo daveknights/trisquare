@@ -49,10 +49,10 @@ export default function App() {
                         options={{headerShown: false, ...headerStyles}} />
                     <Stack.Screen name="Instructions"
                         component={Instructions}
-                        options={{...headerStyles}} />
+                        options={{...headerStyles, animation: 'slide_from_right'}} />
                     <Stack.Screen name="ClearData"
                         component={ClearData}
-                        options={{title: 'Clear data', ...headerStyles}} />
+                        options={{title: 'Clear data', ...headerStyles, animation: 'slide_from_right'}} />
                 </Stack.Navigator>
             </NavigationContainer>
             <StatusBar style="auto" />
