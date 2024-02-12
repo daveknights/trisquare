@@ -1,20 +1,61 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { useEffect, useState } from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import ScoreContext from './context/scoreContext';
+import Home from './components/Home';
+import Game from './components/Game';
+import Instructions from './components/Instructions';
+import ClearData from './components/ClearData';
+import colours from './defaults/colours';
+const headerStyles = {
+    headerStyle: {
+        backgroundColor: colours.primaryColour,
+      },
+    headerTintColor: colours.lightText,
+};
+
+const Stack = createNativeStackNavigator();
 
 export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
-}
+    const [highScore, setHighScore] = useState(0);
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+    const getHighScore = async () => {
+        try {
+            const value = await AsyncStorage.getItem('tri-square-high-score');
+
+            if (value !== null) {
+                setHighScore(Number(value));
+            }
+        } catch (e) {
+            // error reading value
+        }
+    };
+
+    useEffect(() => {
+        getHighScore()
+    }, []);
+
+    return (
+        <ScoreContext.Provider value={{highScore: highScore, setHighScore: setHighScore}}>
+            <NavigationContainer>
+                <Stack.Navigator>
+                    <Stack.Screen name="Home"
+                        component={Home}
+                        options={{headerShown: false, ...headerStyles}} />
+                    <Stack.Screen name="Game"
+                        component={Game}
+                        options={{headerShown: false, ...headerStyles}} />
+                    <Stack.Screen name="Instructions"
+                        component={Instructions}
+                        options={{...headerStyles}} />
+                    <Stack.Screen name="ClearData"
+                        component={ClearData}
+                        options={{title: 'Clear data', ...headerStyles}} />
+                </Stack.Navigator>
+            </NavigationContainer>
+            <StatusBar style="auto" />
+        </ScoreContext.Provider>
+    );
+}
