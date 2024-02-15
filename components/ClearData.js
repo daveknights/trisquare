@@ -1,5 +1,6 @@
 import { StyleSheet, Text, View } from 'react-native';
 import { useState, useContext, useEffect } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import ColourButton from './ColourButton';
 import ScoreContext from '../context/scoreContext';
 import containerStyles from '../defaults/containerStyles';
@@ -14,14 +15,14 @@ export default function ClearData() {
         dataCleared && scoreContext.setHighScore(0);
     }, [dataCleared]);
 
-    const clearData = async () => {
+    const clearUserData = async () => {
         try {
-            await AsyncStorage.removeItem('tri-square-high-score');
+            await AsyncStorage.removeItem('@triSquareData');
+
+            setDataCleared(true);
         } catch(e) {
           // remove error
         }
-
-        setDataCleared(true);
     };
 
     return (
@@ -38,7 +39,7 @@ export default function ClearData() {
                 bgColour="red"
                 textColour="primaryColour"
                 action="clearData"
-                onPress={clearData} />
+                onPress={clearUserData} />
             {dataCleared && <Text style={styles.dataCleared}>Your high score data has been removed.</Text>}
         </View>
     );

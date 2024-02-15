@@ -40,14 +40,16 @@ export default function Game({ navigation }) {
     const [gameOver, setGameOver] = useState(null);
     const scoreContext = useContext(ScoreContext);
 
-    const saveHighScore = async (value) => {
+    const saveHighScore = async value => {
         try {
-            await AsyncStorage.setItem('tri-square-high-score', value.toString());
+            const jsonData = JSON.stringify({normalHighScore: value});
+
+            await AsyncStorage.setItem('@triSquareData', jsonData);
         } catch (e) {
             // saving error
         }
 
-        scoreContext.setHighScore(score);
+        scoreContext.setHighScore(value);
     };
 
     const getEmptyTile = () => emptyTiles[Math.floor(Math.random() * emptyTiles.length)];
