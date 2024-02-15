@@ -26,9 +26,7 @@ export default function App() {
             const jsonData = await AsyncStorage.getItem('@triSquareData');
             const allData = JSON.parse(jsonData);
 
-            if (value !== null) {
-                setHighScore(allData.normalHighScore);
-            }
+            allData !== null && setHighScore(allData.normalHighScore);
         } catch (e) {
             // error reading value
         }
