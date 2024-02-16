@@ -86,8 +86,7 @@ export default function Game({ navigation }) {
     // Add new tile
     useEffect(() => {
         let timer;
-
-        if (playing && canAddTile) {
+        if (playing && canAddTile) { //
             timer = setTimeout(() => {
                 const newColour = getColour();
                 let newBlockedTile;
@@ -198,11 +197,12 @@ export default function Game({ navigation }) {
     const handleTilePress = key => setSelectedTile(key);
 
     const handlePalettePress = colour => {
-        emptyTiles.length === 1 && setGridFull(true);
-        setSelectedColour(colour);
-        setTiles(prevTiles => ({...prevTiles, ...{[selectedTile]: colour}}));
-        setEmptyTiles(emptyTiles.filter(key => key !== selectedTile));
-
+        if (selectedTile) {
+            emptyTiles.length === 1 && setGridFull(true);
+            setSelectedColour(colour);
+            setTiles(prevTiles => ({...prevTiles, ...{[selectedTile]: colour}}));
+            setEmptyTiles(emptyTiles.filter(key => key !== selectedTile));
+        }
     };
 
     return (
