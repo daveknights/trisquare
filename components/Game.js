@@ -37,6 +37,7 @@ export default function Game({ navigation }) {
     const [canAddTile, setCanAddTile] = useState(null);
     const [lastTile, setLastTile] = useState(false);
     const [score, setScore] = useState(null);
+    const [gridFull, setGridFull] = useState(false);
     const [gameOver, setGameOver] = useState(null);
     const scoreContext = useContext(ScoreContext);
 
@@ -96,8 +97,7 @@ export default function Game({ navigation }) {
                     newBlockedTile = emptyTiles[0];
                     newTile = blockedTile;
                     setPlaying(false);
-                    setGameOver(true);
-                    score > scoreContext.highScore && saveHighScore(score);
+                    setGridFull(true);
                 } else {
                     newBlockedTile = getEmptyTile();
 
@@ -131,9 +131,7 @@ export default function Game({ navigation }) {
         switch (emptyTiles.length) {
             case 0:
                 setPlaying(false);
-                setGameOver(true);
-                // check/set high score
-                score > scoreContext.highScore && saveHighScore(score);
+                setGridFull(true);
                 break;
             case 1:
                 setLastTile(true);
@@ -142,6 +140,7 @@ export default function Game({ navigation }) {
                 setScore(score => score + 5);
             default:
                 lastTile && setLastTile(false);
+                gridFull && setGridFull(false);
                 break;
         }
     }, [emptyTiles]);
@@ -172,6 +171,7 @@ export default function Game({ navigation }) {
                         setCanAddTile(true);
                         setSelectedColour('');
                         setSelectedTile(null);
+                        setGridFull(false);
 
                         clearTimeout(timer);
                     }, 250);
@@ -184,6 +184,11 @@ export default function Game({ navigation }) {
                 setCanAddTile(true);
                 setSelectedColour('');
                 setSelectedTile(null);
+
+                if (gridFull) {
+                    setGameOver(true);
+                    score > scoreContext.highScore && saveHighScore(score);
+                }
             }
         }
 
@@ -193,9 +198,11 @@ export default function Game({ navigation }) {
     const handleTilePress = key => setSelectedTile(key);
 
     const handlePalettePress = colour => {
+        emptyTiles.length === 1 && setGridFull(true);
         setSelectedColour(colour);
         setTiles(prevTiles => ({...prevTiles, ...{[selectedTile]: colour}}));
         setEmptyTiles(emptyTiles.filter(key => key !== selectedTile));
+
     };
 
     return (
