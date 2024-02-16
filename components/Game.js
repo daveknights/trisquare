@@ -28,7 +28,6 @@ const shuffle = arrayToShuffle => {
 };
 
 export default function Game({ navigation }) {
-    const [playing, setPlaying] = useState(false);
     const [tiles, setTiles] = useState(initialTiles);
     const [emptyTiles, setEmptyTiles] = useState([...Object.keys(initialTiles)]);
     const [selectedTile, setSelectedTile] = useState(null);
@@ -77,7 +76,6 @@ export default function Game({ navigation }) {
         setCanAddTile(false);
         setScore(0);
         setGameOver(false);
-        setPlaying(true);
     };
 
     useEffect(() => {
@@ -86,7 +84,8 @@ export default function Game({ navigation }) {
     // Add new tile
     useEffect(() => {
         let timer;
-        if (playing && canAddTile) { //
+
+        if (canAddTile) {
             timer = setTimeout(() => {
                 const newColour = getColour();
                 let newBlockedTile;
@@ -95,7 +94,6 @@ export default function Game({ navigation }) {
                 if (lastTile) {
                     newBlockedTile = emptyTiles[0];
                     newTile = blockedTile;
-                    setPlaying(false);
                     setGridFull(true);
                 } else {
                     newBlockedTile = getEmptyTile();
@@ -129,7 +127,6 @@ export default function Game({ navigation }) {
     useEffect(() => {
         switch (emptyTiles.length) {
             case 0:
-                setPlaying(false);
                 setGridFull(true);
                 break;
             case 1:
@@ -165,7 +162,6 @@ export default function Game({ navigation }) {
                             [`t${combo[0]}`]: '',
                             [`t${combo[1]}`]: ''
                         }));
-                        setPlaying(true);
                         setScore(score => score + 1);
                         setCanAddTile(true);
                         setSelectedColour('');
@@ -180,13 +176,15 @@ export default function Game({ navigation }) {
             }
 
             if (!comboMatch) {
-                setCanAddTile(true);
                 setSelectedColour('');
                 setSelectedTile(null);
 
                 if (gridFull) {
                     setGameOver(true);
+                    setCanAddTile(false);
                     score > scoreContext.highScore && saveHighScore(score);
+                } else {
+                    setCanAddTile(true);
                 }
             }
         }
