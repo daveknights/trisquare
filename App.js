@@ -3,23 +3,25 @@ import { useEffect, useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import ScoreContext from './context/scoreContext';
+import GameContext from './context/gameContext';
 import Home from './components/Home';
 import Game from './components/Game';
 import Instructions from './components/Instructions';
 import ClearData from './components/ClearData';
-import colours from './defaults/colours';
-const headerStyles = {
-    headerStyle: {
-        backgroundColor: colours.primaryColour,
-      },
-    headerTintColor: colours.lightText,
-};
+import { darkTheme, lightTheme } from './defaults/themes';
 
 const Stack = createNativeStackNavigator();
 
 export default function App() {
+    const [theme, setTheme] = useState(darkTheme);
     const [highScore, setHighScore] = useState(0);
+
+    const headerStyles = {
+        headerStyle: {
+            backgroundColor: theme.bgColour,
+          },
+        headerTintColor: theme.textColour,
+    };
 
     const getHighScore = async () => {
         try {
@@ -37,7 +39,7 @@ export default function App() {
     }, []);
 
     return (
-        <ScoreContext.Provider value={{highScore: highScore, setHighScore: setHighScore}}>
+        <GameContext.Provider value={{theme: theme, highScore: highScore, setHighScore: setHighScore}}>
             <NavigationContainer>
                 <Stack.Navigator>
                     <Stack.Screen name="Home"
@@ -55,6 +57,6 @@ export default function App() {
                 </Stack.Navigator>
             </NavigationContainer>
             <StatusBar style="auto" />
-        </ScoreContext.Provider>
+        </GameContext.Provider>
     );
 }

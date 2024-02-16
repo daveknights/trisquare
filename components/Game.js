@@ -2,13 +2,11 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useEffect, useState, useContext } from 'react';
 import { StyleSheet, Text, View, Pressable, TouchableOpacity, Image, Dimensions } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import ScoreContext from '../context/scoreContext';
+import GameContext from '../context/gameContext';
 import containerStyles from '../defaults/containerStyles';
 import colours from '../defaults/colours';
-
 const initialTiles = {'t1':'', 't2':'', 't3':'', 't4':'', 't5':'', 't6':'', 't7':'', 't8':'', 't9':''};
 const tileColours = ['red', 'orange', 'yellow', 'green', 'blue'];
-
 const combos = {
     t1: [[2,3], [2,4], [2,5], [4,5], [4,7]],
     t2: [[1,3], [1,4], [1,5], [3,5], [3,6], [4,5], [5,6], [5,8]],
@@ -20,6 +18,7 @@ const combos = {
     t8: [[2,5], [4,5], [4,7], [5,6], [5,7], [5,9], [6,9], [7,9]],
     t9: [[3,6], [5,6], [5,8], [6,8], [7,8]],
 }
+
 const shuffle = arrayToShuffle => {
     return arrayToShuffle.map(value => ({value, sort: Math.random()}))
             .sort((a, b) => a.sort - b.sort)
@@ -38,7 +37,8 @@ export default function Game({ navigation }) {
     const [score, setScore] = useState(null);
     const [gridFull, setGridFull] = useState(false);
     const [gameOver, setGameOver] = useState(null);
-    const scoreContext = useContext(ScoreContext);
+    const gameContext = useContext(GameContext);
+    const styles = createStyles(gameContext.theme);
 
     const saveHighScore = async value => {
         try {
@@ -49,7 +49,7 @@ export default function Game({ navigation }) {
             // saving error
         }
 
-        scoreContext.setHighScore(value);
+        gameContext.setHighScore(value);
     };
 
     const getEmptyTile = () => emptyTiles[Math.floor(Math.random() * emptyTiles.length)];
@@ -182,7 +182,7 @@ export default function Game({ navigation }) {
                 if (gridFull) {
                     setGameOver(true);
                     setCanAddTile(false);
-                    score > scoreContext.highScore && saveHighScore(score);
+                    score > gameContext.highScore && saveHighScore(score);
                 } else {
                     setCanAddTile(true);
                 }
@@ -204,10 +204,10 @@ export default function Game({ navigation }) {
     };
 
     return (
-        <View style={{...styles.container, paddingTop: 80}}>
+        <View style={styles.container}>
             <View style={styles.bestScoreArea}>
                 <Text style={styles.best}>Best: </Text>
-                <Text style={styles.bestScore}>{scoreContext.highScore}</Text>
+                <Text style={styles.bestScore}>{gameContext.highScore}</Text>
             </View>
             <View style={styles.scoreArea}>
                 <Text style={styles.score}>Score: </Text>
@@ -215,7 +215,7 @@ export default function Game({ navigation }) {
             </View>
             <View style={styles.grid}>
                 {Object.entries(tiles).map(([k, col]) => {
-                    let tileColour =  colours.tileGrads['blankColour'];
+                    let tileColour =  gameContext.theme.tileGrads['blankColour'];
                     let tilePress = () => handleTilePress(k);
                     let borderRadius = null;
                     let blocked = null;
@@ -228,12 +228,12 @@ export default function Game({ navigation }) {
                                 </>;
                         tilePress = null;
                     } else if (col) {
-                        tileColour = colours.tileGrads[col];
+                        tileColour = gameContext.theme.tileGrads[col];
                         tilePress = null;
                     }
 
                     if (k === selectedTile) {
-                        selected = {borderColor: 'lime', borderWidth: 3}
+                        selected = {borderColor: '#00ef00', borderWidth: 5}
                     }
 
                     switch (k) {
@@ -251,14 +251,14 @@ export default function Game({ navigation }) {
                             break;
                     }
 
-                    return !col || col === 'blocked' ? <Pressable key={k} onPress={tilePress} style={{...styles.tile, backgroundColor: colours.grey, ...borderRadius, ...selected}}>
+                    return !col || col === 'blocked' ? <Pressable key={k} onPress={tilePress} style={{...styles.tile, backgroundColor: gameContext.theme.gridColour, ...borderRadius, ...selected}}>
                                                             {blocked}
                                                         </Pressable> :
                                                         <LinearGradient key={k} colors={tileColour} style={{...styles.tile, ...borderRadius, ...selected}} />;
                 })}
             </View>
             <View style={styles.colourPalette}>
-                {tileColours.map(colour => colour !== 'blankColour' && <LinearGradient key={colour} colors={colours.tileGrads[colour]} style={{...styles.paletteColour}}>
+                {tileColours.map(colour => colour !== 'blankColour' && <LinearGradient key={colour} colors={gameContext.theme.tileGrads[colour]} style={{...styles.paletteColour}}>
                                             <TouchableOpacity onPress={() => handlePalettePress(colour)} style={{...styles.paletteColour}} />
                                         </LinearGradient>)}
             </View>
@@ -278,8 +278,12 @@ export default function Game({ navigation }) {
     )
 }
 
-const styles = StyleSheet.create({
-    container: {...containerStyles},
+const createStyles = theme => StyleSheet.create({
+    container: {
+        backgroundColor: theme.bgColour,
+        paddingTop: 80,
+        ...containerStyles,
+    },
     grid: {
         aspectRatio: 1/1,
         borderRadius: 15,
@@ -287,9 +291,9 @@ const styles = StyleSheet.create({
         flexWrap: 'wrap',
         gap: 2,
         overflow: 'hidden',
-        paddingLeft: 16,
-        paddingRight: 16,
-        width: '100%',
+        marginLeft: 40,
+        marginRight: 40,
+        width: (Dimensions.get('window').width - 80),
     },
     tile: {
         alignItems: 'center',
@@ -300,7 +304,7 @@ const styles = StyleSheet.create({
         width: (Dimensions.get('window').width - 84) / 3,
     },
     blocked: {
-        backgroundColor: colours.primaryColour,
+        backgroundColor: theme.bgColour,
         height: 56,
         position: 'absolute',
         width: 6,
@@ -309,11 +313,10 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         gap: 2,
         marginTop: 30,
-        width: (Dimensions.get('window').width - 60),
     },
     paletteColour: {
         aspectRatio: 1/1,
-        width: (Dimensions.get('window').width - 65) / 5,
+        width: (Dimensions.get('window').width - 68) / 5,
     },
     bestScoreArea: {
         flexDirection: 'row',
@@ -321,11 +324,11 @@ const styles = StyleSheet.create({
         marginLeft: 'auto',
     },
     best: {
-        color: colours.lightText,
+        color: theme.textColour,
         fontSize: 20,
     },
     bestScore: {
-        color: colours.lightText,
+        color: theme.textColour,
         fontSize: 20,
         fontWeight: 'bold',
     },
@@ -334,11 +337,11 @@ const styles = StyleSheet.create({
         marginBottom: 20,
     },
     score: {
-        color: colours.lightText,
+        color: theme.textColour,
         fontSize: 30,
     },
     scoreTotal: {
-        color: colours.lightText,
+        color: theme.textColour,
         fontSize: 30,
         fontWeight: 'bold',
     },
@@ -347,7 +350,9 @@ const styles = StyleSheet.create({
         gap: 20,
     },
     button: {
+        borderColor: colours.primary,
         borderRadius: 15,
+        borderWidth: 1,
         marginTop: 30,
         paddingBottom: 12,
         paddingLeft: 50,

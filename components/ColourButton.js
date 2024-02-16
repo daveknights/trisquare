@@ -1,7 +1,7 @@
 import { StyleSheet, Text, TouchableOpacity, Dimensions } from 'react-native';
 import colours from '../defaults/colours';
 
-export default function SolidButton({ text, bgColour, textColour, action, onPress }) {
+export default function SolidButton({ text, bgColour, action, onPress }) {
     const onPressAction = action => {
         switch (action) {
             case 'playGame':
@@ -17,14 +17,16 @@ export default function SolidButton({ text, bgColour, textColour, action, onPres
 
     return (
         <TouchableOpacity style={{...styles.button,  backgroundColor: colours[bgColour]}} onPress={() => onPressAction(action)}>
-            <Text style={{...styles.buttonText, color: colours[textColour]}}>{text}</Text>
+            <Text style={{...styles.buttonText, color: colours.darkText}}>{text}</Text>
         </TouchableOpacity>
     );
 };
 
 const styles = StyleSheet.create({
     button: {
+        borderColor: colours.primary,
         borderRadius: 15,
+        borderWidth: 1,
         marginBottom: 30,
         paddingBottom: 10,
         paddingTop: 10,

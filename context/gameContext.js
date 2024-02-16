@@ -1,7 +1,7 @@
 import React from "react";
 
 export default scoreContext = React.createContext({
-    score: 0,
+    theme: {},
     highScore: 0,
     setHighScore: () => {},
 });

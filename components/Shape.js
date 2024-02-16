@@ -15,11 +15,13 @@ const styles = StyleSheet.create({
     shape: {
         flexDirection: 'row',
         flexWrap: 'wrap',
-        gap: 2,
+        gap: 1,
     },
     tile: {
         backgroundColor: colours.green,
-        height: 20,
-        width: 20,
+        borderColor: colours.primary,
+        borderWidth: 1,
+        height: 22,
+        width: 22,
     }
 });

@@ -1,5 +1,4 @@
 import { StyleSheet, Text, TouchableOpacity } from 'react-native';
-import colours from '../defaults/colours';
 
 export default function SolidButton({ text, textColour, action, onPress }) {
     const onPressAction = action => {
@@ -11,7 +10,7 @@ export default function SolidButton({ text, textColour, action, onPress }) {
 
     return (
         <TouchableOpacity style={styles.button} onPress={() => onPressAction(action)}>
-            <Text style={{...styles.buttonText, color: colours[textColour]}}>{text}</Text>
+            <Text style={{...styles.buttonText, color: textColour}}>{text}</Text>
         </TouchableOpacity>
     );
 };

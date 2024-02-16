@@ -1,12 +1,19 @@
 import { StyleSheet, Text, View, Dimensions } from 'react-native';
+import { useContext } from 'react';
 import containerStyles from '../defaults/containerStyles';
 import textStyles from '../defaults/textStyles';
 import Shape from './Shape';
-import colours from '../defaults/colours';
+import GameContext from '../context/gameContext';
 
 export default function Instructions() {
+    const gameContext = useContext(GameContext);
+    const styles = createStyles(gameContext.theme);
+
+    textStyles.heading.color = gameContext.theme.textColour;
+    textStyles.text.color = gameContext.theme.textColour;
+
     return (
-        <View style={{...containerStyles}}>
+        <View style={styles.container}>
             <Text style={{...textStyles.heading}}>How to play</Text>
             <Text style={{...textStyles.text}}>Select a free space on the grid, then choose a colour from the pallete.</Text>
             <Text style={{...textStyles.text}}>Score a point by matching colours in one of the following shapes:</Text>
@@ -33,7 +40,11 @@ export default function Instructions() {
     );
 };
 
-const styles = StyleSheet.create({
+const createStyles = theme => StyleSheet.create({
+    container: {
+        backgroundColor: theme.bgColour,
+        ...containerStyles,
+    },
     shapeRow: {
         alignItems: 'center',
         flexDirection: 'row',
@@ -50,7 +61,7 @@ const styles = StyleSheet.create({
     },
     blockedTile: {
         alignItems: 'center',
-        backgroundColor: colours.grey,
+        backgroundColor: theme.gridColour,
         height: 30,
         justifyContent: 'center',
         marginLeft: 'auto',
@@ -59,7 +70,7 @@ const styles = StyleSheet.create({
         width: 30,
     },
     xSymbol: {
-        color: colours.primaryColour,
+        color: theme.bgColour,
         fontSize: 16,
         fontWeight: 'bold',
     }

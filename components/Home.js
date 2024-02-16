@@ -2,15 +2,15 @@ import { StyleSheet, Text, View, Image } from 'react-native';
 import { useContext } from 'react';
 import ColourButton from './ColourButton';
 import TextButton from './TextButton';
-import ScoreContext from '../context/scoreContext';
+import GameContext from '../context/gameContext';
 import containerStyles from '../defaults/containerStyles';
-import colours from '../defaults/colours';
 
 export default function Home({ navigation }) {
-    const scoreContext = useContext(ScoreContext);
+    const gameContext = useContext(GameContext);
+    const styles = createStyles(gameContext.theme);
 
     return (
-        <View style={{...styles.container, paddingTop: 100}}>
+        <View style={styles.container}>
             <Image
                 style={styles.homescreenLogo}
                 source={require('../assets/homescreen-logo.png')}
@@ -18,25 +18,23 @@ export default function Home({ navigation }) {
             <Text style={styles.gameName}>TriSquare</Text>
             <View style={styles.bestScoreArea}>
                 <Text style={styles.best}>Best: </Text>
-                <Text style={styles.bestScore}>{scoreContext.highScore}</Text>
+                <Text style={styles.bestScore}>{gameContext.highScore}</Text>
             </View>
             <ColourButton
                 text="Play"
                 bgColour="green"
-                textColour="primaryColour"
                 action="playGame"
                 onPress={navigation}
             />
             <ColourButton
                 text="How to play"
                 bgColour="yellow"
-                textColour="primaryColour"
                 action="viewInstructions"
                 onPress={navigation}
             />
             <TextButton
                 text="Clear high score"
-                textColour="blue"
+                textColour={gameContext.theme.linkColour}
                 action="ClearData"
                 onPress={navigation}
             />
@@ -44,14 +42,18 @@ export default function Home({ navigation }) {
     );
 };
 
-const styles = StyleSheet.create({
-    container: {...containerStyles},
+const createStyles = theme => StyleSheet.create({
+    container: {
+        backgroundColor: theme.bgColour,
+        paddingTop: 100,
+        ...containerStyles,
+    },
     homescreenLogo: {
         height: 100,
         width: 109,
     },
     gameName: {
-        color: colours.lightText,
+        color: theme.textColour,
         fontSize: 40,
         fontWeight: 'bold',
     },
@@ -61,11 +63,11 @@ const styles = StyleSheet.create({
         marginTop: 90,
     },
     best: {
-        color: colours.lightText,
+        color: theme.textColour,
         fontSize: 20,
     },
     bestScore: {
-        color: colours.lightText,
+        color: theme.textColour,
         fontSize: 20,
         fontWeight: 'bold',
     },
