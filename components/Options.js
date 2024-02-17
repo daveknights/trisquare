@@ -36,7 +36,9 @@ export default function Options({ navigation }) {
         }
     };
 
-    const playViolet = () => {};
+    const handleBluePress = () => navigation.navigate('Game');
+
+    const handleVioletPress = () => {};
 
     textStyles.heading.color = gameContext.theme.textColour;
     textStyles.text.color = gameContext.theme.textColour;
@@ -61,12 +63,11 @@ export default function Options({ navigation }) {
             <ColourButton
                 text="5 colours"
                 bgColour="blue"
-                action="playGame"
-                onPress={navigation} />
+                onPress={handleBluePress} />
             <Text style={{...textStyles.text}}>Score 100 or more to unlock the violet tile.</Text>
             <Text style={{...textStyles.text}}>The game becomes slightly harder with 6 colours
                 as the chance of the colour of the added tile being one that will help you is reduced.</Text>
-            <TouchableOpacity style={{...buttonStyles.button, ...styles.disabledButton}} disabled={isVioloetDisabled} onPress={playViolet}>
+            <TouchableOpacity style={{...buttonStyles.button, ...styles.disabledButton}} disabled={isVioloetDisabled} onPress={handleVioletPress}>
                 {isVioloetDisabled &&
                     <Image
                     style={styles.padlockIcon}
