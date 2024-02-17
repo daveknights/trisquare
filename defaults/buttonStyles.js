@@ -9,7 +9,7 @@ export default buttonStyles = {
         marginBottom: 30,
         paddingBottom: 10,
         paddingTop: 10,
-        width: Dimensions.get('window').width - 160,
+        width: Dimensions.get('window').width - 140,
     },
     buttonText: {
         fontSize: 24,

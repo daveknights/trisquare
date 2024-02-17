@@ -5,12 +5,6 @@ import colours from '../defaults/colours';
 export default function SolidButton({ text, bgColour, action, onPress }) {
     const onPressAction = action => {
         switch (action) {
-            case 'playGame':
-                return onPress.navigate('Game')
-            case 'viewOptions':
-                return onPress.navigate('Options');
-            case 'viewInstructions':
-                return onPress.navigate('Instructions');
             case 'clearData':
                 return onPress();
             default:

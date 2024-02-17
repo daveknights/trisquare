@@ -2,6 +2,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useEffect, useState, useContext } from 'react';
 import { StyleSheet, Text, View, Pressable, TouchableOpacity, Image, Dimensions } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import IconButton from './IconButton';
 import GameContext from '../context/gameContext';
 import containerStyles from '../defaults/containerStyles';
 import colours from '../defaults/colours';
@@ -153,7 +154,6 @@ export default function Game({ navigation }) {
                 comboMatch = combo.every(colourMatch);
 
                 if (comboMatch) {
-                    // update score
                     timer = setTimeout(() => {
                         setEmptyTiles([...emptyTiles, selectedTile, `t${combo[0]}`, `t${combo[1]}`]);
                         setTiles(prevTiles => ({
@@ -202,6 +202,8 @@ export default function Game({ navigation }) {
             setEmptyTiles(emptyTiles.filter(key => key !== selectedTile));
         }
     };
+
+    const handleHomePress = () => navigation.navigate('Home');
 
     return (
         <View style={styles.container}>
@@ -263,16 +265,16 @@ export default function Game({ navigation }) {
                                         </LinearGradient>)}
             </View>
             {gameOver && <View style={styles.postGameOptions}>
-                            <TouchableOpacity style={{...styles.button, backgroundColor: colours.yellow}} onPress={() => navigation.navigate('Home')}>
-                                <Image
-                                    style={styles.buttonIcon}
-                                    source={require('../assets/home-icon.png')} />
-                            </TouchableOpacity>
-                            <TouchableOpacity style={{...styles.button, backgroundColor: colours.green}} onPress={startGame}>
-                                <Image
-                                    style={styles.buttonIcon}
-                                    source={require('../assets/play-icon.png')} />
-                            </TouchableOpacity>
+                            <IconButton
+                                path={require('../assets/home-icon.png')}
+                                bgColour="yellow"
+                                onPress={handleHomePress}
+                            />
+                            <IconButton
+                                path={require('../assets/play-icon.png')}
+                                bgColour="green"
+                                onPress={startGame}
+                            />
                         </View>}
         </View>
     )
@@ -348,6 +350,7 @@ const createStyles = theme => StyleSheet.create({
     postGameOptions: {
         flexDirection: 'row',
         gap: 20,
+        marginTop: 30,
     },
     button: {
         borderColor: colours.primary,

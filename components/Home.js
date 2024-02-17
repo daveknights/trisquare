@@ -1,6 +1,7 @@
 import { StyleSheet, Text, View, Image } from 'react-native';
 import { useContext } from 'react';
 import ColourButton from './ColourButton';
+import IconButton from './IconButton';
 import TextButton from './TextButton';
 import GameContext from '../context/gameContext';
 import containerStyles from '../defaults/containerStyles';
@@ -8,6 +9,10 @@ import containerStyles from '../defaults/containerStyles';
 export default function Home({ navigation }) {
     const gameContext = useContext(GameContext);
     const styles = createStyles(gameContext.theme);
+
+    const handleOptionsPress = () => navigation.navigate('Options');
+
+    const handleInfoPress = () => navigation.navigate('Instructions');
 
     return (
         <View style={styles.container}>
@@ -26,18 +31,18 @@ export default function Home({ navigation }) {
                 action="playGame"
                 onPress={navigation}
             />
-            <ColourButton
-                text="Options"
-                bgColour="yellow"
-                action="viewOptions"
-                onPress={navigation}
-            />
-            <ColourButton
-                text="How to play"
-                bgColour="yellow"
-                action="viewInstructions"
-                onPress={navigation}
-            />
+            <View style={styles.optionsInfo}>
+                <IconButton
+                    path={require('../assets/options-icon.png')}
+                    bgColour="yellow"
+                    onPress={handleOptionsPress}
+                />
+                <IconButton
+                    path={require('../assets/info-icon.png')}
+                    bgColour="lightBlue"
+                    onPress={handleInfoPress}
+                />
+            </View>
             <TextButton
                 text="Clear high score"
                 textColour={gameContext.theme.linkColour}
@@ -76,5 +81,9 @@ const createStyles = theme => StyleSheet.create({
         color: theme.textColour,
         fontSize: 20,
         fontWeight: 'bold',
+    },
+    optionsInfo: {
+        flexDirection: 'row',
+        gap: 20,
     },
 });
