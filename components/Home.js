@@ -16,6 +16,8 @@ export default function Home({ navigation }) {
 
     const handleInfoPress = () => navigation.navigate('Instructions');
 
+    const handleLinkToClearData = () => navigation.navigate('ClearData');
+
     return (
         <View style={styles.container}>
             <Image
@@ -48,8 +50,7 @@ export default function Home({ navigation }) {
             <TextButton
                 text="Clear high score"
                 textColour={gameContext.theme.linkColour}
-                action="ClearData"
-                onPress={navigation}
+                onPress={handleLinkToClearData}
             />
         </View>
     );

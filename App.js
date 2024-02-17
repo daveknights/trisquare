@@ -31,8 +31,6 @@ export default function App() {
             const allData = JSON.parse(jsonData);
 
             if (allData !== null) {
-                console.log(allData);
-
                 allData.normalHighScore && setHighScore(allData.normalHighScore);
 
                 if (allData.mode) {

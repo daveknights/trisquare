@@ -41,7 +41,6 @@ export default function ClearData() {
             <ColourButton
                 text="Clear"
                 bgColour="red"
-                action="clearData"
                 onPress={clearUserData} />
             {dataCleared && <Text style={styles.dataCleared}>Your high score data has been removed.</Text>}
         </View>
