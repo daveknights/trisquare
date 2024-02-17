@@ -33,7 +33,7 @@ export default function Instructions() {
                     <Text style={styles.xSymbol}>X</Text>
                 </View>
             </View>
-            <Text style={{...textStyles.text}}>A new tile is added to the grid and the blocked square chnages place after every turn.</Text>
+            <Text style={{...textStyles.text}}>A new tile is added to the grid and the blocked square changes place after every turn.</Text>
             <Text style={{...textStyles.text}}>Clear the grid and get a bonus 5 points.</Text>
             <Text style={{...textStyles.text}}>The game ends when you can no longer make a shape of 3 matching tiles.</Text>
         </View>
