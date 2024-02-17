@@ -14,6 +14,7 @@ import { darkTheme, lightTheme } from './defaults/themes';
 const Stack = createNativeStackNavigator();
 
 export default function App() {
+    const [mode, setMode] = useState('dark');
     const [theme, setTheme] = useState(darkTheme);
     const [highScore, setHighScore] = useState(0);
 
@@ -24,23 +25,33 @@ export default function App() {
         headerTintColor: theme.textColour,
     };
 
-    const getHighScore = async () => {
+    const getUserData = async () => {
         try {
             const jsonData = await AsyncStorage.getItem('@triSquareData');
             const allData = JSON.parse(jsonData);
 
-            allData !== null && setHighScore(allData.normalHighScore);
+            if (allData !== null) {
+                console.log(allData);
+
+                allData.normalHighScore && setHighScore(allData.normalHighScore);
+
+                if (allData.mode) {
+                    allData.mode === 'light' ? setTheme(lightTheme) : setTheme(darkTheme);
+
+                    setMode(allData.mode);
+                }
+            }
         } catch (e) {
             // error reading value
         }
     };
 
     useEffect(() => {
-        getHighScore()
+        getUserData();
     }, []);
 
     return (
-        <GameContext.Provider value={{theme: theme, highScore: highScore, setHighScore: setHighScore}}>
+        <GameContext.Provider value={{mode: mode, setMode: setMode, theme: theme, setTheme: setTheme, highScore: highScore, setHighScore: setHighScore}}>
             <NavigationContainer>
                 <Stack.Navigator>
                     <Stack.Screen name="Home"

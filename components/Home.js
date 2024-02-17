@@ -10,6 +10,8 @@ export default function Home({ navigation }) {
     const gameContext = useContext(GameContext);
     const styles = createStyles(gameContext.theme);
 
+    const handlePlayPress = () => navigation.navigate('Game');
+
     const handleOptionsPress = () => navigation.navigate('Options');
 
     const handleInfoPress = () => navigation.navigate('Instructions');
@@ -29,7 +31,7 @@ export default function Home({ navigation }) {
                 text="Play"
                 bgColour="green"
                 action="playGame"
-                onPress={navigation}
+                onPress={handlePlayPress}
             />
             <View style={styles.optionsInfo}>
                 <IconButton

@@ -43,9 +43,12 @@ export default function Game({ navigation }) {
 
     const saveHighScore = async value => {
         try {
-            const jsonData = JSON.stringify({normalHighScore: value});
+            const triSquareData = await AsyncStorage.getItem('@triSquareData');
+            const updatedData = JSON.parse(triSquareData);
 
-            await AsyncStorage.setItem('@triSquareData', jsonData);
+            updatedData.normalHighScore = value
+
+            await AsyncStorage.setItem('@triSquareData', JSON.stringify(updatedData));
         } catch (e) {
             // saving error
         }

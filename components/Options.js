@@ -1,17 +1,40 @@
 import { StyleSheet, Text, TouchableOpacity, View, Image, Dimensions } from 'react-native';
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import GameContext from '../context/gameContext';
 import ColourButton from './ColourButton';
 import containerStyles from '../defaults/containerStyles';
 import textStyles from '../defaults/textStyles';
 import buttonStyles from '../defaults/buttonStyles';
 import colours from '../defaults/colours';
+import { darkTheme, lightTheme } from '../defaults/themes';
 
 
 export default function Options({ navigation }) {
+    const [isDarkMode, setIsDarkMode] = useState(null);
     const [isVioloetDisabled, setIsVioloetDisabled] = useState(true);
     const gameContext = useContext(GameContext);
     const styles = createStyles(gameContext.theme);
+
+    useEffect(() => {
+        gameContext.mode === 'dark' ? setIsDarkMode(true) : setIsDarkMode(false);
+    }, [gameContext.mode]);
+
+    const handleModePress = async value => {
+        try {
+            const triSquareData = await AsyncStorage.getItem('@triSquareData');
+            const updatedData = JSON.parse(triSquareData);
+
+            updatedData.mode = value;
+
+            await AsyncStorage.setItem('@triSquareData', JSON.stringify(updatedData));
+
+            gameContext.setMode(value);
+            gameContext.setTheme(value === 'dark' ? darkTheme : lightTheme);
+        } catch (e) {
+            // saving error
+        }
+    };
 
     const playViolet = () => {};
 
@@ -23,12 +46,12 @@ export default function Options({ navigation }) {
             <Text style={{...textStyles.heading}}>Game options</Text>
             <Text style={styles.subHeading}>Mode</Text>
             <View style={styles.themeChoice}>
-                <TouchableOpacity disabled={true} style={{...styles.theme, ...styles.dark}}>
+                <TouchableOpacity disabled={isDarkMode} style={{...styles.theme, ...styles.dark}} onPress={() => handleModePress('dark')}>
                     <Image
                         style={styles.moonIcon}
                         source={require('../assets/moon-icon.png')} />
                 </TouchableOpacity>
-                <TouchableOpacity style={{...styles.theme, ...styles.light}}>
+                <TouchableOpacity disabled={!isDarkMode} style={{...styles.theme, ...styles.light}} onPress={() => handleModePress('light')}>
                     <Image
                         style={styles.sunIcon}
                     source={require('../assets/sun-icon.png')} />

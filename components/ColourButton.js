@@ -2,18 +2,9 @@ import { StyleSheet, Text, TouchableOpacity, Dimensions } from 'react-native';
 import buttonStyles from '../defaults/buttonStyles';
 import colours from '../defaults/colours';
 
-export default function SolidButton({ text, bgColour, action, onPress }) {
-    const onPressAction = action => {
-        switch (action) {
-            case 'clearData':
-                return onPress();
-            default:
-                break;
-        }
-    }
-
+export default function SolidButton({ text, bgColour, onPress }) {
     return (
-        <TouchableOpacity style={{...styles.button, backgroundColor: colours[bgColour]}} onPress={() => onPressAction(action)}>
+        <TouchableOpacity style={{...styles.button, backgroundColor: colours[bgColour]}} onPress={onPress}>
             <Text style={{...styles.buttonText, color: colours.darkText}}>{text}</Text>
         </TouchableOpacity>
     );
