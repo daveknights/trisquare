@@ -154,21 +154,22 @@ export default function Game({ navigation }) {
             let comboMatch = false;
 
             for (const combo of combos[selectedTile]) {
+                const selected = selectedTile;
                 comboMatch = combo.every(colourMatch);
 
                 if (comboMatch) {
                     timer = setTimeout(() => {
-                        setEmptyTiles([...emptyTiles, selectedTile, `t${combo[0]}`, `t${combo[1]}`]);
+                        setSelectedTile(null);
+                        setSelectedColour('');
+                        setEmptyTiles([...emptyTiles, selected, `t${combo[0]}`, `t${combo[1]}`]);
                         setTiles(prevTiles => ({
                             ...prevTiles,
-                            [selectedTile]: '',
+                            [selected]: '',
                             [`t${combo[0]}`]: '',
                             [`t${combo[1]}`]: ''
                         }));
                         setScore(score => score + 1);
                         setCanAddTile(true);
-                        setSelectedColour('');
-                        setSelectedTile(null);
                         setGridFull(false);
 
                         clearTimeout(timer);
