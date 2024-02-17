@@ -12,6 +12,9 @@ export default function ClearData() {
     const gameContext = useContext(GameContext);
     const styles = createStyles(gameContext.theme);
 
+    textStyles.heading.color = gameContext.theme.textColour;
+    textStyles.text.color = gameContext.theme.textColour;
+
     useEffect(() => {
         dataCleared && gameContext.setHighScore(0);
     }, [dataCleared]);

@@ -27,6 +27,12 @@ export default function Home({ navigation }) {
                 onPress={navigation}
             />
             <ColourButton
+                text="Options"
+                bgColour="yellow"
+                action="viewOptions"
+                onPress={navigation}
+            />
+            <ColourButton
                 text="How to play"
                 bgColour="yellow"
                 action="viewInstructions"

@@ -7,6 +7,7 @@ import GameContext from './context/gameContext';
 import Home from './components/Home';
 import Game from './components/Game';
 import Instructions from './components/Instructions';
+import Options from './components/Options';
 import ClearData from './components/ClearData';
 import { darkTheme, lightTheme } from './defaults/themes';
 
@@ -48,6 +49,9 @@ export default function App() {
                     <Stack.Screen name="Game"
                         component={Game}
                         options={{headerShown: false, ...headerStyles}} />
+                    <Stack.Screen name="Options"
+                        component={Options}
+                        options={{title: 'Options', ...headerStyles, animation: 'slide_from_right'}} />
                     <Stack.Screen name="Instructions"
                         component={Instructions}
                         options={{...headerStyles, animation: 'slide_from_right'}} />
