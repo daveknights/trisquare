@@ -11,6 +11,6 @@ export default textStyles = {
         alignSelf: 'flex-start',
         fontSize: 16,
         lineHeight: 22,
-        marginBottom: 24,
+        marginBottom: 20,
     }
 };

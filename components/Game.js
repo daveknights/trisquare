@@ -39,14 +39,25 @@ export default function Game({ navigation }) {
     const [gridFull, setGridFull] = useState(false);
     const [gameOver, setGameOver] = useState(null);
     const gameContext = useContext(GameContext);
-    const styles = createStyles(gameContext.theme);
+    const styles = createStyles(gameContext.theme, gameContext.playViolet);
+
+
+    useEffect(() => {
+        gameContext.playViolet && tileColours.push('violet');
+
+        return () => tileColours.length === 6 && tileColours.pop();
+    }, []);
 
     const saveHighScore = async value => {
         try {
             const triSquareData = await AsyncStorage.getItem('@triSquareData');
             const updatedData = JSON.parse(triSquareData);
 
-            updatedData.normalHighScore = value
+            updatedData.normalHighScore = value;
+
+            if (value >= 100 && !updatedData.violetUnlocked) {
+                updatedData.violetUnlocked = true;
+            }
 
             await AsyncStorage.setItem('@triSquareData', JSON.stringify(updatedData));
         } catch (e) {
@@ -58,7 +69,7 @@ export default function Game({ navigation }) {
 
     const getEmptyTile = () => emptyTiles[Math.floor(Math.random() * emptyTiles.length)];
 
-    const getColour = () => tileColours[Math.floor(Math.random() * 5)];
+    const getColour = () => tileColours[Math.floor(Math.random() * (gameContext.playViolet ? 6 : 5))];
     // Initial grid state
     const startGame = () => {
         const startingTiles = shuffle([...Object.keys(initialTiles)]);
@@ -284,7 +295,7 @@ export default function Game({ navigation }) {
     )
 }
 
-const createStyles = theme => StyleSheet.create({
+const createStyles = (theme, playViolet) => StyleSheet.create({
     container: {
         backgroundColor: theme.bgColour,
         paddingTop: 80,
@@ -322,7 +333,7 @@ const createStyles = theme => StyleSheet.create({
     },
     paletteColour: {
         aspectRatio: 1/1,
-        width: (Dimensions.get('window').width - 68) / 5,
+        width: (Dimensions.get('window').width - (playViolet ? 70 : 68)) / (playViolet ? 6 : 5),
     },
     bestScoreArea: {
         flexDirection: 'row',

@@ -9,12 +9,10 @@ import buttonStyles from '../defaults/buttonStyles';
 import colours from '../defaults/colours';
 import { darkTheme, lightTheme } from '../defaults/themes';
 
-
 export default function Options({ navigation }) {
     const [isDarkMode, setIsDarkMode] = useState(null);
-    const [isVioloetDisabled, setIsVioloetDisabled] = useState(true);
     const gameContext = useContext(GameContext);
-    const styles = createStyles(gameContext.theme);
+    const styles = createStyles(gameContext.theme, gameContext.violetUnlocked);
 
     useEffect(() => {
         gameContext.mode === 'dark' ? setIsDarkMode(true) : setIsDarkMode(false);
@@ -36,9 +34,10 @@ export default function Options({ navigation }) {
         }
     };
 
-    const handleBluePress = () => navigation.navigate('Game');
-
-    const handleVioletPress = () => {};
+    const handleLevelPress = playViolet => {
+        gameContext.setPlayViolet(playViolet);
+        navigation.navigate('Game');
+    };
 
     textStyles.heading.color = gameContext.theme.textColour;
     textStyles.text.color = gameContext.theme.textColour;
@@ -63,23 +62,22 @@ export default function Options({ navigation }) {
             <ColourButton
                 text="5 colours"
                 bgColour="blue"
-                onPress={handleBluePress} />
-            <Text style={{...textStyles.text}}>Score 100 or more to unlock the violet tile.</Text>
-            <Text style={{...textStyles.text}}>The game becomes slightly harder with 6 colours
-                as the chance of the colour of the added tile being one that will help you is reduced.</Text>
-            <TouchableOpacity style={{...buttonStyles.button, ...styles.disabledButton}} disabled={isVioloetDisabled} onPress={handleVioletPress}>
-                {isVioloetDisabled &&
+                onPress={() => handleLevelPress(false)} />
+            <TouchableOpacity style={{...buttonStyles.button, ...styles.violetButton}} disabled={!gameContext.violetUnlocked} onPress={() => handleLevelPress(true)}>
+                {!gameContext.violetUnlocked &&
                     <Image
                     style={styles.padlockIcon}
                     source={require('../assets/padlock-icon.png')} />
                 }
-                <Text style={{...buttonStyles.buttonText, color: colours.disabledText}}>6 colours</Text>
+                <Text style={{...buttonStyles.buttonText, ...styles.violetButtonText}}>6 colours</Text>
             </TouchableOpacity>
+            {!gameContext.violetUnlocked && <Text style={{...textStyles.text}}>Score 100 or more to unlock the violet tile.</Text>}
+            <Text style={{...textStyles.text}}>The game becomes slightly harder with 6 colours, as the chance of the colour of the tile that's added being one that will help you is reduced.</Text>
         </View>
     );
 };
 
-const createStyles = theme => StyleSheet.create({
+const createStyles = (theme, violetUnlocked) => StyleSheet.create({
     container: {
         backgroundColor: theme.bgColour,
         ...containerStyles,
@@ -124,11 +122,14 @@ const createStyles = theme => StyleSheet.create({
         height: 24,
         width: 24,
     },
-    disabledButton: {
+    violetButton: {
         alignItems: 'center',
-        backgroundColor: colours.disabledViolet,
+        backgroundColor: violetUnlocked ? colours.violet : colours.disabledViolet,
         flexDirection: 'row',
         justifyContent: 'center',
+    },
+    violetButtonText: {
+        color: violetUnlocked ? colours.primary : colours.disabledText,
     },
     padlockIcon: {
         height: 24,

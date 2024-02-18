@@ -17,6 +17,8 @@ export default function App() {
     const [mode, setMode] = useState('dark');
     const [theme, setTheme] = useState(darkTheme);
     const [highScore, setHighScore] = useState(0);
+    const [violetUnlocked, setVioletUnlocked] = useState(false);
+    const [playViolet, setPlayViolet] = useState(false);
 
     const headerStyles = {
         headerStyle: {
@@ -32,6 +34,8 @@ export default function App() {
 
             if (allData !== null) {
                 allData.normalHighScore && setHighScore(allData.normalHighScore);
+
+                allData.violetUnlocked && setVioletUnlocked(true);
 
                 if (allData.mode) {
                     allData.mode === 'light' ? setTheme(lightTheme) : setTheme(darkTheme);
@@ -49,7 +53,14 @@ export default function App() {
     }, []);
 
     return (
-        <GameContext.Provider value={{mode: mode, setMode: setMode, theme: theme, setTheme: setTheme, highScore: highScore, setHighScore: setHighScore}}>
+        <GameContext.Provider value={{mode: mode, setMode: setMode,
+                                    theme: theme, setTheme: setTheme,
+                                    highScore: highScore,
+                                    setHighScore:setHighScore,
+                                    violetUnlocked: violetUnlocked,
+                                    setVioletUnlocked: setVioletUnlocked,
+                                    playViolet: playViolet,
+                                    setPlayViolet: setPlayViolet}}>
             <NavigationContainer>
                 <Stack.Navigator>
                     <Stack.Screen name="Home"

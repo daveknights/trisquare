@@ -56,7 +56,7 @@ const createStyles = theme => StyleSheet.create({
     },
     blockedInfo: {
         flexDirection: 'row',
-        marginBottom: 24,
+        marginBottom: 20,
         width: '100%',
     },
     blockedTile: {
