@@ -1,5 +1,3 @@
-import colours from "./colours";
-
 export default textStyles = {
     heading: {
         alignSelf: 'flex-start',
