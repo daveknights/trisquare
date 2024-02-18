@@ -21,7 +21,7 @@ export default function Options({ navigation }) {
     const handleModePress = async value => {
         try {
             const triSquareData = await AsyncStorage.getItem('@triSquareData');
-            const updatedData = JSON.parse(triSquareData);
+            const updatedData = JSON.parse(triSquareData) || {};
 
             updatedData.mode = value;
 
