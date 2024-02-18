@@ -53,12 +53,13 @@ export default function Game({ navigation }) {
     const saveHighScore = async value => {
         try {
             const triSquareData = await AsyncStorage.getItem('@triSquareData');
-            const updatedData = JSON.parse(triSquareData);
+            const updatedData = JSON.parse(triSquareData) || {};
 
             updatedData.normalHighScore = value;
 
             if (value >= 100 && !updatedData.violetUnlocked) {
                 updatedData.violetUnlocked = true;
+                gameContext.setVioletUnlocked(true);
             }
 
             await AsyncStorage.setItem('@triSquareData', JSON.stringify(updatedData));

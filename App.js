@@ -56,7 +56,7 @@ export default function App() {
         <GameContext.Provider value={{mode: mode, setMode: setMode,
                                     theme: theme, setTheme: setTheme,
                                     highScore: highScore,
-                                    setHighScore:setHighScore,
+                                    setHighScore: setHighScore,
                                     violetUnlocked: violetUnlocked,
                                     setVioletUnlocked: setVioletUnlocked,
                                     playViolet: playViolet,
