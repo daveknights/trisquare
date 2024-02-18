@@ -32,8 +32,9 @@ export default function ClearData() {
     return (
         <View style={styles.container}>
              <Text style={{...textStyles.heading}}>Clear high score</Text>
-             <Text style={{...textStyles.text}}>Please be aware that this will remove the high score data from your device
+             <Text style={{...textStyles.text}}>Please be aware that this will remove all the game data from your device
                 until you next play TriSquare and can't be undone.</Text>
+            <Text style={{...textStyles.text}}>This includes your high score, mode choice and levels unlocked.</Text>
             <View style={styles.highScoreInfo}>
                 <Text style={{...textStyles.text}}>Your current high score is: </Text>
                 <Text style={{...textStyles.text, fontWeight: 'bold', marginBottom: 200}}>{gameContext.highScore}</Text>
