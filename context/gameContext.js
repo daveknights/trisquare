@@ -7,4 +7,8 @@ export default scoreContext = React.createContext({
     setTheme: () => {},
     highScore: 0,
     setHighScore: () => {},
+    violetUnlocked: false,
+    setVioletUnlocked: () => {},
+    playViolet: false,
+    setPlayViolet: () => {},
 });
