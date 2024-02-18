@@ -80,7 +80,7 @@ export default function App() {
                         options={{title: 'Clear data', ...headerStyles, animation: 'slide_from_right'}} />
                 </Stack.Navigator>
             </NavigationContainer>
-            <StatusBar style="auto" />
+            <StatusBar hidden />
         </GameContext.Provider>
     );
 }

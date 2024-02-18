@@ -298,7 +298,6 @@ export default function Game({ navigation }) {
 const createStyles = (theme, playViolet) => StyleSheet.create({
     container: {
         backgroundColor: theme.bgColour,
-        paddingTop: 80,
         ...containerStyles,
     },
     grid: {
