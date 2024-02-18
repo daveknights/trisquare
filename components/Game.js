@@ -219,10 +219,9 @@ export default function Game({ navigation }) {
                         setScore(score => score + (sequantialMatches - 1));
                         setBonusPoints(sequantialMatches - 1);
                         setShowBonus(true);
-                        setSequentialMatches(0);
-                    } else {
-                        setSequentialMatches(0);
                     }
+
+                    setSequentialMatches(0);
                 }
 
                 if (gridFull) {
@@ -364,6 +363,7 @@ const createStyles = (theme, playViolet) => StyleSheet.create({
     },
     paletteColour: {
         aspectRatio: 1/1,
+        borderRadius: 4,
         width: (Dimensions.get('window').width - (playViolet ? 70 : 68)) / (playViolet ? 6 : 5),
     },
     bestScoreArea: {
