@@ -104,12 +104,12 @@ const createStyles = (theme, violetUnlocked) => StyleSheet.create({
         color: 'yellow',
     },
     dark: {
-        backgroundColor: '#1f3c66',
+        backgroundColor: colours.skyBlack,
         borderTopLeftRadius: 15,
         borderBottomLeftRadius: 15,
     },
     light: {
-        backgroundColor: '#006eff',
+        backgroundColor: colours.skyBlue,
         borderTopRightRadius: 15,
         borderBottomRightRadius: 15,
 

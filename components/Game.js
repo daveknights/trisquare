@@ -1,6 +1,6 @@
 import { LinearGradient } from 'expo-linear-gradient';
 import { useEffect, useState, useContext } from 'react';
-import { StyleSheet, Text, View, Pressable, TouchableOpacity, Image, Dimensions } from 'react-native';
+import { StyleSheet, Text, View, Pressable, TouchableOpacity, Dimensions } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import IconButton from './IconButton';
 import GameContext from '../context/gameContext';
@@ -36,11 +36,13 @@ export default function Game({ navigation }) {
     const [canAddTile, setCanAddTile] = useState(null);
     const [lastTile, setLastTile] = useState(false);
     const [score, setScore] = useState(null);
+    const [sequantialMatches, setSequentialMatches] = useState(0);
+    const [showBonus, setShowBonus] = useState(false);
+    const [bonusPoints, setBonusPoints] = useState(0);
     const [gridFull, setGridFull] = useState(false);
     const [gameOver, setGameOver] = useState(null);
     const gameContext = useContext(GameContext);
     const styles = createStyles(gameContext.theme, gameContext.playViolet);
-
 
     useEffect(() => {
         gameContext.playViolet && tileColours.push('violet');
@@ -149,12 +151,28 @@ export default function Game({ navigation }) {
                 break;
             case 8:
                 setScore(score => score + 5);
+                setBonusPoints(5);
+                setShowBonus(true);
             default:
                 lastTile && setLastTile(false);
                 gridFull && setGridFull(false);
                 break;
         }
     }, [emptyTiles]);
+
+    useEffect(() => {
+        let timer;
+
+        if (showBonus) {
+            timer = setTimeout(() => {
+                setShowBonus(false);
+                setBonusPoints(0);
+                setSequentialMatches(0);
+            }, 500);
+        }
+
+        return () => clearTimeout(timer);
+    }, [showBonus]);
 
     const colourMatch = num => tiles[`t${num}`] === selectedColour;
     // Check for 3 adjacents squares
@@ -182,6 +200,7 @@ export default function Game({ navigation }) {
                         setScore(score => score + 1);
                         setCanAddTile(true);
                         setGridFull(false);
+                        setSequentialMatches(prev => prev + 1);
 
                         clearTimeout(timer);
                     }, 250);
@@ -193,6 +212,17 @@ export default function Game({ navigation }) {
             if (!comboMatch) {
                 setSelectedColour('');
                 setSelectedTile(null);
+
+                if (!canAddTile && sequantialMatches > 0) {
+                    if ((sequantialMatches - 1) >= 1) {
+                        setScore(score => score + (sequantialMatches - 1));
+                        setBonusPoints(sequantialMatches - 1);
+                        setShowBonus(true);
+                        setSequentialMatches(0);
+                    } else {
+                        setSequentialMatches(0);
+                    }
+                }
 
                 if (gridFull) {
                     setGameOver(true);
@@ -229,6 +259,7 @@ export default function Game({ navigation }) {
             <View style={styles.scoreArea}>
                 <Text style={styles.score}>Score: </Text>
                 <Text style={styles.scoreTotal}>{score}</Text>
+                {showBonus && <Text style={styles.bonus}>+{bonusPoints}</Text>}
             </View>
             <View style={styles.grid}>
                 {Object.entries(tiles).map(([k, col]) => {
@@ -349,8 +380,12 @@ const createStyles = (theme, playViolet) => StyleSheet.create({
         fontWeight: 'bold',
     },
     scoreArea: {
+        alignItems: 'center',
+        alignSelf: 'flex-start',
         flexDirection: 'row',
+        justifyContent: 'center',
         marginBottom: 20,
+        marginLeft: 16,
     },
     score: {
         color: theme.textColour,
@@ -360,6 +395,11 @@ const createStyles = (theme, playViolet) => StyleSheet.create({
         color: theme.textColour,
         fontSize: 30,
         fontWeight: 'bold',
+    },
+    bonus: {
+        color: colours.skyBlue,
+        fontSize: 24,
+        marginLeft: 10,
     },
     postGameOptions: {
         flexDirection: 'row',

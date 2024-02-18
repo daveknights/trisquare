@@ -8,6 +8,8 @@ export default colours = {
     messageBg: '#abffb1',
     primary: '#0e2444',
     red: '#ff7577',
+    skyBlack: '#1f3c66',
+    skyBlue: '#006eff',
     violet: '#cf73ff',
     yellow: '#ffec73',
 };
