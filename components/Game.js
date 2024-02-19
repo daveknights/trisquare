@@ -36,7 +36,7 @@ export default function Game({ navigation }) {
     const [canAddTile, setCanAddTile] = useState(null);
     const [lastTile, setLastTile] = useState(false);
     const [score, setScore] = useState(null);
-    const [sequantialMatches, setSequentialMatches] = useState(0);
+    const [consecutiveMatches, setConsecutiveMatches] = useState(0);
     const [showBonus, setShowBonus] = useState(false);
     const [bonusPoints, setBonusPoints] = useState(0);
     const [gridFull, setGridFull] = useState(false);
@@ -168,7 +168,7 @@ export default function Game({ navigation }) {
             timer = setTimeout(() => {
                 setShowBonus(false);
                 setBonusPoints(0);
-                setSequentialMatches(0);
+                setConsecutiveMatches(0);
             }, 500);
         }
 
@@ -201,7 +201,7 @@ export default function Game({ navigation }) {
                         setScore(score => score + 1);
                         setCanAddTile(true);
                         setGridFull(false);
-                        setSequentialMatches(prev => prev + 1);
+                        setConsecutiveMatches(prev => prev + 1);
 
                         clearTimeout(timer);
                     }, 250);
@@ -214,14 +214,14 @@ export default function Game({ navigation }) {
                 setSelectedColour('');
                 setSelectedTile(null);
 
-                if (!canAddTile && sequantialMatches > 0) {
-                    if ((sequantialMatches - 1) >= 1) {
-                        setScore(score => score + (sequantialMatches - 1));
-                        setBonusPoints(sequantialMatches - 1);
+                if (!canAddTile && consecutiveMatches > 0) {
+                    if ((consecutiveMatches - 1) >= 1) {
+                        setScore(score => score + (consecutiveMatches - 1));
+                        setBonusPoints(consecutiveMatches - 1);
                         setShowBonus(true);
                     }
 
-                    setSequentialMatches(0);
+                    setConsecutiveMatches(0);
                 }
 
                 if (gridFull) {
