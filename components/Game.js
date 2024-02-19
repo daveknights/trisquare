@@ -44,12 +44,6 @@ export default function Game({ navigation }) {
     const gameContext = useContext(GameContext);
     const styles = createStyles(gameContext.theme, gameContext.playViolet);
 
-    useEffect(() => {
-        gameContext.playViolet && tileColours.push('violet');
-
-        return () => tileColours.length === 6 && tileColours.pop();
-    }, []);
-
     const saveHighScore = async value => {
         try {
             const triSquareData = await AsyncStorage.getItem('@triSquareData');
@@ -97,7 +91,11 @@ export default function Game({ navigation }) {
     };
 
     useEffect(() => {
-        startGame()
+        gameContext.playViolet && tileColours.push('violet');
+
+        startGame();
+
+        return () => tileColours.length === 6 && tileColours.pop();
     }, []);
     // Add new tile
     useEffect(() => {
