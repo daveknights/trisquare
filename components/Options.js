@@ -12,7 +12,8 @@ import { darkTheme, lightTheme } from '../defaults/themes';
 export default function Options({ navigation }) {
     const [isDarkMode, setIsDarkMode] = useState(null);
     const gameContext = useContext(GameContext);
-    const styles = createStyles(gameContext.theme, gameContext.violetUnlocked);
+    const theme = gameContext.theme;
+    const violetUnlocked = gameContext.violetUnlocked;
 
     useEffect(() => {
         gameContext.mode === 'dark' ? setIsDarkMode(true) : setIsDarkMode(false);
@@ -39,13 +40,13 @@ export default function Options({ navigation }) {
         navigation.navigate('Game');
     };
 
-    textStyles.heading.color = gameContext.theme.textColour;
-    textStyles.text.color = gameContext.theme.textColour;
+    textStyles.heading.color = theme.textColour;
+    textStyles.text.color = theme.textColour;
 
     return (
-        <View style={styles.container}>
+        <View style={{...styles.container, backgroundColor: theme.bgColour}}>
             <Text style={{...textStyles.heading}}>Game options</Text>
-            <Text style={styles.subHeading}>Mode</Text>
+            <Text style={{...styles.subHeading, color: theme.textColour}}>Mode</Text>
             <View style={styles.themeChoice}>
                 <TouchableOpacity disabled={isDarkMode} style={{...styles.theme, ...styles.dark}} onPress={() => handleModePress('dark')}>
                     <Image
@@ -58,18 +59,18 @@ export default function Options({ navigation }) {
                     source={require('../assets/sun-icon.png')} />
                 </TouchableOpacity>
             </View>
-            <Text style={styles.subHeading}>Level</Text>
+            <Text style={{...styles.subHeading, color: theme.textColour}}>Level</Text>
             <ColourButton
                 text="5 colours"
                 bgColour="blue"
                 onPress={() => handleLevelPress(false)} />
-            <TouchableOpacity style={{...buttonStyles.button, ...styles.violetButton}} disabled={!gameContext.violetUnlocked} onPress={() => handleLevelPress(true)}>
+            <TouchableOpacity style={{...buttonStyles.button, ...styles.violetButton, backgroundColor: violetUnlocked ? colours.violet : colours.disabledViolet}} disabled={!gameContext.violetUnlocked} onPress={() => handleLevelPress(true)}>
                 {!gameContext.violetUnlocked &&
                     <Image
                     style={styles.padlockIcon}
                     source={require('../assets/padlock-icon.png')} />
                 }
-                <Text style={{...buttonStyles.buttonText, ...styles.violetButtonText}}>6 colours</Text>
+                <Text style={{...buttonStyles.buttonText, color: violetUnlocked ? colours.primary : colours.disabledText}}>6 colours</Text>
             </TouchableOpacity>
             {!gameContext.violetUnlocked && <Text style={{...textStyles.text}}>Score 100 or more to unlock the violet tile.</Text>}
             <Text style={{...textStyles.text}}>The game becomes slightly harder with 6 colours, as the chance of the colour of the tile that's added being one that will help you is reduced.</Text>
@@ -77,13 +78,11 @@ export default function Options({ navigation }) {
     );
 };
 
-const createStyles = (theme, violetUnlocked) => StyleSheet.create({
+const styles = StyleSheet.create({
     container: {
-        backgroundColor: theme.bgColour,
         ...containerStyles,
     },
     subHeading: {
-        color: theme.textColour,
         fontSize: 20,
         fontWeight: 'bold',
         marginBottom: 10,
@@ -124,12 +123,8 @@ const createStyles = (theme, violetUnlocked) => StyleSheet.create({
     },
     violetButton: {
         alignItems: 'center',
-        backgroundColor: violetUnlocked ? colours.violet : colours.disabledViolet,
         flexDirection: 'row',
         justifyContent: 'center',
-    },
-    violetButtonText: {
-        color: violetUnlocked ? colours.primary : colours.disabledText,
     },
     padlockIcon: {
         height: 24,

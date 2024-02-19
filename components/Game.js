@@ -42,7 +42,8 @@ export default function Game({ navigation }) {
     const [gridFull, setGridFull] = useState(false);
     const [gameOver, setGameOver] = useState(null);
     const gameContext = useContext(GameContext);
-    const styles = createStyles(gameContext.theme, gameContext.playViolet);
+    const theme = gameContext.theme;
+    const playViolet = gameContext.playViolet;
 
     const saveHighScore = async value => {
         try {
@@ -248,14 +249,14 @@ export default function Game({ navigation }) {
     const handleHomePress = () => navigation.navigate('Home');
 
     return (
-        <View style={styles.container}>
+        <View style={{...styles.container, backgroundColor: theme.bgColour}}>
             <View style={styles.bestScoreArea}>
-                <Text style={styles.best}>Best: </Text>
-                <Text style={styles.bestScore}>{gameContext.highScore}</Text>
+                <Text style={{...styles.best, color: theme.textColour}}>Best: </Text>
+                <Text style={{...styles.bestScore, color: theme.textColour}}>{gameContext.highScore}</Text>
             </View>
             <View style={styles.scoreArea}>
-                <Text style={styles.score}>Score: </Text>
-                <Text style={styles.scoreTotal}>{score}</Text>
+                <Text style={{...styles.score, color: theme.textColour}}>Score: </Text>
+                <Text style={{...styles.scoreTotal, color: theme.textColour}}>{score}</Text>
                 {showBonus && <Text style={styles.bonus}>+{bonusPoints}</Text>}
             </View>
             <View style={styles.grid}>
@@ -268,8 +269,8 @@ export default function Game({ navigation }) {
 
                     if (col === 'blocked') {
                         blocked = <>
-                                    <View style={{...styles.blocked, transform: [{rotate: '45deg'}]}} />
-                                    <View style={{...styles.blocked, transform: [{rotate: '-45deg'}]}} />
+                                    <View style={{...styles.blocked, backgroundColor: theme.bgColour, transform: [{rotate: '45deg'}]}} />
+                                    <View style={{...styles.blocked, backgroundColor: theme.bgColour, transform: [{rotate: '-45deg'}]}} />
                                 </>;
                         tilePress = null;
                     } else if (col) {
@@ -303,8 +304,10 @@ export default function Game({ navigation }) {
                 })}
             </View>
             <View style={styles.colourPalette}>
-                {tileColours.map(colour => colour !== 'blankColour' && <LinearGradient key={colour} colors={gameContext.theme.tileGrads[colour]} style={{...styles.paletteColour}}>
-                                            <TouchableOpacity onPress={() => handlePalettePress(colour)} style={{...styles.paletteColour}} />
+                {tileColours.map(colour => colour !== 'blankColour' && <LinearGradient key={colour} colors={gameContext.theme.tileGrads[colour]}
+                                                                                        style={{...styles.paletteColour, width: (Dimensions.get('window').width - (playViolet ? 70 : 68)) / (playViolet ? 6 : 5),}}>
+                                            <TouchableOpacity onPress={() => handlePalettePress(colour)}
+                                                                style={{...styles.paletteColour, width: (Dimensions.get('window').width - (playViolet ? 70 : 68)) / (playViolet ? 6 : 5),}} />
                                         </LinearGradient>)}
             </View>
             {gameOver && <View style={styles.postGameOptions}>
@@ -323,9 +326,8 @@ export default function Game({ navigation }) {
     )
 }
 
-const createStyles = (theme, playViolet) => StyleSheet.create({
+const styles = StyleSheet.create({
     container: {
-        backgroundColor: theme.bgColour,
         ...containerStyles,
     },
     grid: {
@@ -348,7 +350,6 @@ const createStyles = (theme, playViolet) => StyleSheet.create({
         width: (Dimensions.get('window').width - 84) / 3,
     },
     blocked: {
-        backgroundColor: theme.bgColour,
         height: 56,
         position: 'absolute',
         width: 6,
@@ -361,7 +362,6 @@ const createStyles = (theme, playViolet) => StyleSheet.create({
     paletteColour: {
         aspectRatio: 1/1,
         borderRadius: 4,
-        width: (Dimensions.get('window').width - (playViolet ? 70 : 68)) / (playViolet ? 6 : 5),
     },
     bestScoreArea: {
         flexDirection: 'row',
@@ -369,11 +369,9 @@ const createStyles = (theme, playViolet) => StyleSheet.create({
         marginLeft: 'auto',
     },
     best: {
-        color: theme.textColour,
         fontSize: 20,
     },
     bestScore: {
-        color: theme.textColour,
         fontSize: 20,
         fontWeight: 'bold',
     },
@@ -386,11 +384,9 @@ const createStyles = (theme, playViolet) => StyleSheet.create({
         marginLeft: 16,
     },
     score: {
-        color: theme.textColour,
         fontSize: 30,
     },
     scoreTotal: {
-        color: theme.textColour,
         fontSize: 30,
         fontWeight: 'bold',
     },

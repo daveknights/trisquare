@@ -11,7 +11,7 @@ export default function Instructions() {
     const [screenHeight, setScreenHeight] = useState(0);
     const [scrollEnabled, setScrollEnabled] = useState(false);
     const gameContext = useContext(GameContext);
-    const styles = createStyles(gameContext.theme);
+    const theme = gameContext.theme;
 
     const onContentSizeChange = (contentWidth, contentHeight) => {
         setScreenHeight(contentHeight);
@@ -21,11 +21,11 @@ export default function Instructions() {
         (!scrollEnabled && screenHeight > height) && setScrollEnabled(true);
     }, [screenHeight]);
 
-    textStyles.heading.color = gameContext.theme.textColour;
-    textStyles.text.color = gameContext.theme.textColour;
+    textStyles.heading.color = theme.textColour;
+    textStyles.text.color = theme.textColour;
 
     return (
-        <View style={styles.container}>
+        <View style={{...styles.container, backgroundColor: theme.bgColour}}>
             <ScrollView scrollEnabled={scrollEnabled} onContentSizeChange={onContentSizeChange}>
                 <Text style={{...textStyles.heading}}>How to play</Text>
                 <Text style={{...textStyles.text}}>Select a free space on the grid, then choose a colour from the pallete.</Text>
@@ -42,8 +42,8 @@ export default function Instructions() {
                 </View>
                 <View style={styles.blockedInfo}>
                     <Text style={{...textStyles.text, marginBottom: 0, width: Dimensions.get('window').width - 50}}>There is always 1 square which is unavailable, indicated by this tile:</Text>
-                    <View style={styles.blockedTile}>
-                        <Text style={styles.xSymbol}>X</Text>
+                    <View style={{...styles.blockedTile, backgroundColor: theme.gridColour}}>
+                        <Text style={{...styles.xSymbol, color: theme.bgColour}}>X</Text>
                     </View>
                 </View>
                 <Text style={{...textStyles.text}}>A new tile is added to the grid and the blocked square changes place after every turn.</Text>
@@ -54,9 +54,8 @@ export default function Instructions() {
     );
 };
 
-const createStyles = theme => StyleSheet.create({
+const styles = StyleSheet.create({
     container: {
-        backgroundColor: theme.bgColour,
         ...containerStyles,
     },
     shapeRow: {
@@ -75,7 +74,6 @@ const createStyles = theme => StyleSheet.create({
     },
     blockedTile: {
         alignItems: 'center',
-        backgroundColor: theme.gridColour,
         height: 30,
         justifyContent: 'center',
         marginLeft: 'auto',
@@ -84,7 +82,6 @@ const createStyles = theme => StyleSheet.create({
         width: 30,
     },
     xSymbol: {
-        color: theme.bgColour,
         fontSize: 16,
         fontWeight: 'bold',
     }

@@ -8,7 +8,7 @@ import containerStyles from '../defaults/containerStyles';
 
 export default function Home({ navigation }) {
     const gameContext = useContext(GameContext);
-    const styles = createStyles(gameContext.theme);
+    const theme = gameContext.theme;
 
     const handlePlayPress = () => navigation.navigate('Game');
 
@@ -19,14 +19,14 @@ export default function Home({ navigation }) {
     const handleLinkToClearData = () => navigation.navigate('ClearData');
 
     return (
-        <View style={styles.container}>
+        <View style={{...styles.container, backgroundColor: theme.bgColour}}>
             <Image
                 style={styles.homescreenLogo}
                 source={require('../assets/homescreen-logo.png')}
             />
             <View style={styles.bestScoreArea}>
-                <Text style={styles.best}>Best: </Text>
-                <Text style={styles.bestScore}>{gameContext.highScore}</Text>
+                <Text style={{...styles.best, color: theme.textColour}}>Best: </Text>
+                <Text style={{...styles.bestScore, color: theme.textColour}}>{gameContext.highScore}</Text>
             </View>
             <ColourButton
                 text="Play"
@@ -55,9 +55,8 @@ export default function Home({ navigation }) {
     );
 };
 
-const createStyles = theme => StyleSheet.create({
+const styles = StyleSheet.create({
     container: {
-        backgroundColor: theme.bgColour,
         paddingTop: 100,
         ...containerStyles,
     },
@@ -71,11 +70,9 @@ const createStyles = theme => StyleSheet.create({
         marginTop: 90,
     },
     best: {
-        color: theme.textColour,
         fontSize: 20,
     },
     bestScore: {
-        color: theme.textColour,
         fontSize: 20,
         fontWeight: 'bold',
     },

@@ -10,10 +10,10 @@ import colours from '../defaults/colours';
 export default function ClearData() {
     const [dataCleared, setDataCleared] = useState(false);
     const gameContext = useContext(GameContext);
-    const styles = createStyles(gameContext.theme);
+    const theme = gameContext.theme;
 
-    textStyles.heading.color = gameContext.theme.textColour;
-    textStyles.text.color = gameContext.theme.textColour;
+    textStyles.heading.color = theme.textColour;
+    textStyles.text.color = theme.textColour;
 
     useEffect(() => {
         dataCleared && gameContext.setHighScore(0);
@@ -30,7 +30,7 @@ export default function ClearData() {
     };
 
     return (
-        <View style={styles.container}>
+        <View style={{...styles.container, backgroundColor: theme.bgColour}}>
              <Text style={{...textStyles.heading}}>Clear high score</Text>
              <Text style={{...textStyles.text}}>Please be aware that this will remove all the game data from your device
                 until you next play TriSquare and can't be undone.</Text>
@@ -48,9 +48,8 @@ export default function ClearData() {
     );
 };
 
-const createStyles = theme => StyleSheet.create({
+const styles = StyleSheet.create({
     container: {
-        backgroundColor: theme.bgColour,
         ...containerStyles,
     },
     highScoreInfo: {
