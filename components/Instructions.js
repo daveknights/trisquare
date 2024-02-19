@@ -1,41 +1,55 @@
-import { StyleSheet, Text, View, Dimensions } from 'react-native';
-import { useContext } from 'react';
+import { StyleSheet, Text, View, Dimensions, ScrollView } from 'react-native';
+import { useState, useContext, useEffect } from 'react';
 import containerStyles from '../defaults/containerStyles';
 import textStyles from '../defaults/textStyles';
 import Shape from './Shape';
 import GameContext from '../context/gameContext';
 
+const { height } = Dimensions.get('window');
+
 export default function Instructions() {
+    const [screenHeight, setScreenHeight] = useState(0);
+    const [scrollEnabled, setScrollEnabled] = useState(false);
     const gameContext = useContext(GameContext);
     const styles = createStyles(gameContext.theme);
+
+    const onContentSizeChange = (contentWidth, contentHeight) => {
+        setScreenHeight(contentHeight);
+    };
+
+    useEffect(() => {
+        (!scrollEnabled && screenHeight > height) && setScrollEnabled(true);
+    }, [screenHeight]);
 
     textStyles.heading.color = gameContext.theme.textColour;
     textStyles.text.color = gameContext.theme.textColour;
 
     return (
         <View style={styles.container}>
-            <Text style={{...textStyles.heading}}>How to play</Text>
-            <Text style={{...textStyles.text}}>Select a free space on the grid, then choose a colour from the pallete.</Text>
-            <Text style={{...textStyles.text}}>Score a point by matching colours in one of the following shapes:</Text>
-            <View style={styles.shapeRow}>
-                <Shape cols={1} rotation="0" />
-                <Shape cols={3} rotation="0" />
-                <Shape cols={2} rotation="180" />
-            </View>
-            <View style={styles.shapeRow}>
-                <Shape cols={2} rotation="0" />
-                <Shape cols={2} rotation="90" />
-                <Shape cols={2} rotation="270" />
-            </View>
-            <View style={styles.blockedInfo}>
-                <Text style={{...textStyles.text, marginBottom: 0, width: Dimensions.get('window').width - 50}}>There is always 1 square which is unavailable, indicated by this tile:</Text>
-                <View style={styles.blockedTile}>
-                    <Text style={styles.xSymbol}>X</Text>
+            <ScrollView scrollEnabled={scrollEnabled} onContentSizeChange={onContentSizeChange}>
+                <Text style={{...textStyles.heading}}>How to play</Text>
+                <Text style={{...textStyles.text}}>Select a free space on the grid, then choose a colour from the pallete.</Text>
+                <Text style={{...textStyles.text}}>Score a point by matching colours in one of the following shapes:</Text>
+                <View style={styles.shapeRow}>
+                    <Shape cols={1} rotation="0" />
+                    <Shape cols={3} rotation="0" />
+                    <Shape cols={2} rotation="180" />
                 </View>
-            </View>
-            <Text style={{...textStyles.text}}>A new tile is added to the grid and the blocked square changes place after every turn.</Text>
-            <Text style={{...textStyles.text}}>Get bonus points for consecutive pattern matches and clearing the grid.</Text>
-            <Text style={{...textStyles.text}}>The game ends when you can no longer make a shape of 3 matching tiles.</Text>
+                <View style={styles.shapeRow}>
+                    <Shape cols={2} rotation="0" />
+                    <Shape cols={2} rotation="90" />
+                    <Shape cols={2} rotation="270" />
+                </View>
+                <View style={styles.blockedInfo}>
+                    <Text style={{...textStyles.text, marginBottom: 0, width: Dimensions.get('window').width - 50}}>There is always 1 square which is unavailable, indicated by this tile:</Text>
+                    <View style={styles.blockedTile}>
+                        <Text style={styles.xSymbol}>X</Text>
+                    </View>
+                </View>
+                <Text style={{...textStyles.text}}>A new tile is added to the grid and the blocked square changes place after every turn.</Text>
+                <Text style={{...textStyles.text}}>Get bonus points for consecutive pattern matches and clearing the grid.</Text>
+                <Text style={{...textStyles.text}}>The game ends when you can no longer make a shape of 3 matching tiles.</Text>
+            </ScrollView>
         </View>
     );
 };
