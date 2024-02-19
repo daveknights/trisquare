@@ -24,7 +24,6 @@ export default function Home({ navigation }) {
                 style={styles.homescreenLogo}
                 source={require('../assets/homescreen-logo.png')}
             />
-            <Text style={styles.gameName}>TriSquare</Text>
             <View style={styles.bestScoreArea}>
                 <Text style={styles.best}>Best: </Text>
                 <Text style={styles.bestScore}>{gameContext.highScore}</Text>
@@ -63,13 +62,8 @@ const createStyles = theme => StyleSheet.create({
         ...containerStyles,
     },
     homescreenLogo: {
-        height: 100,
-        width: 109,
-    },
-    gameName: {
-        color: theme.textColour,
-        fontSize: 40,
-        fontWeight: 'bold',
+        height: 146,
+        width: 168,
     },
     bestScoreArea: {
         flexDirection: 'row',
