@@ -166,7 +166,6 @@ export default function Game({ navigation }) {
             timer = setTimeout(() => {
                 setShowBonus(false);
                 setBonusPoints(0);
-                setConsecutiveMatches(0);
             }, 500);
         }
 
