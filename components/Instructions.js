@@ -1,4 +1,5 @@
 import { StyleSheet, Text, View, Dimensions, ScrollView } from 'react-native';
+import { useHeaderHeight } from '@react-navigation/elements';
 import { useState, useContext, useEffect } from 'react';
 import containerStyles from '../defaults/containerStyles';
 import textStyles from '../defaults/textStyles';
@@ -8,24 +9,25 @@ import GameContext from '../context/gameContext';
 const { height } = Dimensions.get('window');
 
 export default function Instructions() {
-    const [screenHeight, setScreenHeight] = useState(0);
+    const [contentHeight, setContentHeight] = useState(0);
     const [scrollEnabled, setScrollEnabled] = useState(false);
+    const headerHeight = useHeaderHeight();
     const gameContext = useContext(GameContext);
     const theme = gameContext.theme;
 
     const onContentSizeChange = (contentWidth, contentHeight) => {
-        setScreenHeight(contentHeight);
+        setContentHeight(contentHeight);
     };
 
     useEffect(() => {
-        (!scrollEnabled && screenHeight > height) && setScrollEnabled(true);
-    }, [screenHeight]);
+        (!scrollEnabled && contentHeight > (height - headerHeight)) && setScrollEnabled(true);
+    }, [contentHeight]);
 
     textStyles.heading.color = theme.textColour;
     textStyles.text.color = theme.textColour;
 
     return (
-        <View style={{...styles.container, backgroundColor: theme.bgColour}}>
+        <View style={{...containerStyles, backgroundColor: theme.bgColour}}>
             <ScrollView scrollEnabled={scrollEnabled} onContentSizeChange={onContentSizeChange}>
                 <Text style={{...textStyles.heading}}>How to play</Text>
                 <Text style={{...textStyles.text}}>Select a free space on the grid, then choose a colour from the pallete.</Text>
@@ -55,9 +57,6 @@ export default function Instructions() {
 };
 
 const styles = StyleSheet.create({
-    container: {
-        ...containerStyles,
-    },
     shapeRow: {
         alignItems: 'center',
         flexDirection: 'row',
