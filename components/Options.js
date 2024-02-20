@@ -41,12 +41,13 @@ export default function Options({ navigation }) {
     };
 
     textStyles.heading.color = theme.textColour;
+    textStyles.subHeading.color = theme.textColour;
     textStyles.text.color = theme.textColour;
 
     return (
-        <View style={{...styles.container, backgroundColor: theme.bgColour}}>
+        <View style={{...containerStyles, backgroundColor: theme.bgColour}}>
             <Text style={{...textStyles.heading}}>Game options</Text>
-            <Text style={{...styles.subHeading, color: theme.textColour}}>Mode</Text>
+            <Text style={{...textStyles.subHeading, color: theme.textColour}}>Mode</Text>
             <View style={styles.themeChoice}>
                 <TouchableOpacity disabled={isDarkMode} style={{...styles.theme, ...styles.dark}} onPress={() => handleModePress('dark')}>
                     <Image
@@ -59,7 +60,7 @@ export default function Options({ navigation }) {
                     source={require('../assets/sun-icon.png')} />
                 </TouchableOpacity>
             </View>
-            <Text style={{...styles.subHeading, color: theme.textColour}}>Level</Text>
+            <Text style={{...textStyles.subHeading, color: theme.textColour}}>Level</Text>
             <ColourButton
                 text="5 colours"
                 bgColour="blue"
@@ -79,15 +80,6 @@ export default function Options({ navigation }) {
 };
 
 const styles = StyleSheet.create({
-    container: {
-        ...containerStyles,
-    },
-    subHeading: {
-        fontSize: 20,
-        fontWeight: 'bold',
-        marginBottom: 10,
-        marginTop: 20,
-    },
     themeChoice: {
         flexDirection: 'row',
         marginBottom: 50,

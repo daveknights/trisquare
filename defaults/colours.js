@@ -6,10 +6,23 @@ export default colours = {
     grey: '#5f6b78',
     lightBlue: '#73afff',
     messageBg: '#abffb1',
+    orange: '#ffa873',
     primary: '#0e2444',
     red: '#ff7577',
     skyBlack: '#1f3c66',
     skyBlue: '#006eff',
     violet: '#cf73ff',
     yellow: '#ffec73',
+    bronze: {
+        backgroundColor: '#ffcc99',
+        borderColor: '#cc853d',
+    },
+    silver: {
+        backgroundColor: '#dddddd',
+        borderColor: '#888888',
+    },
+    gold: {
+        backgroundColor: '#ffec73',
+        borderColor: '#d4af37',
+    },
 };

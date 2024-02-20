@@ -249,7 +249,7 @@ export default function Game({ navigation }) {
     const handleHomePress = () => navigation.navigate('Home');
 
     return (
-        <View style={{...styles.container, backgroundColor: theme.bgColour}}>
+        <View style={{...containerStyles, backgroundColor: theme.bgColour}}>
             <View style={styles.bestScoreArea}>
                 <Text style={{...styles.best, color: theme.textColour}}>Best: </Text>
                 <Text style={{...styles.bestScore, color: theme.textColour}}>{gameContext.highScore}</Text>
@@ -327,9 +327,6 @@ export default function Game({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-    container: {
-        ...containerStyles,
-    },
     grid: {
         aspectRatio: 1/1,
         borderRadius: 15,

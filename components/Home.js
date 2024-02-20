@@ -12,14 +12,16 @@ export default function Home({ navigation }) {
 
     const handlePlayPress = () => navigation.navigate('Game');
 
+    const handleRewardsPress = () => navigation.navigate('Rewards');
+
     const handleOptionsPress = () => navigation.navigate('Options');
 
     const handleInfoPress = () => navigation.navigate('Instructions');
 
-    const handleLinkToClearData = () => navigation.navigate('ClearData');
+    // const handleLinkToClearData = () => navigation.navigate('ClearData');
 
     return (
-        <View style={{...styles.container, backgroundColor: theme.bgColour}}>
+        <View style={{...containerStyles, paddingTop: 60, backgroundColor: theme.bgColour}}>
             <Image
                 style={styles.homescreenLogo}
                 source={require('../assets/homescreen-logo.png')}
@@ -31,13 +33,17 @@ export default function Home({ navigation }) {
             <ColourButton
                 text="Play"
                 bgColour="green"
-                action="playGame"
                 onPress={handlePlayPress}
+            />
+            <ColourButton
+                text="Rewards"
+                bgColour="yellow"
+                onPress={handleRewardsPress}
             />
             <View style={styles.optionsInfo}>
                 <IconButton
                     path={require('../assets/options-icon.png')}
-                    bgColour="yellow"
+                    bgColour="orange"
                     onPress={handleOptionsPress}
                 />
                 <IconButton
@@ -46,20 +52,16 @@ export default function Home({ navigation }) {
                     onPress={handleInfoPress}
                 />
             </View>
-            <TextButton
+            {/* <TextButton
                 text="Clear high score"
                 textColour={gameContext.theme.linkColour}
                 onPress={handleLinkToClearData}
-            />
+            /> */}
         </View>
     );
 };
 
 const styles = StyleSheet.create({
-    container: {
-        paddingTop: 100,
-        ...containerStyles,
-    },
     homescreenLogo: {
         height: 146,
         width: 168,

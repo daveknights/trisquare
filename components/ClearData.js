@@ -30,7 +30,7 @@ export default function ClearData() {
     };
 
     return (
-        <View style={{...styles.container, backgroundColor: theme.bgColour}}>
+        <View style={{...containerStyles, backgroundColor: theme.bgColour}}>
              <Text style={{...textStyles.heading}}>Clear high score</Text>
              <Text style={{...textStyles.text}}>Please be aware that this will remove all the game data from your device
                 until you next play TriSquare and can't be undone.</Text>
@@ -49,9 +49,6 @@ export default function ClearData() {
 };
 
 const styles = StyleSheet.create({
-    container: {
-        ...containerStyles,
-    },
     highScoreInfo: {
         flexDirection: 'row',
         width: '100%',

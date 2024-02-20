@@ -6,6 +6,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import GameContext from './context/gameContext';
 import Home from './components/Home';
 import Game from './components/Game';
+import Rewards from './components/Rewards';
 import Instructions from './components/Instructions';
 import Options from './components/Options';
 import ClearData from './components/ClearData';
@@ -69,9 +70,12 @@ export default function App() {
                     <Stack.Screen name="Game"
                         component={Game}
                         options={{headerShown: false, ...headerStyles}} />
+                    <Stack.Screen name="Rewards"
+                        component={Rewards}
+                        options={{...headerStyles, animation: 'slide_from_right'}} />
                     <Stack.Screen name="Options"
                         component={Options}
-                        options={{title: 'Options', ...headerStyles, animation: 'slide_from_right'}} />
+                        options={{...headerStyles, animation: 'slide_from_right'}} />
                     <Stack.Screen name="Instructions"
                         component={Instructions}
                         options={{...headerStyles, animation: 'slide_from_right'}} />

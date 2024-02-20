@@ -5,6 +5,12 @@ export default textStyles = {
         fontWeight: 'bold',
         marginBottom: 24,
     },
+    subHeading: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        marginBottom: 10,
+        marginTop: 20,
+    },
     text: {
         alignSelf: 'flex-start',
         fontSize: 16,
