@@ -16,7 +16,10 @@ export default function ClearData() {
     textStyles.text.color = theme.textColour;
 
     useEffect(() => {
-        dataCleared && gameContext.setHighScore(0);
+        if(dataCleared) {
+            gameContext.setHighScore(0);
+            gameContext.setAchievements({});
+        }
     }, [dataCleared]);
 
     const clearUserData = async () => {

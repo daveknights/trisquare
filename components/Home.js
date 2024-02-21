@@ -2,7 +2,6 @@ import { StyleSheet, Text, View, Image } from 'react-native';
 import { useContext } from 'react';
 import ColourButton from './ColourButton';
 import IconButton from './IconButton';
-import TextButton from './TextButton';
 import GameContext from '../context/gameContext';
 import containerStyles from '../defaults/containerStyles';
 
@@ -18,7 +17,7 @@ export default function Home({ navigation }) {
 
     const handleInfoPress = () => navigation.navigate('Instructions');
 
-    // const handleLinkToClearData = () => navigation.navigate('ClearData');
+
 
     return (
         <View style={{...containerStyles, paddingTop: 60, backgroundColor: theme.bgColour}}>
@@ -52,11 +51,6 @@ export default function Home({ navigation }) {
                     onPress={handleInfoPress}
                 />
             </View>
-            {/* <TextButton
-                text="Clear high score"
-                textColour={gameContext.theme.linkColour}
-                onPress={handleLinkToClearData}
-            /> */}
         </View>
     );
 };

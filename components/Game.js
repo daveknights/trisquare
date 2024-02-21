@@ -45,16 +45,41 @@ export default function Game({ navigation }) {
     const theme = gameContext.theme;
     const playViolet = gameContext.playViolet;
 
-    const saveHighScore = async value => {
+    const saveGameData = async value => {
         try {
             const triSquareData = await AsyncStorage.getItem('@triSquareData');
             const updatedData = JSON.parse(triSquareData) || {};
 
-            updatedData.normalHighScore = value;
+            updatedData.highScore = value;
 
             if (value >= 100 && !updatedData.violetUnlocked) {
                 updatedData.violetUnlocked = true;
                 gameContext.setVioletUnlocked(true);
+            }
+
+            if(!updatedData.achievements) {
+                updatedData.achievements = {
+                  scores: {},
+                  grids: {},
+                  matched: {}
+                };
+            }
+
+            switch (true) {
+                case value > 199 && !updatedData.achievements.score200:
+                    updatedData.achievements.score200 = true;
+                case value > 149 && !updatedData.achievements.score150:
+                    updatedData.achievements.score150 = true;
+                case value > 119 && !updatedData.achievements.score120:
+                    updatedData.achieevments.score120 = true;
+                case value > 89 && !updatedData.achievements.score90:
+                    updatedData.achievements.score90 = true;
+                case value > 59 && !updatedData.achievements.score60:
+                    updatedData.achievements.score60 = true;
+                case value > 29 && !updatedData.achievements.score30:
+                    updatedData.achievements.score30 = true;
+                    gameContext.setAchievements(updatedData.achievements);
+                    break;
             }
 
             await AsyncStorage.setItem('@triSquareData', JSON.stringify(updatedData));
@@ -225,7 +250,7 @@ export default function Game({ navigation }) {
                 if (gridFull) {
                     setGameOver(true);
                     setCanAddTile(false);
-                    score > gameContext.highScore && saveHighScore(score);
+                    score > gameContext.highScore && saveGameData(score);
                 } else {
                     setCanAddTile(true);
                 }

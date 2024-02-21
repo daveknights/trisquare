@@ -18,6 +18,7 @@ export default function App() {
     const [mode, setMode] = useState('dark');
     const [theme, setTheme] = useState(darkTheme);
     const [highScore, setHighScore] = useState(0);
+    const [achievements, setAchievements] = useState({});
     const [violetUnlocked, setVioletUnlocked] = useState(false);
     const [playViolet, setPlayViolet] = useState(false);
 
@@ -34,7 +35,7 @@ export default function App() {
             const allData = JSON.parse(jsonData);
 
             if (allData !== null) {
-                allData.normalHighScore && setHighScore(allData.normalHighScore);
+                allData.highScore && setHighScore(allData.highScore);
 
                 allData.violetUnlocked && setVioletUnlocked(true);
 
@@ -42,6 +43,10 @@ export default function App() {
                     allData.mode === 'light' ? setTheme(lightTheme) : setTheme(darkTheme);
 
                     setMode(allData.mode);
+                }
+
+                if (allData.achievements) {
+                    setAchievements(allData.achievements)
                 }
             }
         } catch (e) {
@@ -61,7 +66,9 @@ export default function App() {
                                     violetUnlocked: violetUnlocked,
                                     setVioletUnlocked: setVioletUnlocked,
                                     playViolet: playViolet,
-                                    setPlayViolet: setPlayViolet}}>
+                                    setPlayViolet: setPlayViolet,
+                                    achievements: achievements,
+                                    setAchievements: setAchievements}}>
             <NavigationContainer>
                 <Stack.Navigator>
                     <Stack.Screen name="Home"

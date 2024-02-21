@@ -11,4 +11,6 @@ export default scoreContext = React.createContext({
     setVioletUnlocked: () => {},
     playViolet: false,
     setPlayViolet: () => {},
+    achievements: {},
+    setAchievements: () => {},
 });
