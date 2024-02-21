@@ -9,9 +9,16 @@ export default function MatchesReward({ text, colour }) {
 
     return(
         <View style={styles.matchesReward}>
-            <View style={{...styles.tile, backgroundColor: colours[colour].borderColor}}></View>
-            <View style={{...styles.tile, ...styles.middleTile, backgroundColor: colours[colour].borderColor, borderColor: theme.bgColour}}></View>
-            <View style={{...styles.tile, ...styles.frontTile, ...colours[colour], borderColor: theme.bgColour}}>
+            <View style={{...styles.tile, backgroundColor: colours[colour].borderColor}} />
+            <View style={{...styles.tile,
+                            ...styles.middleTile,
+                            backgroundColor: colours[colour].borderColor,
+                            borderColor: theme.bgColour}} />
+            <View style={{...styles.tile,
+                            ...styles.frontTile,
+                            ...colours[colour],
+                            borderBottomColor: colours[colour].borderColor,
+                            borderLeftColor: colours[colour].borderColor}}>
                 <Text style={styles.matchesRewardText}>{text}+</Text>
             </View>
         </View>

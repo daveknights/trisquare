@@ -14,15 +14,15 @@ export default colours = {
     violet: '#cf73ff',
     yellow: '#ffec73',
     bronze: {
-        backgroundColor: '#ffcc99',
-        borderColor: '#cc853d',
+        backgroundColor: '#f2ceaa',
+        borderColor: '#b3845a',
     },
     silver: {
         backgroundColor: '#dddddd',
         borderColor: '#888888',
     },
     gold: {
-        backgroundColor: '#ffec73',
+        backgroundColor: '#ffee99',
         borderColor: '#d4af37',
     },
 };
