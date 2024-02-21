@@ -4,6 +4,7 @@ import ColourButton from './ColourButton';
 import IconButton from './IconButton';
 import GameContext from '../context/gameContext';
 import containerStyles from '../defaults/containerStyles';
+import layoutStyles from '../defaults/layoutStyles';
 
 export default function Home({ navigation }) {
     const gameContext = useContext(GameContext);
@@ -20,36 +21,42 @@ export default function Home({ navigation }) {
 
 
     return (
-        <View style={{...containerStyles, paddingTop: 60, backgroundColor: theme.bgColour}}>
-            <Image
-                style={styles.homescreenLogo}
-                source={require('../assets/homescreen-logo.png')}
-            />
-            <View style={styles.bestScoreArea}>
-                <Text style={{...styles.best, color: theme.textColour}}>Best: </Text>
-                <Text style={{...styles.bestScore, color: theme.textColour}}>{gameContext.highScore}</Text>
+        <View style={{...containerStyles, backgroundColor: theme.bgColour}}>
+            <View style={{...layoutStyles.centerWrapper, ...layoutStyles.flexTwo}}>
+                <Image
+                    style={styles.homescreenLogo}
+                    source={require('../assets/homescreen-logo.png')}
+                />
             </View>
-            <ColourButton
-                text="Play"
-                bgColour="green"
-                onPress={handlePlayPress}
-            />
-            <ColourButton
-                text="Rewards"
-                bgColour="yellow"
-                onPress={handleRewardsPress}
-            />
-            <View style={styles.optionsInfo}>
-                <IconButton
-                    path={require('../assets/options-icon.png')}
-                    bgColour="orange"
-                    onPress={handleOptionsPress}
+            <View style={{...layoutStyles.centerWrapper, ...layoutStyles.flexOne}}>
+                <View style={styles.bestScoreArea}>
+                    <Text style={{...styles.best, color: theme.textColour}}>Best: </Text>
+                    <Text style={{...styles.bestScore, color: theme.textColour}}>{gameContext.highScore}</Text>
+                </View>
+            </View>
+            <View style={{...layoutStyles.centerWrapper, ...layoutStyles.flexThree}}>
+                <ColourButton
+                    text="Play"
+                    bgColour="green"
+                    onPress={handlePlayPress}
                 />
-                <IconButton
-                    path={require('../assets/info-icon.png')}
-                    bgColour="lightBlue"
-                    onPress={handleInfoPress}
+                <ColourButton
+                    text="Rewards"
+                    bgColour="yellow"
+                    onPress={handleRewardsPress}
                 />
+                <View style={styles.optionsInfo}>
+                    <IconButton
+                        path={require('../assets/options-icon.png')}
+                        bgColour="orange"
+                        onPress={handleOptionsPress}
+                    />
+                    <IconButton
+                        path={require('../assets/info-icon.png')}
+                        bgColour="lightBlue"
+                        onPress={handleInfoPress}
+                    />
+                </View>
             </View>
         </View>
     );
@@ -62,8 +69,6 @@ const styles = StyleSheet.create({
     },
     bestScoreArea: {
         flexDirection: 'row',
-        marginBottom: 100,
-        marginTop: 90,
     },
     best: {
         fontSize: 20,

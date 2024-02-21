@@ -5,6 +5,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import IconButton from './IconButton';
 import GameContext from '../context/gameContext';
 import containerStyles from '../defaults/containerStyles';
+import layoutStyles from '../defaults/layoutStyles';
 import colours from '../defaults/colours';
 const initialTiles = {'t1':'', 't2':'', 't3':'', 't4':'', 't5':'', 't6':'', 't7':'', 't8':'', 't9':''};
 const tileColours = ['red', 'orange', 'yellow', 'green', 'blue'];
@@ -275,78 +276,84 @@ export default function Game({ navigation }) {
 
     return (
         <View style={{...containerStyles, backgroundColor: theme.bgColour}}>
-            <View style={styles.bestScoreArea}>
-                <Text style={{...styles.best, color: theme.textColour}}>Best: </Text>
-                <Text style={{...styles.bestScore, color: theme.textColour}}>{gameContext.highScore}</Text>
+            <View style={{...layoutStyles.spaceBetweenWrapper, ...layoutStyles.flexOne}}>
+                <View style={styles.bestScoreArea}>
+                    <Text style={{...styles.best, color: theme.textColour}}>Best: </Text>
+                    <Text style={{...styles.bestScore, color: theme.textColour}}>{gameContext.highScore}</Text>
+                </View>
+                <View style={styles.scoreArea}>
+                    <Text style={{...styles.score, color: theme.textColour}}>Score: </Text>
+                    <Text style={{...styles.scoreTotal, color: theme.textColour}}>{score}</Text>
+                    {showBonus && <Text style={styles.bonus}>+{bonusPoints}</Text>}
+                </View>
             </View>
-            <View style={styles.scoreArea}>
-                <Text style={{...styles.score, color: theme.textColour}}>Score: </Text>
-                <Text style={{...styles.scoreTotal, color: theme.textColour}}>{score}</Text>
-                {showBonus && <Text style={styles.bonus}>+{bonusPoints}</Text>}
+            <View style={{...layoutStyles.centerWrapper, ...layoutStyles.flexFour}}>
+                <View style={styles.grid}>
+                    {Object.entries(tiles).map(([k, col]) => {
+                        let tileColour =  gameContext.theme.tileGrads['blankColour'];
+                        let tilePress = () => handleTilePress(k);
+                        let borderRadius = null;
+                        let blocked = null;
+                        let selected = null;
+
+                        if (col === 'blocked') {
+                            blocked = <>
+                                        <View style={{...styles.blocked, backgroundColor: theme.bgColour, transform: [{rotate: '45deg'}]}} />
+                                        <View style={{...styles.blocked, backgroundColor: theme.bgColour, transform: [{rotate: '-45deg'}]}} />
+                                    </>;
+                            tilePress = null;
+                        } else if (col) {
+                            tileColour = gameContext.theme.tileGrads[col];
+                            tilePress = null;
+                        }
+
+                        if (k === selectedTile) {
+                            selected = {borderColor: '#00ef00', borderWidth: 5}
+                        }
+
+                        switch (k) {
+                            case 't1':
+                                borderRadius = {borderTopLeftRadius: 9}
+                                break;
+                            case 't3':
+                                borderRadius = {borderTopRightRadius: 9}
+                                break;
+                            case 't7':
+                                borderRadius = {borderBottomLeftRadius: 9}
+                                break;
+                            case 't9':
+                                borderRadius = {borderBottomRightRadius: 9}
+                                break;
+                        }
+
+                        return !col || col === 'blocked' ? <Pressable key={k} onPress={tilePress} style={{...styles.tile, backgroundColor: gameContext.theme.gridColour, ...borderRadius, ...selected}}>
+                                                                {blocked}
+                                                            </Pressable> :
+                                                            <LinearGradient key={k} colors={tileColour} style={{...styles.tile, ...borderRadius, ...selected}} />;
+                    })}
+                </View>
             </View>
-            <View style={styles.grid}>
-                {Object.entries(tiles).map(([k, col]) => {
-                    let tileColour =  gameContext.theme.tileGrads['blankColour'];
-                    let tilePress = () => handleTilePress(k);
-                    let borderRadius = null;
-                    let blocked = null;
-                    let selected = null;
-
-                    if (col === 'blocked') {
-                        blocked = <>
-                                    <View style={{...styles.blocked, backgroundColor: theme.bgColour, transform: [{rotate: '45deg'}]}} />
-                                    <View style={{...styles.blocked, backgroundColor: theme.bgColour, transform: [{rotate: '-45deg'}]}} />
-                                </>;
-                        tilePress = null;
-                    } else if (col) {
-                        tileColour = gameContext.theme.tileGrads[col];
-                        tilePress = null;
-                    }
-
-                    if (k === selectedTile) {
-                        selected = {borderColor: '#00ef00', borderWidth: 5}
-                    }
-
-                    switch (k) {
-                        case 't1':
-                            borderRadius = {borderTopLeftRadius: 9}
-                            break;
-                        case 't3':
-                            borderRadius = {borderTopRightRadius: 9}
-                            break;
-                        case 't7':
-                            borderRadius = {borderBottomLeftRadius: 9}
-                            break;
-                        case 't9':
-                            borderRadius = {borderBottomRightRadius: 9}
-                            break;
-                    }
-
-                    return !col || col === 'blocked' ? <Pressable key={k} onPress={tilePress} style={{...styles.tile, backgroundColor: gameContext.theme.gridColour, ...borderRadius, ...selected}}>
-                                                            {blocked}
-                                                        </Pressable> :
-                                                        <LinearGradient key={k} colors={tileColour} style={{...styles.tile, ...borderRadius, ...selected}} />;
-                })}
+            <View style={{...layoutStyles.startWrapper, ...layoutStyles.flexTwo}}>
+                <View style={styles.colourPalette}>
+                    {tileColours.map(colour => colour !== 'blankColour' && <LinearGradient key={colour} colors={gameContext.theme.tileGrads[colour]}
+                                                                                            style={{...styles.paletteColour, width: (Dimensions.get('window').width - (playViolet ? 70 : 68)) / (playViolet ? 6 : 5),}}>
+                                                <TouchableOpacity onPress={() => handlePalettePress(colour)}
+                                                                    style={{...styles.paletteColour, width: (Dimensions.get('window').width - (playViolet ? 70 : 68)) / (playViolet ? 6 : 5),}} />
+                                            </LinearGradient>)}
+                </View>
+                {gameOver && <View style={styles.postGameOptions}>
+                                <IconButton
+                                    path={require('../assets/home-icon.png')}
+                                    bgColour="yellow"
+                                    onPress={handleHomePress}
+                                />
+                                <IconButton
+                                    path={require('../assets/play-icon.png')}
+                                    bgColour="green"
+                                    onPress={startGame}
+                                />
+                            </View>}
             </View>
-            <View style={styles.colourPalette}>
-                {tileColours.map(colour => colour !== 'blankColour' && <LinearGradient key={colour} colors={gameContext.theme.tileGrads[colour]}
-                                                                                        style={{...styles.paletteColour, width: (Dimensions.get('window').width - (playViolet ? 70 : 68)) / (playViolet ? 6 : 5),}}>
-                                            <TouchableOpacity onPress={() => handlePalettePress(colour)}
-                                                                style={{...styles.paletteColour, width: (Dimensions.get('window').width - (playViolet ? 70 : 68)) / (playViolet ? 6 : 5),}} />
-                                        </LinearGradient>)}
-            </View>
-            {gameOver && <View style={styles.postGameOptions}>
-                            <IconButton
-                                path={require('../assets/home-icon.png')}
-                                bgColour="yellow"
-                                onPress={handleHomePress}
-                            />
-                            <IconButton
-                                path={require('../assets/play-icon.png')}
-                                bgColour="green"
-                                onPress={startGame}
-                            />
-                        </View>}
         </View>
     )
 }
@@ -379,7 +386,6 @@ const styles = StyleSheet.create({
     colourPalette: {
         flexDirection: 'row',
         gap: 2,
-        marginTop: 30,
     },
     paletteColour: {
         aspectRatio: 1/1,
@@ -387,7 +393,6 @@ const styles = StyleSheet.create({
     },
     bestScoreArea: {
         flexDirection: 'row',
-        marginBottom: 40,
         marginLeft: 'auto',
     },
     best: {
@@ -402,7 +407,6 @@ const styles = StyleSheet.create({
         alignSelf: 'flex-start',
         flexDirection: 'row',
         justifyContent: 'center',
-        marginBottom: 20,
         marginLeft: 16,
     },
     score: {
@@ -426,7 +430,6 @@ const styles = StyleSheet.create({
         borderColor: colours.primary,
         borderRadius: 15,
         borderWidth: 1,
-        marginTop: 30,
         paddingBottom: 12,
         paddingLeft: 50,
         paddingRight: 50,
