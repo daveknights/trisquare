@@ -87,9 +87,9 @@ const styles = StyleSheet.create({
     theme: {
         alignItems: 'center',
         backgroundColor: colours.grey,
-        paddingBottom: 12,
-        paddingTop: 12,
-        width: (Dimensions.get('window').width - 160) / 2,
+        paddingBottom: 16,
+        paddingTop: 16,
+        width: (Dimensions.get('window').width - 140) / 2,
     },
     themeText: {
         color: 'yellow',
