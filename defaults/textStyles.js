@@ -6,6 +6,7 @@ export default textStyles = {
         marginBottom: 24,
     },
     subHeading: {
+        alignSelf: 'center',
         fontSize: 20,
         fontWeight: 'bold',
         marginBottom: 10,

@@ -42,19 +42,18 @@ export default function Game({ navigation }) {
     const [showBonus, setShowBonus] = useState(false);
     const [bonusPoints, setBonusPoints] = useState(0);
     const [gridFull, setGridFull] = useState(false);
+    const [gridsCleared, setGridsCleared] = useState(0);
     const [gameOver, setGameOver] = useState(null);
     const gameContext = useContext(GameContext);
     const theme = gameContext.theme;
     const playViolet = gameContext.playViolet;
 
-    const saveGameData = async value => {
+    const saveGameData = async () => {
         try {
             const triSquareData = await AsyncStorage.getItem('@triSquareData');
             const updatedData = JSON.parse(triSquareData) || {};
 
-            updatedData.highScore = value;
-
-            if (value >= 100 && !updatedData.violetUnlocked) {
+            if (score >= 100 && !updatedData.violetUnlocked) {
                 updatedData.violetUnlocked = true;
                 gameContext.setVioletUnlocked(true);
             }
@@ -67,30 +66,46 @@ export default function Game({ navigation }) {
                 };
             }
 
-            switch (true) {
-                case value > 199 && !updatedData.achievements.score200:
-                    updatedData.achievements.score200 = true;
-                case value > 149 && !updatedData.achievements.score150:
-                    updatedData.achievements.score150 = true;
-                case value > 119 && !updatedData.achievements.score120:
-                    updatedData.achievements.score120 = true;
-                case value > 89 && !updatedData.achievements.score90:
-                    updatedData.achievements.score90 = true;
-                case value > 59 && !updatedData.achievements.score60:
-                    updatedData.achievements.score60 = true;
-                case value > 29 && !updatedData.achievements.score30:
-                    updatedData.achievements.score30 = true;
-                    gameContext.setAchievements(updatedData.achievements);
-                    break;
+            if (score > gameContext.highScore) {
+                updatedData.highScore = score;
+
+                switch (true) {
+                    case score > 199 && !updatedData.achievements.scores.score200:
+                        updatedData.achievements.scores.score200 = true;
+                    case score > 149 && !updatedData.achievements.scores.score150:
+                        updatedData.achievements.scores.score150 = true;
+                    case score > 119 && !updatedData.achievements.scores.score120:
+                        updatedData.achievements.scores.score120 = true;
+                    case score > 89 && !updatedData.achievements.scores.score90:
+                        updatedData.achievements.scores.score90 = true;
+                    case score > 59 && !updatedData.achievements.scores.score60:
+                        updatedData.achievements.scores.score60 = true;
+                    case score > 29 && !updatedData.achievements.scores.score30:
+                        updatedData.achievements.scores.score30 = true;
+                        break;
+                }
+
+                setNewHighScore(true);
+                gameContext.setHighScore(score);
             }
+
+            switch (true) {
+                case gridsCleared > 5 && !updatedData.achievements.grids.grids6:
+                    updatedData.achievements.grids.grids6 = true;
+                case gridsCleared > 2 && !updatedData.achievements.grids.grids3:
+                    updatedData.achievement.grids.grids3 = true;
+                case gridsCleared > 0 && !updatedData.achievements.grids.grids1:
+                    updatedData.achievements.grids.grids1 = true;
+            }
+
+            console.log(updatedData);
+            gameContext.setAchievements(updatedData.achievements);
 
             await AsyncStorage.setItem('@triSquareData', JSON.stringify(updatedData));
         } catch (e) {
             // saving error
         }
 
-        setNewHighScore(true);
-        gameContext.setHighScore(value);
     };
 
     const getEmptyTile = () => emptyTiles[Math.floor(Math.random() * emptyTiles.length)];
@@ -180,6 +195,7 @@ export default function Game({ navigation }) {
                 break;
             case 8:
                 setScore(score => score + 5);
+                setGridsCleared(prev => prev + 1);
                 setBonusPoints(5);
                 setShowBonus(true);
             default:
@@ -254,7 +270,7 @@ export default function Game({ navigation }) {
                 if (gridFull) {
                     setGameOver(true);
                     setCanAddTile(false);
-                    score > gameContext.highScore && saveGameData(score);
+                    saveGameData();
                 } else {
                     setCanAddTile(true);
                 }

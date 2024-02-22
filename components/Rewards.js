@@ -37,24 +37,24 @@ export default function Rewards({ navigation }) {
                 <ScrollView scrollEnabled={scrollEnabled} onContentSizeChange={onContentSizeChange} style={{minHeight: height - headerHeight, width: '100%'}}>
                     <Text style={{...textStyles.heading}}>Your Achievements</Text>
                     {!Object.keys(achievements).length && <Text style={{...textStyles.text}}>All your achievement rewards will show here.</Text>}
-                    {Object.keys(achievements).length > 0 && <Text style={{...textStyles.subHeading, alignSelf: 'center'}}>Points scored in a game</Text>}
-                    {Object.keys(achievements).length > 0 && <View style={styles.rewardsRow}>
+                    {Object.keys(achievements.scores).length > 0 && <Text style={{...textStyles.subHeading, alignSelf: 'center'}}>Points scored in a game</Text>}
+                    {(Object.keys(achievements.scores).length > 0 && achievements.scores.score30) && <View style={styles.rewardsRow}>
                         {achievements.score30 && <PointsReward text="30" colour="bronze" />}
                         {achievements.score60 && <PointsReward text="60" colour="bronze" />}
                         {achievements.score90 && <PointsReward text="90" colour="silver" />}
                     </View>}
-                    {/* <View style={styles.rewardsRow}>
-                        <PointsReward text="120" colour="silver" />
-                        <PointsReward text="150" colour="gold" />
-                        <PointsReward text="200" colour="gold" />
-                    </View>
-                    <Text style={{...textStyles.subHeading}}>Grids cleared in a game</Text>
-                    <View style={styles.rewardsRow}>
-                        <GridsReward text="1" colour="bronze" />
-                        <GridsReward text="3" colour="silver" />
-                        <GridsReward text="6" colour="gold" />
-                    </View>
-                    <Text style={{...textStyles.subHeading}}>Consecutive matches</Text>
+                    {(Object.keys(achievements.scores).length > 0 && achievements.scores.score120) && <View style={styles.rewardsRow}>
+                        {achievements.scores.score120 && <PointsReward text="120" colour="silver" />}
+                        {achievements.scores.score150 && <PointsReward text="150" colour="gold" />}
+                        {achievements.scores.score200 && <PointsReward text="200" colour="gold" />}
+                    </View>}
+                    {Object.keys(achievements.grids).length > 0 && <Text style={{...textStyles.subHeading}}>Grids cleared in a game</Text>}
+                    {Object.keys(achievements.grids).length > 0 && <View style={styles.rewardsRow}>
+                        {achievements.grids.grids1 && <GridsReward text="1" colour="bronze" />}
+                         {achievements.grids.grids3 && <GridsReward text="3" colour="silver" />}
+                         {achievements.grids.grids6 && <GridsReward text="6" colour="gold" />}
+                    </View>}
+                    {/* <Text style={{...textStyles.subHeading}}>Consecutive matches</Text>
                     <View style={styles.rewardsRow}>
                         <MatchesReward text="1" colour="bronze" />
                         <MatchesReward text="3" colour="silver" />
