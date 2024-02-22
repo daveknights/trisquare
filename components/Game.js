@@ -37,6 +37,7 @@ export default function Game({ navigation }) {
     const [canAddTile, setCanAddTile] = useState(null);
     const [lastTile, setLastTile] = useState(false);
     const [score, setScore] = useState(null);
+    const [newHighScore, setNewHighScore] = useState(false);
     const [consecutiveMatches, setConsecutiveMatches] = useState(0);
     const [showBonus, setShowBonus] = useState(false);
     const [bonusPoints, setBonusPoints] = useState(0);
@@ -88,6 +89,7 @@ export default function Game({ navigation }) {
             // saving error
         }
 
+        setNewHighScore(true);
         gameContext.setHighScore(value);
     };
 
@@ -114,6 +116,7 @@ export default function Game({ navigation }) {
         }});
         setCanAddTile(false);
         setScore(0);
+        setNewHighScore(false);
         setGameOver(false);
     };
 
@@ -278,7 +281,7 @@ export default function Game({ navigation }) {
         <View style={{...containerStyles, backgroundColor: theme.bgColour}}>
             <View style={{...layoutStyles.spaceBetweenWrapper, ...layoutStyles.flexOne}}>
                 <View style={styles.bestScoreArea}>
-                    <Text style={{...styles.best, color: theme.textColour}}>Best: </Text>
+                    <Text style={{...styles.best, color: theme.textColour}}>{newHighScore ? 'New high score' : 'Best'}: </Text>
                     <Text style={{...styles.bestScore, color: theme.textColour}}>{gameContext.highScore}</Text>
                 </View>
                 <View style={styles.scoreArea}>
