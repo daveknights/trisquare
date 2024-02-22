@@ -72,7 +72,7 @@ export default function Game({ navigation }) {
                 case value > 149 && !updatedData.achievements.score150:
                     updatedData.achievements.score150 = true;
                 case value > 119 && !updatedData.achievements.score120:
-                    updatedData.achieevments.score120 = true;
+                    updatedData.achievements.score120 = true;
                 case value > 89 && !updatedData.achievements.score90:
                     updatedData.achievements.score90 = true;
                 case value > 59 && !updatedData.achievements.score60:
