@@ -9,6 +9,8 @@ import layoutStyles from '../defaults/layoutStyles';
 export default function Home({ navigation }) {
     const gameContext = useContext(GameContext);
     const theme = gameContext.theme;
+    const gameName = gameContext.mode === 'dark' ? require('../assets/gameName-light.png') :
+                                                    require('../assets/gameName-dark.png');
 
     const handlePlayPress = () => navigation.navigate('Game');
 
@@ -26,6 +28,10 @@ export default function Home({ navigation }) {
                 <Image
                     style={styles.homescreenLogo}
                     source={require('../assets/homescreen-logo.png')}
+                />
+                <Image
+                    style={styles.gameName}
+                    source={gameName}
                 />
             </View>
             <View style={{...layoutStyles.centerWrapper, ...layoutStyles.flexOne}}>
@@ -64,8 +70,13 @@ export default function Home({ navigation }) {
 
 const styles = StyleSheet.create({
     homescreenLogo: {
-        height: 146,
-        width: 168,
+        height: 102,
+        marginBottom: 8,
+        width: 111,
+    },
+    gameName: {
+        height: 34,
+        width: 166,
     },
     bestScoreArea: {
         flexDirection: 'row',
