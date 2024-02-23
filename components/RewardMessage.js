@@ -3,8 +3,11 @@ import { LinearGradient } from 'expo-linear-gradient';
 import colours from "../defaults/colours";
 import { darkTheme } from "../defaults/themes";
 
-export default function RewardMessage({ navigation }) {
-    const handleRewardsPress = () => navigation.navigate('Rewards');
+export default function RewardMessage({ navigation, setShowRewardsMessage }) {
+    const handleRewardsPress = () => {
+        setShowRewardsMessage(false);
+        navigation.navigate('Rewards')
+    };
 
     return (
         <TouchableOpacity style={styles.rewardMessage} onPress={handleRewardsPress}>
