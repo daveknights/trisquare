@@ -62,6 +62,7 @@ export default function Game({ navigation }) {
             if (score >= 100 && !updatedData.violetUnlocked) {
                 updatedData.violetUnlocked = true;
                 gameContext.setVioletUnlocked(true);
+                saveData = true;
             }
 
             if(!updatedData.achievements) {
