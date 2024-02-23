@@ -12,7 +12,7 @@
       "backgroundColor": "#0e2444"
     },
     "assetBundlePatterns": [
-      "assets/images/*"
+      "assets/*"
     ],
     "ios": {
       "supportsTablet": true
