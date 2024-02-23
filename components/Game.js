@@ -2,6 +2,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useEffect, useState, useContext } from 'react';
 import { StyleSheet, Text, View, Pressable, TouchableOpacity, Dimensions } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import RewardMessage from './RewardMessage';
 import IconButton from './IconButton';
 import GameContext from '../context/gameContext';
 import containerStyles from '../defaults/containerStyles';
@@ -45,11 +46,14 @@ export default function Game({ navigation }) {
     const [gridsCleared, setGridsCleared] = useState(0);
     const [matches, setMatches] = useState(0);
     const [gameOver, setGameOver] = useState(null);
+    const [showRewardsMessage, setShowRewardsMessage] = useState(false);
     const gameContext = useContext(GameContext);
     const theme = gameContext.theme;
     const playViolet = gameContext.playViolet;
 
     const saveGameData = async () => {
+        let saveData = false;
+
         try {
             const triSquareData = await AsyncStorage.getItem('@triSquareData');
             const updatedData = JSON.parse(triSquareData) || {};
@@ -69,20 +73,27 @@ export default function Game({ navigation }) {
 
             if (score > gameContext.highScore) {
                 updatedData.highScore = score;
+                saveData = true;
 
                 switch (true) {
                     case score > 199 && !updatedData.achievements.scores.score200:
                         updatedData.achievements.scores.score200 = true;
+                        saveData = true;
                     case score > 149 && !updatedData.achievements.scores.score150:
                         updatedData.achievements.scores.score150 = true;
+                        saveData = true;
                     case score > 119 && !updatedData.achievements.scores.score120:
                         updatedData.achievements.scores.score120 = true;
+                        saveData = true;
                     case score > 89 && !updatedData.achievements.scores.score90:
                         updatedData.achievements.scores.score90 = true;
+                        saveData = true;
                     case score > 59 && !updatedData.achievements.scores.score60:
                         updatedData.achievements.scores.score60 = true;
+                        saveData = true;
                     case score > 29 && !updatedData.achievements.scores.score30:
                         updatedData.achievements.scores.score30 = true;
+                        saveData = true;
                         break;
                 }
 
@@ -93,28 +104,36 @@ export default function Game({ navigation }) {
             switch (true) {
                 case gridsCleared > 5 && !updatedData.achievements.grids.grids6:
                     updatedData.achievements.grids.grids6 = true;
+                    saveData = true;
                 case gridsCleared > 2 && !updatedData.achievements.grids.grids3:
-                    updatedData.achievement.grids.grids3 = true;
+                    updatedData.achievements.grids.grids3 = true;
+                    saveData = true;
                 case gridsCleared > 0 && !updatedData.achievements.grids.grids1:
                     updatedData.achievements.grids.grids1 = true;
+                    saveData = true;
+                    break;
             }
 
             switch (true) {
                 case matches > 5 && !updatedData.achievements.matches.matches6:
                     updatedData.achievements.matches.matches6 = true;
+                    saveData = true;
                 case matches > 2 && !updatedData.achievements.matches.matches3:
-                    updatedData.achievement.matches.matches3 = true;
+                    updatedData.achievements.matches.matches3 = true;
+                    saveData = true;
                 case matches > 0 && !updatedData.achievements.matches.matches1:
                     updatedData.achievements.matches.matches1 = true;
-                    console.log(matches);
+                    saveData = true;
+                    break;
             }
 
-            console.log(updatedData);
-            gameContext.setAchievements(updatedData.achievements);
-
-            await AsyncStorage.setItem('@triSquareData', JSON.stringify(updatedData));
-        } catch (e) {
-            // saving error
+            if (saveData) {
+                gameContext.setAchievements(updatedData.achievements);
+                setShowRewardsMessage(true);
+                await AsyncStorage.setItem('@triSquareData', JSON.stringify(updatedData));
+            }
+        } catch (error) {
+            console.log('There has been a problem saving: ' + error.message);
         }
 
     };
@@ -144,6 +163,7 @@ export default function Game({ navigation }) {
         setScore(0);
         setNewHighScore(false);
         setGameOver(false);
+        setShowRewardsMessage(false);
     };
 
     useEffect(() => {
@@ -364,6 +384,7 @@ export default function Game({ navigation }) {
                                                             <LinearGradient key={k} colors={tileColour} style={{...styles.tile, ...borderRadius, ...selected}} />;
                     })}
                 </View>
+                {showRewardsMessage && <RewardMessage navigation={navigation} />}
             </View>
             <View style={{...layoutStyles.startWrapper, ...layoutStyles.flexTwo}}>
                 <View style={styles.colourPalette}>
