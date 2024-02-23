@@ -295,7 +295,7 @@ export default function Game({ navigation }) {
                         setShowBonus(true);
                     }
 
-                    consecutiveMatches > matches && setMatches(consecutiveMatches);
+                    consecutiveMatches - 1 > matches && setMatches(consecutiveMatches - 1);
 
                     setConsecutiveMatches(0);
                 }
