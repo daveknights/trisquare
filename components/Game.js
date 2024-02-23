@@ -365,16 +365,16 @@ export default function Game({ navigation }) {
 
                         switch (k) {
                             case 't1':
-                                borderRadius = {borderTopLeftRadius: 9}
+                                borderRadius = {borderTopLeftRadius: 15}
                                 break;
                             case 't3':
-                                borderRadius = {borderTopRightRadius: 9}
+                                borderRadius = {borderTopRightRadius: 15}
                                 break;
                             case 't7':
-                                borderRadius = {borderBottomLeftRadius: 9}
+                                borderRadius = {borderBottomLeftRadius: 15}
                                 break;
                             case 't9':
-                                borderRadius = {borderBottomRightRadius: 9}
+                                borderRadius = {borderBottomRightRadius: 15}
                                 break;
                         }
 
