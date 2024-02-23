@@ -45,9 +45,7 @@ export default function App() {
                     setMode(allData.mode);
                 }
 
-                if (allData.achievements) {
-                    setAchievements(allData.achievements)
-                }
+                allData.achievements && setAchievements(allData.achievements);
             }
         } catch (e) {
             // error reading value

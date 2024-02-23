@@ -43,6 +43,7 @@ export default function Game({ navigation }) {
     const [bonusPoints, setBonusPoints] = useState(0);
     const [gridFull, setGridFull] = useState(false);
     const [gridsCleared, setGridsCleared] = useState(0);
+    const [matches, setMatches] = useState(0);
     const [gameOver, setGameOver] = useState(null);
     const gameContext = useContext(GameContext);
     const theme = gameContext.theme;
@@ -62,7 +63,7 @@ export default function Game({ navigation }) {
                 updatedData.achievements = {
                   scores: {},
                   grids: {},
-                  matched: {}
+                  matches: {}
                 };
             }
 
@@ -96,6 +97,16 @@ export default function Game({ navigation }) {
                     updatedData.achievement.grids.grids3 = true;
                 case gridsCleared > 0 && !updatedData.achievements.grids.grids1:
                     updatedData.achievements.grids.grids1 = true;
+            }
+
+            switch (true) {
+                case matches > 5 && !updatedData.achievements.matches.matches6:
+                    updatedData.achievements.matches.matches6 = true;
+                case matches > 2 && !updatedData.achievements.matches.matches3:
+                    updatedData.achievement.matches.matches3 = true;
+                case matches > 0 && !updatedData.achievements.matches.matches1:
+                    updatedData.achievements.matches.matches1 = true;
+                    console.log(matches);
             }
 
             console.log(updatedData);
@@ -263,6 +274,8 @@ export default function Game({ navigation }) {
                         setBonusPoints(consecutiveMatches - 1);
                         setShowBonus(true);
                     }
+
+                    consecutiveMatches > matches && setMatches(consecutiveMatches);
 
                     setConsecutiveMatches(0);
                 }
