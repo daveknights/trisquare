@@ -53,6 +53,7 @@ export default function Game({ navigation }) {
 
     const saveGameData = async () => {
         let saveData = false;
+        let newReward = false;
 
         try {
             const triSquareData = await AsyncStorage.getItem('@triSquareData');
@@ -79,21 +80,27 @@ export default function Game({ navigation }) {
                     case score > 199 && !updatedData.achievements.scores.score200:
                         updatedData.achievements.scores.score200 = true;
                         saveData = true;
+                        newReward = true;
                     case score > 149 && !updatedData.achievements.scores.score150:
                         updatedData.achievements.scores.score150 = true;
                         saveData = true;
+                        newReward = true;
                     case score > 119 && !updatedData.achievements.scores.score120:
                         updatedData.achievements.scores.score120 = true;
                         saveData = true;
+                        newReward = true;
                     case score > 89 && !updatedData.achievements.scores.score90:
                         updatedData.achievements.scores.score90 = true;
                         saveData = true;
+                        newReward = true;
                     case score > 59 && !updatedData.achievements.scores.score60:
                         updatedData.achievements.scores.score60 = true;
                         saveData = true;
+                        newReward = true;
                     case score > 29 && !updatedData.achievements.scores.score30:
                         updatedData.achievements.scores.score30 = true;
                         saveData = true;
+                        newReward = true;
                         break;
                 }
 
@@ -105,12 +112,15 @@ export default function Game({ navigation }) {
                 case gridsCleared > 5 && !updatedData.achievements.grids.grids6:
                     updatedData.achievements.grids.grids6 = true;
                     saveData = true;
+                    newReward = true;
                 case gridsCleared > 2 && !updatedData.achievements.grids.grids3:
                     updatedData.achievements.grids.grids3 = true;
                     saveData = true;
+                    newReward = true;
                 case gridsCleared > 0 && !updatedData.achievements.grids.grids1:
                     updatedData.achievements.grids.grids1 = true;
                     saveData = true;
+                    newReward = true;
                     break;
             }
 
@@ -118,18 +128,21 @@ export default function Game({ navigation }) {
                 case matches > 5 && !updatedData.achievements.matches.matches6:
                     updatedData.achievements.matches.matches6 = true;
                     saveData = true;
+                    newReward = true;
                 case matches > 2 && !updatedData.achievements.matches.matches3:
                     updatedData.achievements.matches.matches3 = true;
                     saveData = true;
+                    newReward = true;
                 case matches > 0 && !updatedData.achievements.matches.matches1:
                     updatedData.achievements.matches.matches1 = true;
                     saveData = true;
+                    newReward = true;
                     break;
             }
 
             if (saveData) {
                 gameContext.setAchievements(updatedData.achievements);
-                setShowRewardsMessage(true);
+                newReward && setShowRewardsMessage(true);
                 await AsyncStorage.setItem('@triSquareData', JSON.stringify(updatedData));
             }
         } catch (error) {
@@ -385,7 +398,7 @@ export default function Game({ navigation }) {
                                                             <LinearGradient key={k} colors={tileColour} style={{...styles.tile, ...borderRadius, ...selected}} />;
                     })}
                 </View>
-                {showRewardsMessage && <RewardMessage navigation={navigation} />}
+                {showRewardsMessage && <RewardMessage navigation={navigation} setShowRewardsMessage={setShowRewardsMessage} />}
             </View>
             <View style={{...layoutStyles.startWrapper, ...layoutStyles.flexTwo}}>
                 <View style={styles.colourPalette}>
