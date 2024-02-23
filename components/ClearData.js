@@ -6,8 +6,9 @@ import GameContext from '../context/gameContext';
 import containerStyles from '../defaults/containerStyles';
 import textStyles from '../defaults/textStyles';
 import colours from '../defaults/colours';
+import layoutStyles from '../defaults/layoutStyles';
 
-export default function ClearData() {
+export default function ClearData({ navigation }) {
     const [dataCleared, setDataCleared] = useState(false);
     const gameContext = useContext(GameContext);
     const theme = gameContext.theme;
@@ -32,21 +33,31 @@ export default function ClearData() {
         }
     };
 
+    const handleHomePress = () => navigation.navigate('Home');
+
     return (
         <View style={{...containerStyles, backgroundColor: theme.bgColour}}>
-             <Text style={{...textStyles.heading}}>Clear high score</Text>
-             <Text style={{...textStyles.text}}>Please be aware that this will remove all the game data from your device
-                until you next play TriSquare and can't be undone.</Text>
-            <Text style={{...textStyles.text}}>This includes your high score, mode choice and levels unlocked.</Text>
-            <View style={styles.highScoreInfo}>
-                <Text style={{...textStyles.text}}>Your current high score is: </Text>
-                <Text style={{...textStyles.text, fontWeight: 'bold', marginBottom: 200}}>{gameContext.highScore}</Text>
+            <View style={{...layoutStyles.flexOne, ...layoutStyles.startWrapper}}>
+                <Text style={{...textStyles.heading}}>Clear high score</Text>
+                <Text style={{...textStyles.text}}>Please be aware that this will remove all the game data from your device
+                    until you next play TriSquare and can't be undone.</Text>
+                <Text style={{...textStyles.text}}>This includes your high score, levels unlocked and rewards.</Text>
+                <View style={styles.highScoreInfo}>
+                    <Text style={{...textStyles.text}}>Your current high score is: </Text>
+                    <Text style={{...textStyles.text, fontWeight: 'bold'}}>{gameContext.highScore}</Text>
+                </View>
             </View>
-            <ColourButton
-                text="Clear"
-                bgColour="red"
-                onPress={clearUserData} />
-            {dataCleared && <Text style={styles.dataCleared}>Your high score data has been removed.</Text>}
+            <View style={{...layoutStyles.flexOne, ...layoutStyles.startWrapper}}>
+                <ColourButton
+                    text="Clear"
+                    bgColour="red"
+                    onPress={clearUserData} />
+                <ColourButton
+                    text="Home"
+                    bgColour="yellow"
+                    onPress={handleHomePress} />
+                {dataCleared && <Text style={styles.dataCleared}>Your high score data has been removed.</Text>}
+            </View>
         </View>
     );
 };
@@ -63,8 +74,11 @@ const styles = StyleSheet.create({
         borderWidth: 2,
         color: colours.primary,
         fontSize: 16,
-        marginTop: 20,
-        padding: 10,
+        marginTop: 10,
+        paddingBottom: 8,
+        paddingLeft: 10,
+        paddingRight: 10,
+        paddingTop: 8,
         width: '100%',
     },
 });
