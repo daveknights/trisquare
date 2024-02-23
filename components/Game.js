@@ -259,6 +259,7 @@ export default function Game({ navigation }) {
 
             for (const combo of combos[selectedTile]) {
                 const selected = selectedTile;
+                const scoreIncrement = selectedColour === 'violet' ? 2 : 1;
                 comboMatch = combo.every(colourMatch);
 
                 if (comboMatch) {
@@ -272,7 +273,7 @@ export default function Game({ navigation }) {
                             [`t${combo[0]}`]: '',
                             [`t${combo[1]}`]: ''
                         }));
-                        setScore(score => score + 1);
+                        setScore(score => score + scoreIncrement);
                         setCanAddTile(true);
                         setGridFull(false);
                         setConsecutiveMatches(prev => prev + 1);

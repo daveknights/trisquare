@@ -1,19 +1,34 @@
-import { StyleSheet, Text, TouchableOpacity, View, Image, Dimensions } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View, Image, ScrollView, Dimensions } from 'react-native';
 import { useContext, useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useHeaderHeight } from '@react-navigation/elements';
 import GameContext from '../context/gameContext';
 import ColourButton from './ColourButton';
 import containerStyles from '../defaults/containerStyles';
 import textStyles from '../defaults/textStyles';
 import buttonStyles from '../defaults/buttonStyles';
 import colours from '../defaults/colours';
+import layoutStyles from '../defaults/layoutStyles';
 import { darkTheme, lightTheme } from '../defaults/themes';
+
+const { height } = Dimensions.get('window');
 
 export default function Options({ navigation }) {
     const [isDarkMode, setIsDarkMode] = useState(null);
+    const [contentHeight, setContentHeight] = useState(0);
+    const [scrollEnabled, setScrollEnabled] = useState(false);
+    const headerHeight = useHeaderHeight();
     const gameContext = useContext(GameContext);
     const theme = gameContext.theme;
     const violetUnlocked = gameContext.violetUnlocked;
+
+    const onContentSizeChange = (contentWidth, contentHeight) => {
+        setContentHeight(contentHeight);
+    };
+
+    useEffect(() => {
+        (!scrollEnabled && contentHeight > (height - headerHeight)) && setScrollEnabled(true);
+    }, [contentHeight]);
 
     useEffect(() => {
         gameContext.mode === 'dark' ? setIsDarkMode(true) : setIsDarkMode(false);
@@ -46,35 +61,40 @@ export default function Options({ navigation }) {
 
     return (
         <View style={{...containerStyles, backgroundColor: theme.bgColour}}>
-            <Text style={{...textStyles.heading}}>Game options</Text>
-            <Text style={{...textStyles.subHeading, color: theme.textColour}}>Mode</Text>
-            <View style={styles.themeChoice}>
-                <TouchableOpacity disabled={isDarkMode} style={{...styles.theme, ...styles.dark}} onPress={() => handleModePress('dark')}>
-                    <Image
-                        style={styles.moonIcon}
-                        source={require('../assets/moon-icon.png')} />
-                </TouchableOpacity>
-                <TouchableOpacity disabled={!isDarkMode} style={{...styles.theme, ...styles.light}} onPress={() => handleModePress('light')}>
-                    <Image
-                        style={styles.sunIcon}
-                    source={require('../assets/sun-icon.png')} />
-                </TouchableOpacity>
-            </View>
-            <Text style={{...textStyles.subHeading, color: theme.textColour}}>Level</Text>
-            <ColourButton
-                text="5 colours"
-                bgColour="blue"
-                onPress={() => handleLevelPress(false)} />
-            <TouchableOpacity style={{...buttonStyles.button, ...styles.violetButton, backgroundColor: violetUnlocked ? colours.violet : colours.disabledViolet}} disabled={!gameContext.violetUnlocked} onPress={() => handleLevelPress(true)}>
-                {!gameContext.violetUnlocked &&
-                    <Image
-                    style={styles.padlockIcon}
-                    source={require('../assets/padlock-icon.png')} />
-                }
-                <Text style={{...buttonStyles.buttonText, color: violetUnlocked ? colours.primary : colours.disabledText}}>6 colours</Text>
-            </TouchableOpacity>
-            {!gameContext.violetUnlocked && <Text style={{...textStyles.text}}>Score 100 or more to unlock the violet tile.</Text>}
-            <Text style={{...textStyles.text}}>The game becomes slightly harder with 6 colours, as the chance of the colour of the tile that's added being one that will help you is reduced.</Text>
+            <ScrollView scrollEnabled={scrollEnabled} onContentSizeChange={onContentSizeChange}>
+                <View style={{...layoutStyles.centerWrapper}}>
+                    <Text style={{...textStyles.heading}}>Game options</Text>
+                    <Text style={{...textStyles.subHeading, color: theme.textColour}}>Mode</Text>
+                    <View style={styles.themeChoice}>
+                        <TouchableOpacity disabled={isDarkMode} style={{...styles.theme, ...styles.dark}} onPress={() => handleModePress('dark')}>
+                            <Image
+                                style={styles.moonIcon}
+                                source={require('../assets/moon-icon.png')} />
+                        </TouchableOpacity>
+                        <TouchableOpacity disabled={!isDarkMode} style={{...styles.theme, ...styles.light}} onPress={() => handleModePress('light')}>
+                            <Image
+                                style={styles.sunIcon}
+                            source={require('../assets/sun-icon.png')} />
+                        </TouchableOpacity>
+                    </View>
+                    <Text style={{...textStyles.subHeading, color: theme.textColour}}>Level</Text>
+                    <ColourButton
+                        text="5 colours"
+                        bgColour="blue"
+                        onPress={() => handleLevelPress(false)} />
+                    <TouchableOpacity style={{...buttonStyles.button, ...styles.violetButton, backgroundColor: violetUnlocked ? colours.violet : colours.disabledViolet}} disabled={!gameContext.violetUnlocked} onPress={() => handleLevelPress(true)}>
+                        {!gameContext.violetUnlocked &&
+                            <Image
+                            style={styles.padlockIcon}
+                            source={require('../assets/padlock-icon.png')} />
+                        }
+                        <Text style={{...buttonStyles.buttonText, color: violetUnlocked ? colours.primary : colours.disabledText}}>6 colours</Text>
+                    </TouchableOpacity>
+                </View>
+                {!gameContext.violetUnlocked && <Text style={{...textStyles.text}}>Score 100 or more to unlock the violet tile.</Text>}
+                <Text style={{...textStyles.text}}>The game becomes slightly harder with 6 colours, as the chance of the colour of the tile that's added being one that will help you is reduced.</Text>
+                <Text style={{...textStyles.text}}>However, you get 2 points for every violet pattern matched.</Text>
+            </ScrollView>
         </View>
     );
 };
@@ -82,7 +102,7 @@ export default function Options({ navigation }) {
 const styles = StyleSheet.create({
     themeChoice: {
         flexDirection: 'row',
-        marginBottom: 50,
+        marginBottom: 20,
     },
     theme: {
         alignItems: 'center',
