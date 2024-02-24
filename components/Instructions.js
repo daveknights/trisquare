@@ -43,7 +43,7 @@ export default function Instructions() {
                     <Shape cols={2} rotation="270" />
                 </View>
                 <View style={styles.blockedInfo}>
-                    <Text style={{...textStyles.text, marginBottom: 0, width: Dimensions.get('window').width - 50}}>There is always 1 square which is unavailable, indicated by this tile:</Text>
+                    <Text style={{...textStyles.text, marginBottom: 0, width: Dimensions.get('window').width - 90}}>There is always 1 square which is unavailable, indicated by this tile:</Text>
                     <View style={{...styles.blockedTile, backgroundColor: theme.gridColour}}>
                         <Text style={{...styles.xSymbol, color: theme.bgColour}}>X</Text>
                     </View>
