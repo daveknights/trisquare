@@ -58,7 +58,7 @@ export default function ClearData({ navigation }) {
                     text="Home"
                     bgColour="yellow"
                     onPress={handleHomePress} />
-                {dataCleared && <Text style={styles.dataCleared}>Your high score data has been removed.</Text>}
+                {dataCleared && <Text style={styles.dataCleared}>All data has been removed.</Text>}
             </View>
         </View>
     );
@@ -76,11 +76,13 @@ const styles = StyleSheet.create({
         borderWidth: 2,
         color: colours.primary,
         fontSize: 16,
+        fontWeight: 'bold',
         marginTop: 10,
         paddingBottom: 8,
         paddingLeft: 10,
         paddingRight: 10,
         paddingTop: 8,
+        textAlign: 'center',
         width: '100%',
     },
 });

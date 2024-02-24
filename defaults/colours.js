@@ -5,7 +5,7 @@ export default colours = {
     green: '#00fc77',
     grey: '#5f6b78',
     lightBlue: '#73afff',
-    messageBg: '#abffb1',
+    messageBg: '#bfffc3',
     orange: '#ffa873',
     primary: '#0e2444',
     red: '#ff7577',
