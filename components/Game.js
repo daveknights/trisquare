@@ -328,7 +328,7 @@ export default function Game({ navigation }) {
         return () => clearTimeout(timer);
     }, [tiles]);
 
-    const handleTilePress = key => setSelectedTile(key);
+    const handleTilePress = key => !canAddTile && setSelectedTile(key);
 
     const handlePalettePress = colour => {
         if (selectedTile) {
