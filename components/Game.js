@@ -374,7 +374,7 @@ export default function Game({ navigation }) {
                             tilePress = null;
                         }
 
-                        if (k === selectedTile) {
+                        if (k === selectedTile && !selectedColour) {
                             selected = {borderColor: '#00ef00', borderWidth: 5}
                         }
 
