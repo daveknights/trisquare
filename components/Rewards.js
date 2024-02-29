@@ -34,7 +34,7 @@ export default function Rewards({ navigation }) {
 
     return (
             <View style={{...containerStyles, backgroundColor: theme.bgColour}}>
-                <ScrollView scrollEnabled={scrollEnabled} onContentSizeChange={onContentSizeChange}>
+                <ScrollView scrollEnabled={scrollEnabled} onContentSizeChange={onContentSizeChange} style={{width: '100%'}}>
                     <Text style={{...textStyles.heading}}>Your Achievements</Text>
                     {!Object.keys(achievements).length > 0 && <Text style={{...textStyles.text}}>All your achievement rewards will show here.</Text>}
                     {(Object.keys(achievements).length > 0 && Object.keys(achievements.scores).length > 0) && <Text style={{...textStyles.subHeading, alignSelf: 'center'}}>Points scored in a game</Text>}
