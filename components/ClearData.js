@@ -40,7 +40,7 @@ export default function ClearData({ navigation }) {
     return (
         <View style={{...containerStyles, backgroundColor: theme.bgColour}}>
             <View style={{...layoutStyles.flexOne, ...layoutStyles.startWrapper}}>
-                <Text style={{...textStyles.heading}}>Clear high score</Text>
+                <Text style={{...textStyles.heading}}>Clear game data</Text>
                 <Text style={{...textStyles.text}}>Please be aware that this will remove all the game data from your device
                     until you next play TriSquare and can't be undone.</Text>
                 <Text style={{...textStyles.text}}>This includes your high score, levels unlocked and rewards.</Text>
