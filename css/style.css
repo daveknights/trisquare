@@ -38,6 +38,7 @@ h1 {
 main {
     max-width: 1000px;
     padding: 30px 20px;
+    width: 100%;
 }
 main p {
     line-height: 1.5rem;
