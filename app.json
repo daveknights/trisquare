@@ -21,10 +21,16 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#0e2444"
-      }
+      },
+      "package": "com.daveknights.triSquare"
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "e35c8b8b-f87d-48a9-9f37-b30c6d2514d3"
+      }
     }
   }
 }
