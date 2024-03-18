@@ -78,7 +78,7 @@ const styles = StyleSheet.create({
         width: '100%',
     },
     link: {
-        paddingBottom: 10,
+        paddingBottom: 11,
         paddingTop: 10,
     },
     linkText: {
