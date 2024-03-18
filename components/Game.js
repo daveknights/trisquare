@@ -428,11 +428,11 @@ export default function Game({ navigation }) {
 
 const styles = StyleSheet.create({
     grid: {
-        aspectRatio: 1/1,
         borderRadius: 15,
         flexDirection: 'row',
         flexWrap: 'wrap',
         gap: 2,
+        height: (Dimensions.get('window').width - 80),
         overflow: 'hidden',
         marginLeft: 40,
         marginRight: 40,
@@ -440,8 +440,7 @@ const styles = StyleSheet.create({
     },
     tile: {
         alignItems: 'center',
-        aspectRatio: 1/1,
-        height: 1,
+        height: (Dimensions.get('window').width - 84) / 3,
         justifyContent: 'center',
         position: 'relative',
         width: (Dimensions.get('window').width - 84) / 3,
