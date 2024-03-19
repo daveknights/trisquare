@@ -396,7 +396,15 @@ export default function Game({ navigation }) {
                                 break;
                         }
 
-                        return !col || col === 'blocked' ? <Pressable key={k} onPress={tilePress} style={{...styles.tile, backgroundColor: gameContext.theme.gridColour, ...borderRadius, ...selected}}>
+                        const accessibilityAttributes = col !==  'blocked' ? {
+                            accessible: true,
+                            accessibilityLabel: "Empty grid space",
+                            accessibilityHint: "Press to select this space"
+                        } : {};
+
+                        return !col || col === 'blocked' ? <Pressable key={k} onPress={tilePress}
+                                                                {...accessibilityAttributes}
+                                                                style={{...styles.tile, backgroundColor: gameContext.theme.gridColour, ...borderRadius, ...selected}}>
                                                                 {blocked}
                                                             </Pressable> :
                                                             <LinearGradient key={k} colors={tileColour} style={{...styles.tile, ...borderRadius, ...selected}} />;
@@ -409,6 +417,9 @@ export default function Game({ navigation }) {
                     {tileColours.map(colour => colour !== 'blankColour' && <LinearGradient key={colour} colors={gameContext.theme.tileGrads[colour]}
                                                                                             style={{...styles.paletteColour, width: (Dimensions.get('window').width - (playViolet ? 70 : 68)) / (playViolet ? 6 : 5),}}>
                                                 <TouchableOpacity onPress={() => handlePalettePress(colour)}
+                                                                    accessible={true}
+                                                                    accessibilityLabel={colour}
+                                                                    accessibilityHint={`Adds a ${colour} tile to the grid`}
                                                                     style={{...styles.paletteColour, width: (Dimensions.get('window').width - (playViolet ? 70 : 68)) / (playViolet ? 6 : 5),}} />
                                             </LinearGradient>)}
                 </View>
@@ -417,11 +428,13 @@ export default function Game({ navigation }) {
                                     path={require('../assets/home-icon.png')}
                                     bgColour="yellow"
                                     onPress={handleHomePress}
+                                    label="Go to home screen"
                                 />
                                 <IconButton
                                     path={require('../assets/play-icon.png')}
                                     bgColour="green"
                                     onPress={startGame}
+                                    label="Replay game"
                                 />
                             </View>}
             </View>

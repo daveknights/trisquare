@@ -56,11 +56,13 @@ export default function Home({ navigation }) {
                         path={require('../assets/options-icon.png')}
                         bgColour="orange"
                         onPress={handleOptionsPress}
+                        label="Options"
                     />
                     <IconButton
                         path={require('../assets/info-icon.png')}
                         bgColour="lightBlue"
                         onPress={handleInfoPress}
+                        label="Instructions"
                     />
                 </View>
             </View>

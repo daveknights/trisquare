@@ -66,12 +66,16 @@ export default function Options({ navigation }) {
                     <Text style={{...textStyles.heading}}>Game options</Text>
                     <Text style={{...textStyles.subHeading, color: theme.textColour}}>Mode</Text>
                     <View style={styles.themeChoice}>
-                        <TouchableOpacity disabled={isDarkMode} style={{...styles.theme, ...styles.dark}} onPress={() => handleModePress('dark')}>
+                        <TouchableOpacity disabled={isDarkMode} style={{...styles.theme, ...styles.dark}} onPress={() => handleModePress('dark')}
+                            accessible={true}
+                            accessibilityLabel="Dark mode">
                             <Image
                                 style={styles.moonIcon}
                                 source={require('../assets/moon-icon.png')} />
                         </TouchableOpacity>
-                        <TouchableOpacity disabled={!isDarkMode} style={{...styles.theme, ...styles.light}} onPress={() => handleModePress('light')}>
+                        <TouchableOpacity disabled={!isDarkMode} style={{...styles.theme, ...styles.light}} onPress={() => handleModePress('light')}
+                            accessible={true}
+                            accessibilityLabel="Light mode">
                             <Image
                                 style={styles.sunIcon}
                             source={require('../assets/sun-icon.png')} />

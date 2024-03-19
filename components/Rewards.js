@@ -79,7 +79,7 @@ const styles = StyleSheet.create({
     },
     link: {
         paddingBottom: 11,
-        paddingTop: 10,
+        paddingTop: 11,
     },
     linkText: {
         fontSize: 20,
