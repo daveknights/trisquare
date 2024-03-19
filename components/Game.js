@@ -47,6 +47,7 @@ export default function Game({ navigation }) {
     const [matches, setMatches] = useState(0);
     const [gameOver, setGameOver] = useState(null);
     const [showRewardsMessage, setShowRewardsMessage] = useState(false);
+    const [tileAdded, setTileAdded] = useState(false);
     const gameContext = useContext(GameContext);
     const theme = gameContext.theme;
     const playViolet = gameContext.playViolet;
@@ -222,6 +223,7 @@ export default function Game({ navigation }) {
                 }));
                 setBlockedTile(newBlockedTile);
                 setCanAddTile(false);
+                setTileAdded(true);
 
                 clearTimeout(timer);
             }, 250);
@@ -288,7 +290,7 @@ export default function Game({ navigation }) {
                             [`t${combo[1]}`]: ''
                         }));
                         setScore(score => score + scoreIncrement);
-                        setCanAddTile(true);
+                        !tileAdded && setCanAddTile(true);
                         setGridFull(false);
                         setConsecutiveMatches(prev => prev + 1);
 
@@ -320,7 +322,7 @@ export default function Game({ navigation }) {
                     setCanAddTile(false);
                     saveGameData();
                 } else {
-                    setCanAddTile(true);
+                    !tileAdded && setCanAddTile(true);
                 }
             }
         }
@@ -336,6 +338,7 @@ export default function Game({ navigation }) {
             setSelectedColour(colour);
             setTiles(prevTiles => ({...prevTiles, ...{[selectedTile]: colour}}));
             setEmptyTiles(emptyTiles.filter(key => key !== selectedTile));
+            setTileAdded(false);
         }
     };
 
