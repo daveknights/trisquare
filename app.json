@@ -14,18 +14,12 @@
     "assetBundlePatterns": [
       "assets/*"
     ],
-    "ios": {
-      "supportsTablet": true
-    },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#0e2444"
       },
       "package": "com.daveknights.triSquare"
-    },
-    "web": {
-      "favicon": "./assets/favicon.png"
     },
     "extra": {
       "eas": {
