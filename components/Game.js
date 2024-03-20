@@ -414,7 +414,8 @@ export default function Game({ navigation }) {
             </View>
             <View style={{...layoutStyles.startWrapper, ...layoutStyles.flexTwo}}>
                 <View style={styles.colourPalette}>
-                    {tileColours.map(colour => colour !== 'blankColour' && <LinearGradient key={colour} colors={gameContext.theme.tileGrads[colour]}
+                    {gameOver ? <View style={styles.gameOver}><Text style={{...styles.gameOverText, color: theme.textColour}}>Game Over</Text></View>
+                        : tileColours.map(colour => colour !== 'blankColour' && <LinearGradient key={colour} colors={gameContext.theme.tileGrads[colour]}
                                                                                             style={{...styles.paletteColour, width: (Dimensions.get('window').width - (playViolet ? 70 : 68)) / (playViolet ? 6 : 5),}}>
                                                 <TouchableOpacity onPress={() => handlePalettePress(colour)}
                                                                     accessible={true}
@@ -521,5 +522,13 @@ const styles = StyleSheet.create({
     buttonIcon: {
         height: 24,
         width: 24,
+    },
+    gameOver: {
+        alignItems: 'center',
+        height: 70,
+        width: Dimensions.get('window').width - 80,
+    },
+    gameOverText: {
+        fontSize: 36,
     },
 });
