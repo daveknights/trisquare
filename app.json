@@ -19,7 +19,8 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#0e2444"
       },
-      "package": "com.daveknights.triSquare"
+      "package": "com.daveknights.triSquare",
+      "versionCode": 2
     },
     "extra": {
       "eas": {
