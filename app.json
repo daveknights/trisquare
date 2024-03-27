@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "triSquare",
-    "slug": "triSquare",
-    "version": "1.0.1",
+    "name": "TriSquare",
+    "slug": "TriSquare",
+    "version": "1.0.2",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -20,7 +20,7 @@
         "backgroundColor": "#0e2444"
       },
       "package": "com.daveknights.triSquare",
-      "versionCode": 2
+      "versionCode": 3
     },
     "extra": {
       "eas": {
