@@ -21,6 +21,8 @@ const combos = {
     t8: [[2,5], [4,5], [4,7], [5,6], [5,7], [5,9], [6,9], [7,9]],
     t9: [[3,6], [5,6], [5,8], [6,8], [7,8]],
 }
+const tileSize = Math.floor((Dimensions.get('window').width - 84) / 3);
+const gridSize = (tileSize * 3) + 6;
 
 const shuffle = arrayToShuffle => {
     return arrayToShuffle.map(value => ({value, sort: Math.random()}))
@@ -48,9 +50,11 @@ export default function Game({ navigation }) {
     const [gameOver, setGameOver] = useState(null);
     const [showRewardsMessage, setShowRewardsMessage] = useState(false);
     const [tileAdded, setTileAdded] = useState(false);
+    const [paletteTileSize, setPaletteTileSize] = useState(Math.floor((Dimensions.get('window').width - 68) / 5));
     const gameContext = useContext(GameContext);
     const theme = gameContext.theme;
     const playViolet = gameContext.playViolet;
+
 
     const saveGameData = async () => {
         let saveData = false;
@@ -155,7 +159,7 @@ export default function Game({ navigation }) {
 
     const getEmptyTile = () => emptyTiles[Math.floor(Math.random() * emptyTiles.length)];
 
-    const getColour = () => tileColours[Math.floor(Math.random() * (gameContext.playViolet ? 6 : 5))];
+    const getColour = () => tileColours[Math.floor(Math.random() * (playViolet ? 6 : 5))];
     // Initial grid state
     const startGame = () => {
         const startingTiles = shuffle([...Object.keys(initialTiles)]);
@@ -182,7 +186,10 @@ export default function Game({ navigation }) {
     };
 
     useEffect(() => {
-        gameContext.playViolet && tileColours.push('violet');
+        if(playViolet) {
+            setPaletteTileSize(Math.floor((Dimensions.get('window').width - 68)/6));
+            tileColours.push('violet');
+        }
 
         startGame();
 
@@ -416,12 +423,12 @@ export default function Game({ navigation }) {
                 <View style={styles.colourPalette}>
                     {gameOver ? <View style={styles.gameOver}><Text style={{...styles.gameOverText, color: theme.textColour}}>Game Over</Text></View>
                         : tileColours.map(colour => colour !== 'blankColour' && <LinearGradient key={colour} colors={gameContext.theme.tileGrads[colour]}
-                                                                                            style={{...styles.paletteColour, width: (Dimensions.get('window').width - (playViolet ? 70 : 68)) / (playViolet ? 6 : 5),}}>
+                                                                                            style={{...styles.paletteColour, width: paletteTileSize}}>
                                                 <TouchableOpacity onPress={() => handlePalettePress(colour)}
                                                                     accessible={true}
                                                                     accessibilityLabel={colour}
                                                                     accessibilityHint={`Adds a ${colour} tile to the grid`}
-                                                                    style={{...styles.paletteColour, width: (Dimensions.get('window').width - (playViolet ? 70 : 68)) / (playViolet ? 6 : 5),}} />
+                                                                    style={{...styles.paletteColour, width: paletteTileSize}} />
                                             </LinearGradient>)}
                 </View>
                 {gameOver && <View style={styles.postGameOptions}>
@@ -448,19 +455,19 @@ const styles = StyleSheet.create({
         borderRadius: 15,
         flexDirection: 'row',
         flexWrap: 'wrap',
-        gap: 2,
-        height: (Dimensions.get('window').width - 80),
+        gap: 3,
+        height: gridSize,
         overflow: 'hidden',
         marginLeft: 40,
         marginRight: 40,
-        width: (Dimensions.get('window').width - 80),
+        width: gridSize,
     },
     tile: {
         alignItems: 'center',
-        height: (Dimensions.get('window').width - 84) / 3,
+        height: tileSize,
         justifyContent: 'center',
         position: 'relative',
-        width: (Dimensions.get('window').width - 84) / 3,
+        width: tileSize,
     },
     blocked: {
         height: 56,
@@ -469,7 +476,7 @@ const styles = StyleSheet.create({
     },
     colourPalette: {
         flexDirection: 'row',
-        gap: 2,
+        gap: 3,
     },
     paletteColour: {
         aspectRatio: 1/1,
@@ -526,7 +533,7 @@ const styles = StyleSheet.create({
     gameOver: {
         alignItems: 'center',
         height: 70,
-        width: Dimensions.get('window').width - 80,
+        width: gridSize,
     },
     gameOverText: {
         fontSize: 36,
