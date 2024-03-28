@@ -1,5 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import { useEffect, useState } from 'react';
+import { View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -57,6 +58,7 @@ export default function App() {
     }, []);
 
     return (
+    <View style={{backgroundColor: theme.bgColour, flex: 1}}>
         <GameContext.Provider value={{mode: mode, setMode: setMode,
                                     theme: theme, setTheme: setTheme,
                                     highScore: highScore,
@@ -71,10 +73,10 @@ export default function App() {
                 <Stack.Navigator>
                     <Stack.Screen name="Home"
                         component={Home}
-                        options={{headerShown: false, ...headerStyles}} />
+                        options={{headerShown: false, animation: 'fade', ...headerStyles}} />
                     <Stack.Screen name="Game"
                         component={Game}
-                        options={{headerShown: false, ...headerStyles}} />
+                        options={{headerShown: false, animation: 'fade', ...headerStyles}} />
                     <Stack.Screen name="Rewards"
                         component={Rewards}
                         options={{...headerStyles, animation: 'slide_from_right'}} />
@@ -91,5 +93,6 @@ export default function App() {
             </NavigationContainer>
             <StatusBar hidden />
         </GameContext.Provider>
+    </View>
     );
 }
