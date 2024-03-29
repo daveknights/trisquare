@@ -157,13 +157,9 @@ const styles = StyleSheet.create({
     },
     option: {
         alignItems: 'center',
-        backgroundColor: colours.grey,
         paddingBottom: 16,
         paddingTop: 16,
         width: (Dimensions.get('window').width - 140) / 2,
-    },
-    themeText: {
-        color: 'yellow',
     },
     dark: {
         backgroundColor: colours.skyBlack,
