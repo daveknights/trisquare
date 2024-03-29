@@ -10,6 +10,7 @@ import buttonStyles from '../defaults/buttonStyles';
 import colours from '../defaults/colours';
 import layoutStyles from '../defaults/layoutStyles';
 import { darkTheme, lightTheme } from '../defaults/themes';
+import { Audio } from 'expo-av';
 
 const { height } = Dimensions.get('window');
 
@@ -17,10 +18,22 @@ export default function Options({ navigation }) {
     const [isDarkMode, setIsDarkMode] = useState(null);
     const [contentHeight, setContentHeight] = useState(0);
     const [scrollEnabled, setScrollEnabled] = useState(false);
+    const [sound, setSound] = useState();
     const headerHeight = useHeaderHeight();
     const gameContext = useContext(GameContext);
     const theme = gameContext.theme;
     const violetUnlocked = gameContext.violetUnlocked;
+
+    const playSound = async () => {
+        const { sound } = await Audio.Sound.createAsync(require('../assets/reward.mp3'));
+        setSound(sound);
+
+        await sound.playAsync();
+    }
+
+    useEffect(() => {
+        return sound? () => sound.unloadAsync() : undefined;
+    }, [sound]);
 
     const onContentSizeChange = (contentWidth, contentHeight) => {
         setContentHeight(contentHeight);
@@ -50,6 +63,23 @@ export default function Options({ navigation }) {
         }
     };
 
+    const handleSfxPress = async value => {
+        value && playSound();
+
+        try {
+            const triSquareData = await AsyncStorage.getItem('@triSquareData');
+            const updatedData = JSON.parse(triSquareData) || {};
+
+            updatedData.sfx = value;
+
+            await AsyncStorage.setItem('@triSquareData', JSON.stringify(updatedData));
+
+            gameContext.setSfx(value);
+        } catch (e) {
+            // saving error
+        }
+    };
+
     const handleLevelPress = playViolet => {
         gameContext.setPlayViolet(playViolet);
         navigation.navigate('Game');
@@ -65,20 +95,37 @@ export default function Options({ navigation }) {
                 <View style={{...layoutStyles.centerWrapper}}>
                     <Text style={{...textStyles.heading}}>Game options</Text>
                     <Text style={{...textStyles.subHeading, color: theme.textColour}}>Mode</Text>
-                    <View style={styles.themeChoice}>
-                        <TouchableOpacity disabled={isDarkMode} style={{...styles.theme, ...styles.dark}} onPress={() => handleModePress('dark')}
+                    <View style={styles.optionChoice}>
+                        <TouchableOpacity disabled={isDarkMode} style={{...styles.option, ...styles.dark}} onPress={() => handleModePress('dark')}
                             accessible={true}
                             accessibilityLabel="Dark mode">
                             <Image
                                 style={styles.moonIcon}
                                 source={require('../assets/moon-icon.png')} />
                         </TouchableOpacity>
-                        <TouchableOpacity disabled={!isDarkMode} style={{...styles.theme, ...styles.light}} onPress={() => handleModePress('light')}
+                        <TouchableOpacity disabled={!isDarkMode} style={{...styles.option, ...styles.light}} onPress={() => handleModePress('light')}
                             accessible={true}
                             accessibilityLabel="Light mode">
                             <Image
                                 style={styles.sunIcon}
                             source={require('../assets/sun-icon.png')} />
+                        </TouchableOpacity>
+                    </View>
+                    <Text style={{...textStyles.subHeading, color: theme.textColour}}>Sound</Text>
+                    <View style={styles.optionChoice}>
+                        <TouchableOpacity disabled={gameContext.sfx} style={{...styles.option, ...styles.soundOn}} onPress={() => handleSfxPress(true)}
+                            accessible={true}
+                            accessibilityLabel="Sound on">
+                            <Image
+                                style={styles.soundOnIcon}
+                                source={require('../assets/sound-on-icon.png')} />
+                        </TouchableOpacity>
+                        <TouchableOpacity disabled={!gameContext.sfx} style={{...styles.option, ...styles.soundOff}} onPress={() => handleSfxPress(false)}
+                            accessible={true}
+                            accessibilityLabel="Sound off">
+                            <Image
+                                style={styles.soundOffIcon}
+                            source={require('../assets/sound-off-icon.png')} />
                         </TouchableOpacity>
                     </View>
                     <Text style={{...textStyles.subHeading, color: theme.textColour}}>Level</Text>
@@ -104,11 +151,11 @@ export default function Options({ navigation }) {
 };
 
 const styles = StyleSheet.create({
-    themeChoice: {
+    optionChoice: {
         flexDirection: 'row',
         marginBottom: 20,
     },
-    theme: {
+    option: {
         alignItems: 'center',
         backgroundColor: colours.grey,
         paddingBottom: 16,
@@ -129,11 +176,29 @@ const styles = StyleSheet.create({
         borderBottomRightRadius: 15,
 
     },
+    soundOn: {
+        backgroundColor: '#8d9fb3',
+        borderTopLeftRadius: 15,
+        borderBottomLeftRadius: 15,
+    },
+    soundOff: {
+        backgroundColor: '#b5cde5',
+        borderTopRightRadius: 15,
+        borderBottomRightRadius: 15,
+    },
     moonIcon: {
         height: 24,
         width: 20,
     },
     sunIcon: {
+        height: 24,
+        width: 24,
+    },
+    soundOnIcon: {
+        height: 24,
+        width: 14,
+    },
+    soundOffIcon: {
         height: 24,
         width: 24,
     },

@@ -171,7 +171,7 @@ export default function Game({ navigation }) {
                 gameContext.setAchievements(updatedData.achievements);
 
                 if (newReward) {
-                    playSound('reward');
+                    gameContext.sfx && playSound('reward');
                     setShowRewardsMessage(true);
                 }
 
@@ -312,7 +312,7 @@ export default function Game({ navigation }) {
                 comboMatch = combo.every(colourMatch);
 
                 if (comboMatch) {
-                    playSound('match');
+                    gameContext.sfx && playSound('match');
                     timer = setTimeout(() => {
                         setSelectedTile(null);
                         setSelectedColour('');

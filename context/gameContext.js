@@ -13,4 +13,6 @@ export default scoreContext = React.createContext({
     setPlayViolet: () => {},
     achievements: {},
     setAchievements: () => {},
+    sfx: true,
+    setSfx: () => {},
 });

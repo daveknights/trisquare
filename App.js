@@ -22,6 +22,7 @@ export default function App() {
     const [achievements, setAchievements] = useState({});
     const [violetUnlocked, setVioletUnlocked] = useState(false);
     const [playViolet, setPlayViolet] = useState(false);
+    const [sfx, setSfx] = useState(true);
 
     const headerStyles = {
         headerStyle: {
@@ -46,6 +47,10 @@ export default function App() {
                     setMode(allData.mode);
                 }
 
+                if (allData.sfx === false) {
+                    setSfx(allData.sfx);
+                }
+
                 allData.achievements && setAchievements(allData.achievements);
             }
         } catch (e) {
@@ -68,7 +73,9 @@ export default function App() {
                                     playViolet: playViolet,
                                     setPlayViolet: setPlayViolet,
                                     achievements: achievements,
-                                    setAchievements: setAchievements}}>
+                                    setAchievements: setAchievements,
+                                    sfx: sfx,
+                                    setSfx: setSfx}}>
             <NavigationContainer>
                 <Stack.Navigator>
                     <Stack.Screen name="Home"
