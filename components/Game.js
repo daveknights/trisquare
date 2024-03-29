@@ -8,6 +8,7 @@ import GameContext from '../context/gameContext';
 import containerStyles from '../defaults/containerStyles';
 import layoutStyles from '../defaults/layoutStyles';
 import colours from '../defaults/colours';
+import { Audio } from 'expo-av';
 const initialTiles = {'t1':'', 't2':'', 't3':'', 't4':'', 't5':'', 't6':'', 't7':'', 't8':'', 't9':''};
 const tileColours = ['red', 'orange', 'yellow', 'green', 'blue'];
 const combos = {
@@ -51,9 +52,29 @@ export default function Game({ navigation }) {
     const [showRewardsMessage, setShowRewardsMessage] = useState(false);
     const [tileAdded, setTileAdded] = useState(false);
     const [paletteTileSize, setPaletteTileSize] = useState(Math.floor((Dimensions.get('window').width - 68) / 5));
+    const [sound, setSound] = useState();
     const gameContext = useContext(GameContext);
     const theme = gameContext.theme;
     const playViolet = gameContext.playViolet;
+
+    const playSound = async (type) => {
+        let soundType;
+
+        if (type === 'match') {
+            soundType = require('../assets/match.mp3');
+        } else {
+            soundType = require('../assets/reward.mp3');
+        }
+
+        const { sound } = await Audio.Sound.createAsync(soundType);
+        setSound(sound);
+
+        await sound.playAsync();
+    }
+
+    useEffect(() => {
+        return sound? () => sound.unloadAsync() : undefined;
+    }, [sound]);
 
 
     const saveGameData = async () => {
@@ -148,7 +169,12 @@ export default function Game({ navigation }) {
 
             if (saveData) {
                 gameContext.setAchievements(updatedData.achievements);
-                newReward && setShowRewardsMessage(true);
+
+                if (newReward) {
+                    playSound('reward');
+                    setShowRewardsMessage(true);
+                }
+
                 await AsyncStorage.setItem('@triSquareData', JSON.stringify(updatedData));
             }
         } catch (error) {
@@ -286,6 +312,7 @@ export default function Game({ navigation }) {
                 comboMatch = combo.every(colourMatch);
 
                 if (comboMatch) {
+                    playSound('match');
                     timer = setTimeout(() => {
                         setSelectedTile(null);
                         setSelectedColour('');
