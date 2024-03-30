@@ -23,6 +23,10 @@ export default function Options({ navigation }) {
     const gameContext = useContext(GameContext);
     const theme = gameContext.theme;
     const violetUnlocked = gameContext.violetUnlocked;
+    const selectedOption = {
+        borderColor: '#00b353',
+        borderWidth: 5
+    };
 
     const playSound = async () => {
         const { sound } = await Audio.Sound.createAsync(require('../assets/reward.mp3'));
@@ -96,14 +100,14 @@ export default function Options({ navigation }) {
                     <Text style={{...textStyles.heading}}>Game options</Text>
                     <Text style={{...textStyles.subHeading, color: theme.textColour}}>Mode</Text>
                     <View style={styles.optionChoice}>
-                        <TouchableOpacity disabled={isDarkMode} style={{...styles.option, ...styles.dark}} onPress={() => handleModePress('dark')}
+                        <TouchableOpacity disabled={isDarkMode} style={{...styles.option, ...styles.dark, ...isDarkMode && selectedOption}} onPress={() => handleModePress('dark')}
                             accessible={true}
                             accessibilityLabel="Dark mode">
                             <Image
                                 style={styles.moonIcon}
                                 source={require('../assets/moon-icon.png')} />
                         </TouchableOpacity>
-                        <TouchableOpacity disabled={!isDarkMode} style={{...styles.option, ...styles.light}} onPress={() => handleModePress('light')}
+                        <TouchableOpacity disabled={!isDarkMode} style={{...styles.option, ...styles.light, ...!isDarkMode && selectedOption}} onPress={() => handleModePress('light')}
                             accessible={true}
                             accessibilityLabel="Light mode">
                             <Image
@@ -113,14 +117,14 @@ export default function Options({ navigation }) {
                     </View>
                     <Text style={{...textStyles.subHeading, color: theme.textColour}}>Sound</Text>
                     <View style={styles.optionChoice}>
-                        <TouchableOpacity disabled={gameContext.sfx} style={{...styles.option, ...styles.soundOn}} onPress={() => handleSfxPress(true)}
+                        <TouchableOpacity disabled={gameContext.sfx} style={{...styles.option, ...styles.sound, ...gameContext.sfx && selectedOption}} onPress={() => handleSfxPress(true)}
                             accessible={true}
                             accessibilityLabel="Sound on">
                             <Image
                                 style={styles.soundOnIcon}
                                 source={require('../assets/sound-on-icon.png')} />
                         </TouchableOpacity>
-                        <TouchableOpacity disabled={!gameContext.sfx} style={{...styles.option, ...styles.soundOff}} onPress={() => handleSfxPress(false)}
+                        <TouchableOpacity disabled={!gameContext.sfx} style={{...styles.option, ...styles.sound, ...!gameContext.sfx && selectedOption}} onPress={() => handleSfxPress(false)}
                             accessible={true}
                             accessibilityLabel="Sound off">
                             <Image
@@ -143,8 +147,7 @@ export default function Options({ navigation }) {
                     </TouchableOpacity>
                 </View>
                 {!gameContext.violetUnlocked && <Text style={{...textStyles.text}}>Score 100 or more to unlock the violet tile.</Text>}
-                <Text style={{...textStyles.text}}>The game becomes slightly harder with 6 colours, as the chance of the colour of the tile that's added being one that will help you is reduced.</Text>
-                <Text style={{...textStyles.text}}>However, you get 2 points for every violet pattern matched.</Text>
+                {!gameContext.violetUnlocked && <Text style={{...textStyles.text}}>You get 2 points for every violet pattern matched.</Text>}
             </ScrollView>
         </View>
     );
@@ -153,34 +156,24 @@ export default function Options({ navigation }) {
 const styles = StyleSheet.create({
     optionChoice: {
         flexDirection: 'row',
+        gap: 60,
         marginBottom: 20,
     },
     option: {
         alignItems: 'center',
-        paddingBottom: 16,
-        paddingTop: 16,
-        width: (Dimensions.get('window').width - 140) / 2,
+        borderRadius: 15,
+        height: 56,
+        justifyContent: 'center',
+        width: 70,
     },
     dark: {
         backgroundColor: colours.skyBlack,
-        borderTopLeftRadius: 15,
-        borderBottomLeftRadius: 15,
     },
     light: {
         backgroundColor: colours.skyBlue,
-        borderTopRightRadius: 15,
-        borderBottomRightRadius: 15,
-
     },
-    soundOn: {
-        backgroundColor: '#8d9fb3',
-        borderTopLeftRadius: 15,
-        borderBottomLeftRadius: 15,
-    },
-    soundOff: {
+    sound: {
         backgroundColor: '#b5cde5',
-        borderTopRightRadius: 15,
-        borderBottomRightRadius: 15,
     },
     moonIcon: {
         height: 24,
