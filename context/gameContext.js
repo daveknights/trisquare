@@ -5,6 +5,8 @@ export default scoreContext = React.createContext({
     setMode: () => {},
     theme: {},
     setTheme: () => {},
+    plays: 0,
+    setPlays: () => {},
     highScore: 0,
     setHighScore: () => {},
     violetUnlocked: false,

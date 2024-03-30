@@ -78,17 +78,18 @@ export default function Game({ navigation }) {
 
 
     const saveGameData = async () => {
-        let saveData = false;
         let newReward = false;
 
         try {
             const triSquareData = await AsyncStorage.getItem('@triSquareData');
             const updatedData = JSON.parse(triSquareData) || {};
 
+            updatedData.plays = gameContext.plays + 1;
+            gameContext.setPlays(gameContext.plays + 1);
+
             if (score >= 100 && !updatedData.violetUnlocked) {
                 updatedData.violetUnlocked = true;
                 gameContext.setVioletUnlocked(true);
-                saveData = true;
             }
 
             if(!updatedData.achievements) {
@@ -101,32 +102,20 @@ export default function Game({ navigation }) {
 
             if (score > gameContext.highScore) {
                 updatedData.highScore = score;
-                saveData = true;
 
                 switch (true) {
                     case score > 199 && !updatedData.achievements.scores.score200:
                         updatedData.achievements.scores.score200 = true;
-                        saveData = true;
-                        newReward = true;
                     case score > 149 && !updatedData.achievements.scores.score150:
                         updatedData.achievements.scores.score150 = true;
-                        saveData = true;
-                        newReward = true;
                     case score > 119 && !updatedData.achievements.scores.score120:
                         updatedData.achievements.scores.score120 = true;
-                        saveData = true;
-                        newReward = true;
                     case score > 89 && !updatedData.achievements.scores.score90:
                         updatedData.achievements.scores.score90 = true;
-                        saveData = true;
-                        newReward = true;
                     case score > 59 && !updatedData.achievements.scores.score60:
                         updatedData.achievements.scores.score60 = true;
-                        saveData = true;
-                        newReward = true;
                     case score > 29 && !updatedData.achievements.scores.score30:
                         updatedData.achievements.scores.score30 = true;
-                        saveData = true;
                         newReward = true;
                         break;
                 }
@@ -138,15 +127,10 @@ export default function Game({ navigation }) {
             switch (true) {
                 case gridsCleared > 5 && !updatedData.achievements.grids.grids6:
                     updatedData.achievements.grids.grids6 = true;
-                    saveData = true;
-                    newReward = true;
                 case gridsCleared > 2 && !updatedData.achievements.grids.grids3:
                     updatedData.achievements.grids.grids3 = true;
-                    saveData = true;
-                    newReward = true;
                 case gridsCleared > 0 && !updatedData.achievements.grids.grids1:
                     updatedData.achievements.grids.grids1 = true;
-                    saveData = true;
                     newReward = true;
                     break;
             }
@@ -154,29 +138,22 @@ export default function Game({ navigation }) {
             switch (true) {
                 case matches > 5 && !updatedData.achievements.matches.matches6:
                     updatedData.achievements.matches.matches6 = true;
-                    saveData = true;
-                    newReward = true;
                 case matches > 2 && !updatedData.achievements.matches.matches3:
                     updatedData.achievements.matches.matches3 = true;
-                    saveData = true;
-                    newReward = true;
                 case matches > 0 && !updatedData.achievements.matches.matches1:
                     updatedData.achievements.matches.matches1 = true;
-                    saveData = true;
                     newReward = true;
                     break;
             }
 
-            if (saveData) {
-                gameContext.setAchievements(updatedData.achievements);
+            gameContext.setAchievements(updatedData.achievements);
 
-                if (newReward) {
-                    gameContext.sfx && playSound('reward');
-                    setShowRewardsMessage(true);
-                }
-
-                await AsyncStorage.setItem('@triSquareData', JSON.stringify(updatedData));
+            if (newReward) {
+                gameContext.sfx && playSound('reward');
+                setShowRewardsMessage(true);
             }
+
+            await AsyncStorage.setItem('@triSquareData', JSON.stringify(updatedData));
         } catch (error) {
             console.log('There has been a problem saving: ' + error.message);
         }

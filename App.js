@@ -18,6 +18,7 @@ const Stack = createNativeStackNavigator();
 export default function App() {
     const [mode, setMode] = useState('dark');
     const [theme, setTheme] = useState(darkTheme);
+    const [plays, setPlays] = useState(0);
     const [highScore, setHighScore] = useState(0);
     const [achievements, setAchievements] = useState({});
     const [violetUnlocked, setVioletUnlocked] = useState(false);
@@ -37,7 +38,9 @@ export default function App() {
             const allData = JSON.parse(jsonData);
 
             if (allData !== null) {
+                allData.plays && setPlays(allData.plays)
                 allData.highScore && setHighScore(allData.highScore);
+
 
                 allData.violetUnlocked && setVioletUnlocked(true);
 
@@ -66,6 +69,8 @@ export default function App() {
     <View style={{backgroundColor: theme.bgColour, flex: 1}}>
         <GameContext.Provider value={{mode: mode, setMode: setMode,
                                     theme: theme, setTheme: setTheme,
+                                    plays: plays,
+                                    setPlays: setPlays,
                                     highScore: highScore,
                                     setHighScore: setHighScore,
                                     violetUnlocked: violetUnlocked,
