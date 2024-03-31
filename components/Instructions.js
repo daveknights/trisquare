@@ -28,7 +28,7 @@ export default function Instructions() {
 
     return (
         <View style={{...containerStyles, backgroundColor: theme.bgColour}}>
-            <ScrollView scrollEnabled={scrollEnabled} onContentSizeChange={onContentSizeChange}>
+            <ScrollView scrollEnabled={scrollEnabled} onContentSizeChange={onContentSizeChange} style={{width: '100%'}}>
                 <Text style={{...textStyles.heading}}>How to play</Text>
                 <Text style={{...textStyles.text}}>Select a free space on the grid, then choose a colour from the pallete.</Text>
                 <Text style={{...textStyles.text}}>Score a point by matching colours in one of the following shapes:</Text>

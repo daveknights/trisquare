@@ -95,7 +95,7 @@ export default function Options({ navigation }) {
 
     return (
         <View style={{...containerStyles, backgroundColor: theme.bgColour}}>
-            <ScrollView scrollEnabled={scrollEnabled} onContentSizeChange={onContentSizeChange}>
+            <ScrollView scrollEnabled={scrollEnabled} onContentSizeChange={onContentSizeChange} style={{width: '100%'}}>
                 <View style={{...layoutStyles.centerWrapper}}>
                     <Text style={{...textStyles.heading}}>Game options</Text>
                     <Text style={{...textStyles.subHeading, color: theme.textColour}}>Mode</Text>
