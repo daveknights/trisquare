@@ -185,6 +185,8 @@ export default function Game({ navigation }) {
         setCanAddTile(false);
         setScore(0);
         setNewHighScore(false);
+        setMatches(0);
+        setGridsCleared(0);
         setGameOver(false);
         setShowRewardsMessage(false);
     };
