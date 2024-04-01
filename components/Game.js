@@ -22,7 +22,8 @@ const combos = {
     t8: [[2,5], [4,5], [4,7], [5,6], [5,7], [5,9], [6,9], [7,9]],
     t9: [[3,6], [5,6], [5,8], [6,8], [7,8]],
 }
-const tileSize = Math.floor((Dimensions.get('window').width - 84) / 3);
+const gridRemainder = Math.floor((Dimensions.get('window').width - 84)) % 3;
+const tileSize = Math.floor(((Dimensions.get('window').width - 84) - gridRemainder) / 3);
 const gridSize = (tileSize * 3) + 6;
 
 const shuffle = arrayToShuffle => {
@@ -51,7 +52,7 @@ export default function Game({ navigation }) {
     const [gameOver, setGameOver] = useState(null);
     const [showRewardsMessage, setShowRewardsMessage] = useState(false);
     const [tileAdded, setTileAdded] = useState(false);
-    const [paletteTileSize, setPaletteTileSize] = useState(Math.floor((Dimensions.get('window').width - 68) / 5));
+    const [paletteTileSize, setPaletteTileSize] = useState(null);
     const [sound, setSound] = useState();
     const gameContext = useContext(GameContext);
     const theme = gameContext.theme;
@@ -188,10 +189,18 @@ export default function Game({ navigation }) {
         setShowRewardsMessage(false);
     };
 
+    const getPaletteTileSize = (qty, gap) => {
+        const remainder = Math.floor((Dimensions.get('window').width - (50 + gap))) % qty;
+
+        return Math.floor((Dimensions.get('window').width - (50 + gap + remainder))) / qty;
+    };
+
     useEffect(() => {
         if(playViolet) {
-            setPaletteTileSize(Math.floor((Dimensions.get('window').width - 68)/6));
+            setPaletteTileSize(getPaletteTileSize(6, 15));
             tileColours.push('violet');
+        } else {
+            setPaletteTileSize(getPaletteTileSize(5, 12));
         }
 
         startGame();
