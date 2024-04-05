@@ -51,6 +51,7 @@ export default function Game({ navigation }) {
     const [matches, setMatches] = useState(0);
     const [gameOver, setGameOver] = useState(null);
     const [showRewardsMessage, setShowRewardsMessage] = useState(false);
+    const [rewardData, setRewardData] = useState({});
     const [tileAdded, setTileAdded] = useState(false);
     const [paletteTileSize, setPaletteTileSize] = useState(null);
     const [sound, setSound] = useState();
@@ -79,6 +80,7 @@ export default function Game({ navigation }) {
 
 
     const saveGameData = async () => {
+        const newRewardData = {};
         let newReward = false;
 
         try {
@@ -90,14 +92,15 @@ export default function Game({ navigation }) {
 
             if (score >= 100 && !updatedData.violetUnlocked) {
                 updatedData.violetUnlocked = true;
+                newRewardData.violet = true;
                 gameContext.setVioletUnlocked(true);
             }
 
             if(!updatedData.achievements) {
                 updatedData.achievements = {
-                  scores: {},
-                  grids: {},
-                  matches: {}
+                    scores: {},
+                    grids: {},
+                    matches: {}
                 };
             }
 
@@ -107,16 +110,22 @@ export default function Game({ navigation }) {
                 switch (true) {
                     case score > 199 && !updatedData.achievements.scores.score200:
                         updatedData.achievements.scores.score200 = true;
+                        newRewardData.score = {text: 200, colour: 'gold'};
                     case score > 149 && !updatedData.achievements.scores.score150:
                         updatedData.achievements.scores.score150 = true;
+                        !newRewardData.score && (newRewardData.score = {text: 150, colour: 'gold'});
                     case score > 119 && !updatedData.achievements.scores.score120:
                         updatedData.achievements.scores.score120 = true;
+                        !newRewardData.score && (newRewardData.score = {text: 120, colour: 'silver'});
                     case score > 89 && !updatedData.achievements.scores.score90:
                         updatedData.achievements.scores.score90 = true;
+                        !newRewardData.score && (newRewardData.score = {text: 90, colour: 'silver'});
                     case score > 59 && !updatedData.achievements.scores.score60:
                         updatedData.achievements.scores.score60 = true;
+                        !newRewardData.score && (newRewardData.score = {text: 60, colour: 'bronze'});
                     case score > 29 && !updatedData.achievements.scores.score30:
                         updatedData.achievements.scores.score30 = true;
+                        !newRewardData.score && (newRewardData.score = {text: 30, colour: 'bronze'});
                         newReward = true;
                         break;
                 }
@@ -128,10 +137,13 @@ export default function Game({ navigation }) {
             switch (true) {
                 case gridsCleared > 5 && !updatedData.achievements.grids.grids6:
                     updatedData.achievements.grids.grids6 = true;
+                    newRewardData.grids = {text: 6, colour: 'gold'};
                 case gridsCleared > 2 && !updatedData.achievements.grids.grids3:
                     updatedData.achievements.grids.grids3 = true;
+                    !newRewardData.grids && (newRewardData.grids = {text: 3, colour: 'silver'});
                 case gridsCleared > 0 && !updatedData.achievements.grids.grids1:
                     updatedData.achievements.grids.grids1 = true;
+                    !newRewardData.grids && (newRewardData.grids = {text: 1, colour: 'bronze'});
                     newReward = true;
                     break;
             }
@@ -139,10 +151,13 @@ export default function Game({ navigation }) {
             switch (true) {
                 case matches > 5 && !updatedData.achievements.matches.matches6:
                     updatedData.achievements.matches.matches6 = true;
+                    newRewardData.matches = {text: 6, colour: 'gold'};
                 case matches > 2 && !updatedData.achievements.matches.matches3:
                     updatedData.achievements.matches.matches3 = true;
+                    !newRewardData.matches && (newRewardData.matches = {text: 3, colour: 'silver'});
                 case matches > 0 && !updatedData.achievements.matches.matches1:
                     updatedData.achievements.matches.matches1 = true;
+                    !newRewardData.matches && (newRewardData.matches = {text: 1, colour: 'bronze'});
                     newReward = true;
                     break;
             }
@@ -151,6 +166,7 @@ export default function Game({ navigation }) {
 
             if (newReward) {
                 gameContext.sfx && playSound('reward');
+                setRewardData(newRewardData);
                 setShowRewardsMessage(true);
             }
 
@@ -432,7 +448,7 @@ export default function Game({ navigation }) {
                                                             <LinearGradient key={k} colors={tileColour} style={{...styles.tile, ...borderRadius, ...selected}} />;
                     })}
                 </View>
-                {showRewardsMessage && <RewardMessage navigation={navigation} setShowRewardsMessage={setShowRewardsMessage} />}
+                {showRewardsMessage && <RewardMessage rewards={rewardData} />}
             </View>
             <View style={{...layoutStyles.startWrapper, ...layoutStyles.flexTwo}}>
                 <View style={styles.colourPalette}>

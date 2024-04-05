@@ -4,7 +4,7 @@ export default colours = {
     disabledViolet: '#918299',
     green: '#00fc77',
     grey: '#5f6b78',
-    lightBlue: '#73afff',
+    lightBlue: '#ddeeff',
     messageBg: '#bfffc3',
     orange: '#ffa873',
     primary: '#0e2444',

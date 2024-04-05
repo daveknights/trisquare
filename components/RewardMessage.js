@@ -1,94 +1,117 @@
-import { StyleSheet, Text, TouchableOpacity, View, Dimensions } from "react-native";
+import { StyleSheet, Text, Pressable, Modal, View } from "react-native";
 import { LinearGradient } from 'expo-linear-gradient';
+import { useState } from "react";
+import PointsReward from './rewards/PointsReward';
+import GridsReward from './rewards/GridsReward';
+import MatchesReward from './rewards/MatchesReward';
 import colours from "../defaults/colours";
 import { darkTheme } from "../defaults/themes";
 
-export default function RewardMessage({ navigation, setShowRewardsMessage }) {
-    const handleRewardsPress = () => {
-        setShowRewardsMessage(false);
-        navigation.navigate('Rewards')
-    };
+export default function RewardMessage({ rewards }) {
+    const [rewardMsgVisible, setRewardMsgVisible] = useState(true);
 
     return (
-        <TouchableOpacity style={styles.rewardMessage} onPress={handleRewardsPress}>
-            <View style={styles.rewardMessageInner}>
-                <Text style={styles.message}>
-                    You've earned a new reward
-                </Text>
-                <View style={styles.medalContainer}>
-                    <View style={styles.ribbonLeft}></View>
-                    <View style={styles.ribbonRight}></View>
-                    <LinearGradient colors={darkTheme.tileGrads.yellow} style={styles.medal} />
-                </View>
+        <Modal animationType="fade"
+            transparent={true}
+            visible={rewardMsgVisible}
+            onRequestClose={() => setRewardMsgVisible(!rewardMsgVisible)}
+        >
+            <View style={styles.modal}>
+                <Pressable style={styles.rewardMessage} onPress={() => setRewardMsgVisible(!rewardMsgVisible)}>
+                    <Text style={styles.heading}>Achievements</Text>
+                    {Object.entries(rewards).map(([key, data]) => {
+                            if (key === 'score') {
+                                return <View key={key} style={styles.reward}>
+                                            <View style={styles.badge}>
+                                                <PointsReward text={data.text} colour={data.colour} />
+                                            </View>
+                                            <Text style={styles.rewardType}>Points</Text>
+                                    </View>;
+                            }
+                            if (key === 'grids') {
+                                return <View key={key} style={styles.reward}>
+                                            <View style={styles.badge}>
+                                                <GridsReward text={data.text} colour={data.colour} />
+                                            </View>
+                                            <Text style={styles.rewardType}>Grids cleared</Text>
+                                    </View>;
+                            }
+                            if (key === 'matches') {
+                                return <View key={key} style={styles.reward}>
+                                            <View style={styles.badge}>
+                                                <MatchesReward text={data.text} colour={data.colour} border={colours.primary} />
+                                            </View>
+                                            <Text style={styles.rewardType}>Consecutive matches</Text>
+                                    </View>;
+                            }
+                            if (key === 'violet') {
+                                return <View key={key} style={styles.reward}>
+                                            <View style={styles.badge}>
+                                                <LinearGradient colors={darkTheme.tileGrads.violet} style={styles.violetTile}>
+                                                </LinearGradient>
+                                            </View>
+                                            <Text style={styles.rewardType}>Violet unlocked</Text>
+                                    </View>;
+                            }
+                        })
+                    }
+                </Pressable>
             </View>
-        </TouchableOpacity>
+        </Modal>
     );
 };
 
 const styles = StyleSheet.create({
-    rewardMessage: {
-        aspectRatio: 1/1,
-        backgroundColor: colours.gold.borderColor,
-        borderRadius: 12,
-        elevation: 5,
-        padding: 15,
-        position: 'absolute',
-        shadowColor: "#000000",
-        shadowOffset: {
-        width: 0,
-        height: 3,
-        },
-        shadowOpacity:  0.18,
-        shadowRadius: 4.59,
-        width: (Dimensions.get('window').width - 130),
-    },
-    rewardMessageInner: {
+    modal: {
+        backgroundColor: 'rgba(0,4,6,0.5)',
         alignItems: 'center',
-        aspectRatio: 1/1,
-        backgroundColor: '#fff9dd',
-        borderRadius: 10,
-        justifyContent: 'space-between',
-        padding: 30,
-        width: (Dimensions.get('window').width - 160),
+        flex: 1,
+        justifyContent: 'center',
     },
-    message: {
+    heading: {
+        backgroundColor: colours.green,
         color: colours.primary,
-        fontSize: 21,
+        fontSize: 20,
         fontWeight: 'bold',
+        paddingBottom: 12,
+        paddingTop: 12,
         textAlign: 'center',
+        width: 280,
     },
-    medalContainer: {
-        marginBottom: 30,
+    reward: {
+        alignItems: 'center',
+        backgroundColor: colours.lightBlue,
+        borderTopColor: colours.primary,
+        borderTopWidth: 1,
+        flexDirection: 'row',
+        paddingRight: 10,
+        width: 280,
     },
-    medal: {
-        borderColor: colours.primary,
-        borderRadius: 25,
-        borderWidth: 1,
-        height: 50,
-        width: 50,
+    badge: {
+        alignItems: 'center',
+        backgroundColor: colours.primary,
+        justifyContent: 'center',
+        height: 120,
+        marginRight: 15,
+        width: 120,
     },
-    ribbonLeft: {
-        height: 40,
-        borderLeftWidth: 16,
-        borderLeftColor: colours.primary,
-        borderBottomWidth: 8,
-        borderBottomColor: "transparent",
-        borderStyle: "solid",
-        left: 10,
-        position: 'absolute',
-        top: 40,
-        width: 0,
+    rewardType: {
+        color: colours.primary,
+        fontSize: 18,
+        fontWeight: 'bold',
+        width: 150,
     },
-    ribbonRight: {
-        height: 40,
-        borderRightWidth: 15,
-        borderRightColor: colours.grey,
-        borderBottomWidth: 8,
-        borderBottomColor: "transparent",
-        borderStyle: "solid",
-        right: 10,
-        position: 'absolute',
-        top: 40,
-        width: 0,
+    rewardMessage: {
+        borderBottomLeftRadius: 8,
+        borderBottomRightRadius: 8,
+        borderTopLeftRadius: 12,
+        borderTopRightRadius: 12,
+        marginBottom: 100,
+        overflow: 'hidden',
+    },
+    violetTile: {
+        borderRadius: 4,
+        height: 80,
+        width: 80,
     }
 });

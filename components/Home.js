@@ -60,7 +60,7 @@ export default function Home({ navigation }) {
                     />
                     <IconButton
                         path={require('../assets/info-icon.png')}
-                        bgColour="lightBlue"
+                        bgColour="blue"
                         onPress={handleInfoPress}
                         label="Instructions"
                     />

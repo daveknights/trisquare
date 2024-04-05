@@ -3,9 +3,10 @@ import { useContext } from "react";
 import GameContext from '../../context/gameContext';
 import colours from "../../defaults/colours";
 
-export default function MatchesReward({ text, colour }) {
+export default function MatchesReward({ text, colour, border = '' }) {
     const gameContext = useContext(GameContext);
     const theme = gameContext.theme;
+    const borderColour = border ? border : theme.bgColour;
 
     return(
         <View style={styles.matchesReward}>
@@ -13,7 +14,7 @@ export default function MatchesReward({ text, colour }) {
             <View style={{...styles.tile,
                             ...styles.middleTile,
                             backgroundColor: colours[colour].borderColor,
-                            borderColor: theme.bgColour}} />
+                            borderColor: borderColour}} />
             <View style={{...styles.tile,
                             ...styles.frontTile,
                             ...colours[colour],
