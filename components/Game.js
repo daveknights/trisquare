@@ -1,6 +1,6 @@
 import { LinearGradient } from 'expo-linear-gradient';
-import { useEffect, useState, useContext } from 'react';
-import { StyleSheet, Text, View, Pressable, TouchableOpacity, Dimensions } from 'react-native';
+import { useEffect, useState, useContext, useRef, useLayoutEffect } from 'react';
+import { StyleSheet, Text, View, Pressable, TouchableOpacity, Dimensions, Animated } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import RewardMessage from './RewardMessage';
 import IconButton from './IconButton';
@@ -55,9 +55,11 @@ export default function Game({ navigation }) {
     const [tileAdded, setTileAdded] = useState(false);
     const [paletteTileSize, setPaletteTileSize] = useState(null);
     const [sound, setSound] = useState();
+    const [newTile, setNewTile] = useState(null);
     const gameContext = useContext(GameContext);
     const theme = gameContext.theme;
     const playViolet = gameContext.playViolet;
+    const grow = useRef(new Animated.Value(0)).current;
 
     const playSound = async (type) => {
         let soundType;
@@ -78,6 +80,14 @@ export default function Game({ navigation }) {
         return sound? () => sound.unloadAsync() : undefined;
     }, [sound]);
 
+    useLayoutEffect(() => {
+        grow.setValue(0);
+        Animated.timing(grow, {
+            toValue: 1,
+            duration: 125,
+            useNativeDriver: true,
+        }).start();
+    }, [newTile]);
 
     const saveGameData = async () => {
         const newRewardData = {};
@@ -199,6 +209,7 @@ export default function Game({ navigation }) {
             [blockedTileKey]: 'blocked'
         }});
         setCanAddTile(false);
+        setNewTile(null);
         setScore(0);
         setNewHighScore(false);
         setMatches(0);
@@ -252,6 +263,7 @@ export default function Game({ navigation }) {
                 setSelectedColour(newColour);
                 setSelectedTile(newTile);
                 setEmptyTiles([...newEmptyArray, blockedTile]);
+                setNewTile(newTile);
                 setTiles(prevTiles => ({
                     ...prevTiles,
                     [blockedTile]: '',
@@ -403,6 +415,16 @@ export default function Game({ navigation }) {
                         let borderRadius = null;
                         let blocked = null;
                         let selected = null;
+                        let growStyles = null;
+
+                        if (k === newTile) {
+                            growStyles = {
+                                opacity: grow,
+                                transform: [{
+                                    scale: grow
+                                }]
+                            };
+                        }
 
                         if (col === 'blocked') {
                             blocked = <>
@@ -445,7 +467,11 @@ export default function Game({ navigation }) {
                                                                 style={{...styles.tile, backgroundColor: gameContext.theme.gridColour, ...borderRadius, ...selected}}>
                                                                 {blocked}
                                                             </Pressable> :
-                                                            <LinearGradient key={k} colors={tileColour} style={{...styles.tile, ...borderRadius, ...selected}} />;
+                                                            <View key={k} style={{...styles.tile, ...borderRadius, backgroundColor: gameContext.theme.gridColour}}>
+                                                                <Animated.View style={growStyles}>
+                                                                    <LinearGradient colors={tileColour} style={styles.tile} />
+                                                                </Animated.View>
+                                                            </View>
                     })}
                 </View>
                 {showRewardsMessage && <RewardMessage rewards={rewardData} />}
@@ -497,6 +523,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         height: tileSize,
         justifyContent: 'center',
+        overflow: 'hidden',
         position: 'relative',
         width: tileSize,
     },
