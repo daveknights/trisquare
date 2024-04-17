@@ -84,7 +84,7 @@ const styles = StyleSheet.create({
         borderTopColor: colours.primary,
         borderTopWidth: 1,
         flexDirection: 'row',
-        paddingRight: 10,
+        paddingRight: 15,
         width: 280,
     },
     badge: {
