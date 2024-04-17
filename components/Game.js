@@ -1,6 +1,6 @@
 import { LinearGradient } from 'expo-linear-gradient';
 import { useEffect, useState, useContext, useRef, useLayoutEffect } from 'react';
-import { StyleSheet, Text, View, Pressable, TouchableOpacity, Dimensions, Animated } from 'react-native';
+import { StyleSheet, Text, View, Pressable, TouchableOpacity, Dimensions, Animated, ImageBackground } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import RewardMessage from './RewardMessage';
 import IconButton from './IconButton';
@@ -395,115 +395,117 @@ export default function Game({ navigation }) {
     const handleHomePress = () => navigation.navigate('Home');
 
     return (
-        <View style={{...containerStyles, backgroundColor: theme.bgColour}}>
-            <View style={{...layoutStyles.spaceBetweenWrapper, ...layoutStyles.flexOne}}>
-                <View style={styles.bestScoreArea}>
-                    <Text style={{...styles.best, color: theme.textColour}}>{newHighScore ? 'New high score' : 'Best'}: </Text>
-                    <Text style={{...styles.bestScore, color: theme.textColour}}>{gameContext.highScore}</Text>
+        <ImageBackground source={gameContext.mode === 'dark' ? require('../assets/game-bg-dark.webp') : require('../assets/game-bg-light.webp')} resizeMode="cover" style={{backgroundColor: theme.bgColour, flex: 1}}>
+            <View style={containerStyles}>
+                <View style={{...layoutStyles.spaceBetweenWrapper, ...layoutStyles.flexOne}}>
+                    <View style={styles.bestScoreArea}>
+                        <Text style={{...styles.best, color: theme.textColour}}>{newHighScore ? 'New high score' : 'Best'}: </Text>
+                        <Text style={{...styles.bestScore, color: theme.textColour}}>{gameContext.highScore}</Text>
+                    </View>
+                    <View style={styles.scoreArea}>
+                        <Text style={{...styles.score, color: theme.textColour}}>Score: </Text>
+                        <Text style={{...styles.scoreTotal, color: theme.textColour}}>{score}</Text>
+                        {showBonus && <Text style={styles.bonus}>+{bonusPoints}</Text>}
+                    </View>
                 </View>
-                <View style={styles.scoreArea}>
-                    <Text style={{...styles.score, color: theme.textColour}}>Score: </Text>
-                    <Text style={{...styles.scoreTotal, color: theme.textColour}}>{score}</Text>
-                    {showBonus && <Text style={styles.bonus}>+{bonusPoints}</Text>}
+                <View style={{...layoutStyles.centerWrapper, ...layoutStyles.flexFour}}>
+                    <View style={styles.grid}>
+                        {Object.entries(tiles).map(([k, col]) => {
+                            let tileColour =  gameContext.theme.tileGrads['blankColour'];
+                            let tilePress = () => handleTilePress(k);
+                            let borderRadius = null;
+                            let blocked = null;
+                            let selected = null;
+                            let growStyles = null;
+
+                            if (k === newTile) {
+                                growStyles = {
+                                    opacity: grow,
+                                    transform: [{
+                                        scale: grow
+                                    }]
+                                };
+                            }
+
+                            if (col === 'blocked') {
+                                blocked = <>
+                                            <View style={{...styles.blocked, backgroundColor: theme.bgColour, transform: [{rotate: '45deg'}]}} />
+                                            <View style={{...styles.blocked, backgroundColor: theme.bgColour, transform: [{rotate: '-45deg'}]}} />
+                                        </>;
+                                tilePress = null;
+                            } else if (col) {
+                                tileColour = gameContext.theme.tileGrads[col];
+                                tilePress = null;
+                            }
+
+                            if (k === selectedTile && !selectedColour) {
+                                selected = {borderColor: '#00ef00', borderWidth: 5}
+                            }
+
+                            switch (k) {
+                                case 't1':
+                                    borderRadius = {borderTopLeftRadius: 15}
+                                    break;
+                                case 't3':
+                                    borderRadius = {borderTopRightRadius: 15}
+                                    break;
+                                case 't7':
+                                    borderRadius = {borderBottomLeftRadius: 15}
+                                    break;
+                                case 't9':
+                                    borderRadius = {borderBottomRightRadius: 15}
+                                    break;
+                            }
+
+                            const accessibilityAttributes = col !==  'blocked' ? {
+                                accessible: true,
+                                accessibilityLabel: "Empty grid space",
+                                accessibilityHint: "Press to select this space"
+                            } : {};
+
+                            return !col || col === 'blocked' ? <Pressable key={k} onPress={tilePress}
+                                                                    {...accessibilityAttributes}
+                                                                    style={{...styles.tile, backgroundColor: gameContext.theme.gridColour, ...borderRadius, ...selected}}>
+                                                                    {blocked}
+                                                                </Pressable> :
+                                                                <View key={k} style={{...styles.tile, ...borderRadius, backgroundColor: gameContext.theme.gridColour}}>
+                                                                    <Animated.View style={growStyles}>
+                                                                        <LinearGradient colors={tileColour} style={styles.tile} />
+                                                                    </Animated.View>
+                                                                </View>
+                        })}
+                    </View>
+                    {showRewardsMessage && <RewardMessage rewards={rewardData} />}
+                </View>
+                <View style={{...layoutStyles.startWrapper, ...layoutStyles.flexTwo}}>
+                    <View style={styles.colourPalette}>
+                        {gameOver ? <View style={styles.gameOver}><Text style={{...styles.gameOverText, color: theme.textColour}}>Game Over</Text></View>
+                            : tileColours.map(colour => colour !== 'blankColour' && <LinearGradient key={colour} colors={gameContext.theme.tileGrads[colour]}
+                                                                                                style={{...styles.paletteColour, width: paletteTileSize}}>
+                                                    <TouchableOpacity onPress={() => handlePalettePress(colour)}
+                                                                        accessible={true}
+                                                                        accessibilityLabel={colour}
+                                                                        accessibilityHint={`Adds a ${colour} tile to the grid`}
+                                                                        style={{...styles.paletteColour, width: paletteTileSize}} />
+                                                </LinearGradient>)}
+                    </View>
+                    {gameOver && <View style={styles.postGameOptions}>
+                                    <IconButton
+                                        path={require('../assets/home-icon.png')}
+                                        bgColour="yellow"
+                                        onPress={handleHomePress}
+                                        label="Go to home screen"
+                                    />
+                                    <IconButton
+                                        path={require('../assets/play-icon.png')}
+                                        bgColour="green"
+                                        onPress={startGame}
+                                        label="Replay game"
+                                    />
+                                </View>}
                 </View>
             </View>
-            <View style={{...layoutStyles.centerWrapper, ...layoutStyles.flexFour}}>
-                <View style={styles.grid}>
-                    {Object.entries(tiles).map(([k, col]) => {
-                        let tileColour =  gameContext.theme.tileGrads['blankColour'];
-                        let tilePress = () => handleTilePress(k);
-                        let borderRadius = null;
-                        let blocked = null;
-                        let selected = null;
-                        let growStyles = null;
-
-                        if (k === newTile) {
-                            growStyles = {
-                                opacity: grow,
-                                transform: [{
-                                    scale: grow
-                                }]
-                            };
-                        }
-
-                        if (col === 'blocked') {
-                            blocked = <>
-                                        <View style={{...styles.blocked, backgroundColor: theme.bgColour, transform: [{rotate: '45deg'}]}} />
-                                        <View style={{...styles.blocked, backgroundColor: theme.bgColour, transform: [{rotate: '-45deg'}]}} />
-                                    </>;
-                            tilePress = null;
-                        } else if (col) {
-                            tileColour = gameContext.theme.tileGrads[col];
-                            tilePress = null;
-                        }
-
-                        if (k === selectedTile && !selectedColour) {
-                            selected = {borderColor: '#00ef00', borderWidth: 5}
-                        }
-
-                        switch (k) {
-                            case 't1':
-                                borderRadius = {borderTopLeftRadius: 15}
-                                break;
-                            case 't3':
-                                borderRadius = {borderTopRightRadius: 15}
-                                break;
-                            case 't7':
-                                borderRadius = {borderBottomLeftRadius: 15}
-                                break;
-                            case 't9':
-                                borderRadius = {borderBottomRightRadius: 15}
-                                break;
-                        }
-
-                        const accessibilityAttributes = col !==  'blocked' ? {
-                            accessible: true,
-                            accessibilityLabel: "Empty grid space",
-                            accessibilityHint: "Press to select this space"
-                        } : {};
-
-                        return !col || col === 'blocked' ? <Pressable key={k} onPress={tilePress}
-                                                                {...accessibilityAttributes}
-                                                                style={{...styles.tile, backgroundColor: gameContext.theme.gridColour, ...borderRadius, ...selected}}>
-                                                                {blocked}
-                                                            </Pressable> :
-                                                            <View key={k} style={{...styles.tile, ...borderRadius, backgroundColor: gameContext.theme.gridColour}}>
-                                                                <Animated.View style={growStyles}>
-                                                                    <LinearGradient colors={tileColour} style={styles.tile} />
-                                                                </Animated.View>
-                                                            </View>
-                    })}
-                </View>
-                {showRewardsMessage && <RewardMessage rewards={rewardData} />}
-            </View>
-            <View style={{...layoutStyles.startWrapper, ...layoutStyles.flexTwo}}>
-                <View style={styles.colourPalette}>
-                    {gameOver ? <View style={styles.gameOver}><Text style={{...styles.gameOverText, color: theme.textColour}}>Game Over</Text></View>
-                        : tileColours.map(colour => colour !== 'blankColour' && <LinearGradient key={colour} colors={gameContext.theme.tileGrads[colour]}
-                                                                                            style={{...styles.paletteColour, width: paletteTileSize}}>
-                                                <TouchableOpacity onPress={() => handlePalettePress(colour)}
-                                                                    accessible={true}
-                                                                    accessibilityLabel={colour}
-                                                                    accessibilityHint={`Adds a ${colour} tile to the grid`}
-                                                                    style={{...styles.paletteColour, width: paletteTileSize}} />
-                                            </LinearGradient>)}
-                </View>
-                {gameOver && <View style={styles.postGameOptions}>
-                                <IconButton
-                                    path={require('../assets/home-icon.png')}
-                                    bgColour="yellow"
-                                    onPress={handleHomePress}
-                                    label="Go to home screen"
-                                />
-                                <IconButton
-                                    path={require('../assets/play-icon.png')}
-                                    bgColour="green"
-                                    onPress={startGame}
-                                    label="Replay game"
-                                />
-                            </View>}
-            </View>
-        </View>
+        </ImageBackground>
     )
 }
 
