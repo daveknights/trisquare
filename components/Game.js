@@ -405,7 +405,11 @@ export default function Game({ navigation }) {
                     <View style={styles.scoreArea}>
                         <Text style={{...styles.score, color: theme.textColour}}>Score: </Text>
                         <Text style={{...styles.scoreTotal, color: theme.textColour}}>{score}</Text>
-                        {showBonus && <Text style={styles.bonus}>+{bonusPoints}</Text>}
+                        {showBonus && <View style={styles.bonus}>
+                            <Text style={styles.bonusText}>+
+                                <Text style={{...styles.bonusText, ...styles.bonusPoints}}>{bonusPoints}</Text>
+                            </Text>
+                        </View>}
                     </View>
                 </View>
                 <View style={{...layoutStyles.centerWrapper, ...layoutStyles.flexFour}}>
@@ -568,9 +572,22 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     bonus: {
-        color: colours.skyBlue,
-        fontSize: 24,
+        alignItems: 'center',
+        backgroundColor: colours.green,
+        borderRadius: 18,
+        height: 36,
+        justifyContent: 'center',
         marginLeft: 10,
+        width: 60,
+    },
+    bonusText: {
+        color: colours.skyBlue,
+        fontSize: 20,
+        letterSpacing: 1,
+        lineHeight: 24,
+    },
+    bonusPoints: {
+        fontWeight: 'bold',
     },
     postGameOptions: {
         flexDirection: 'row',
