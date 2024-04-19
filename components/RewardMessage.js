@@ -84,7 +84,6 @@ const styles = StyleSheet.create({
         borderTopColor: colours.primary,
         borderTopWidth: 1,
         flexDirection: 'row',
-        paddingRight: 15,
         width: 280,
     },
     badge: {
@@ -99,6 +98,7 @@ const styles = StyleSheet.create({
         color: colours.primary,
         fontSize: 18,
         fontWeight: 'bold',
+        paddingRight: 15,
         width: 150,
     },
     rewardMessage: {
