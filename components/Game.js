@@ -60,6 +60,8 @@ export default function Game({ navigation }) {
     const theme = gameContext.theme;
     const playViolet = gameContext.playViolet;
     const grow = useRef(new Animated.Value(0)).current;
+    const scoreZoom = useRef(new Animated.Value(0)).current;
+    const bonusZoom = useRef(new Animated.Value(0)).current;
 
     const playSound = async (type) => {
         let soundType;
@@ -80,6 +82,15 @@ export default function Game({ navigation }) {
         return sound? () => sound.unloadAsync() : undefined;
     }, [sound]);
 
+    useEffect(() => {
+        scoreZoom.setValue(0);
+        score && Animated.timing(scoreZoom, {
+            toValue: 1,
+            duration: 125,
+            useNativeDriver: true,
+        }).start();
+    }, [score]);
+
     useLayoutEffect(() => {
         grow.setValue(0);
         Animated.timing(grow, {
@@ -88,6 +99,15 @@ export default function Game({ navigation }) {
             useNativeDriver: true,
         }).start();
     }, [newTile]);
+
+    useLayoutEffect(() => {
+        bonusZoom.setValue(0);
+        Animated.timing(bonusZoom, {
+            toValue: 1,
+            duration: 75,
+            useNativeDriver: true,
+        }).start();
+    }, [showBonus]);
 
     const saveGameData = async () => {
         const newRewardData = {};
@@ -404,12 +424,20 @@ export default function Game({ navigation }) {
                     </View>
                     <View style={styles.scoreArea}>
                         <Text style={{...styles.score, color: theme.textColour}}>Score: </Text>
-                        <Text style={{...styles.scoreTotal, color: theme.textColour}}>{score}</Text>
-                        {showBonus && <View style={styles.bonus}>
+                        <Animated.Text style={{...styles.scoreTotal, color: theme.textColour,
+                            transform: [{
+                                scale: scoreZoom.interpolate({
+                                    inputRange: [0, 0.5, 1],
+                                    outputRange: [1, 1.5, 1]})
+                            }]
+                        }}>
+                            {score}
+                        </Animated.Text>
+                        {showBonus && <Animated.View style={{...styles.bonus, transform: [{scale: bonusZoom}]}}>
                             <Text style={styles.bonusText}>+
                                 <Text style={{...styles.bonusText, ...styles.bonusPoints}}>{bonusPoints}</Text>
                             </Text>
-                        </View>}
+                        </Animated.View>}
                     </View>
                 </View>
                 <View style={{...layoutStyles.centerWrapper, ...layoutStyles.flexFour}}>
