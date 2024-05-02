@@ -23,6 +23,8 @@ export default function App() {
     const [achievements, setAchievements] = useState({});
     const [violetUnlocked, setVioletUnlocked] = useState(false);
     const [playViolet, setPlayViolet] = useState(false);
+    const [quickPlay, setQuickPlay] = useState(false);
+    const [quickPlayHighScore, setQuickPlayHighScore] = useState(0);
     const [sfx, setSfx] = useState(true);
 
     const headerStyles = {
@@ -40,7 +42,7 @@ export default function App() {
             if (allData !== null) {
                 allData.plays && setPlays(allData.plays)
                 allData.highScore && setHighScore(allData.highScore);
-
+                allData.quickPlayHighScore && setQuickPlayHighScore(allData.quickPlayHighScore);
 
                 allData.violetUnlocked && setVioletUnlocked(true);
 
@@ -77,6 +79,10 @@ export default function App() {
                                     setVioletUnlocked: setVioletUnlocked,
                                     playViolet: playViolet,
                                     setPlayViolet: setPlayViolet,
+                                    quickPlay: quickPlay,
+                                    setQuickPlay: setQuickPlay,
+                                    quickPlayHighScore: quickPlayHighScore,
+                                    setQuickPlayHighScore: setQuickPlayHighScore,
                                     achievements: achievements,
                                     setAchievements: setAchievements,
                                     sfx: sfx,

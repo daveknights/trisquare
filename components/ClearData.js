@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, Dimensions } from 'react-native';
 import { useState, useContext, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import ColourButton from './ColourButton';
@@ -48,17 +48,21 @@ export default function ClearData({ navigation }) {
                     <Text style={{...textStyles.text}}>Your current high score is: </Text>
                     <Text style={{...textStyles.text, fontWeight: 'bold'}}>{gameContext.highScore}</Text>
                 </View>
-            </View>
-            <View style={{...layoutStyles.flexOne, ...layoutStyles.startWrapper}}>
-                <ColourButton
-                    text="Clear"
-                    bgColour="red"
-                    onPress={clearUserData} />
-                <ColourButton
-                    text="Home"
-                    bgColour="yellow"
-                    onPress={handleHomePress} />
-                {dataCleared && <Text style={styles.dataCleared}>All data has been removed.</Text>}
+                {gameContext.quickPlayHighScore > 0 && <View style={styles.highScoreInfo}>
+                    <Text style={{...textStyles.text}}>Your current quick play high score is: </Text>
+                    <Text style={{...textStyles.text, fontWeight: 'bold'}}>{gameContext.quickPlayHighScore}</Text>
+                </View>}
+                <View style={styles.buttons}>
+                    <ColourButton
+                        text="Clear"
+                        bgColour="red"
+                        onPress={clearUserData} />
+                    <ColourButton
+                        text="Home"
+                        bgColour="yellow"
+                        onPress={handleHomePress} />
+                    {dataCleared && <Text style={styles.dataCleared}>All data has been removed.</Text>}
+                </View>
             </View>
         </View>
     );
@@ -69,8 +73,10 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         width: '100%',
     },
+    buttons: {
+        marginTop: 50,
+    },
     dataCleared: {
-        alignSelf: 'flex-start',
         backgroundColor: colours.messageBg,
         borderColor: colours.green,
         borderWidth: 2,
@@ -83,6 +89,6 @@ const styles = StyleSheet.create({
         paddingRight: 10,
         paddingTop: 8,
         textAlign: 'center',
-        width: '100%',
+        width: Dimensions.get('window').width - 140,
     },
 });

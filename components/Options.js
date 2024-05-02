@@ -14,7 +14,7 @@ import { Audio } from 'expo-av';
 
 const { height } = Dimensions.get('window');
 
-export default function Options({ navigation }) {
+export default function Options({ navigation, setQuickPlay }) {
     const [isDarkMode, setIsDarkMode] = useState(null);
     const [contentHeight, setContentHeight] = useState(0);
     const [scrollEnabled, setScrollEnabled] = useState(false);
@@ -84,8 +84,21 @@ export default function Options({ navigation }) {
         }
     };
 
-    const handleLevelPress = playViolet => {
-        gameContext.setPlayViolet(playViolet);
+    const handleLevelPress = gameType => {
+        switch (gameType) {
+            case 'quick play':
+                gameContext.setQuickPlay(true);
+                gameContext.setPlayViolet(false);
+                break;
+            case '6 colours':
+                gameContext.setPlayViolet(true);
+                gameContext.setQuickPlay(false);
+            default:
+                gameContext.setPlayViolet(false);
+                gameContext.setQuickPlay(false);
+                break;
+        }
+
         navigation.navigate('Game');
     };
 
@@ -132,12 +145,16 @@ export default function Options({ navigation }) {
                             source={require('../assets/sound-off-icon.png')} />
                         </TouchableOpacity>
                     </View>
-                    <Text style={{...textStyles.subHeading, color: theme.textColour}}>Level</Text>
+                    <Text style={{...textStyles.subHeading, color: theme.textColour}}>Game type</Text>
+                    <ColourButton
+                        text="Quick play"
+                        bgColour="green"
+                        onPress={() => handleLevelPress('quick play')} />
                     <ColourButton
                         text="5 colours"
                         bgColour="blue"
-                        onPress={() => handleLevelPress(false)} />
-                    <TouchableOpacity style={{...buttonStyles.button, ...styles.violetButton, backgroundColor: violetUnlocked ? colours.violet : colours.disabledViolet}} disabled={!gameContext.violetUnlocked} onPress={() => handleLevelPress(true)}>
+                        onPress={() => handleLevelPress('5 colours')} />
+                    <TouchableOpacity style={{...buttonStyles.button, ...styles.violetButton, backgroundColor: violetUnlocked ? colours.violet : colours.disabledViolet}} disabled={!gameContext.violetUnlocked} onPress={() => handleLevelPress('6 colours')}>
                         {!gameContext.violetUnlocked &&
                             <Image
                             style={styles.padlockIcon}

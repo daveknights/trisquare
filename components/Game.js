@@ -4,6 +4,9 @@ import { StyleSheet, Text, View, Pressable, TouchableOpacity, Dimensions, Animat
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import RewardMessage from './RewardMessage';
 import IconButton from './IconButton';
+import Timer from './Timer';
+import CountDown from './CountDown';
+import QuickPlayOver from './QuickPlayOver';
 import GameContext from '../context/gameContext';
 import containerStyles from '../defaults/containerStyles';
 import layoutStyles from '../defaults/layoutStyles';
@@ -56,6 +59,8 @@ export default function Game({ navigation }) {
     const [paletteTileSize, setPaletteTileSize] = useState(null);
     const [sound, setSound] = useState();
     const [newTile, setNewTile] = useState(null);
+    const [countDownNumber, setCountDownNumber] = useState(3);
+    const [isQuickPlayTimerFinished, setIsQuickPlayTimerFinished] = useState(false);
     const gameContext = useContext(GameContext);
     const theme = gameContext.theme;
     const playViolet = gameContext.playViolet;
@@ -108,6 +113,14 @@ export default function Game({ navigation }) {
             useNativeDriver: true,
         }).start();
     }, [showBonus]);
+
+    useEffect(() => {
+        const countDown = setInterval(() => {
+            countDownNumber > 0 && setCountDownNumber(num => num - 1);
+        }, 1000);
+
+        return () => clearInterval(countDown);
+    }, [countDownNumber]);
 
     const saveGameData = async () => {
         const newRewardData = {};
@@ -221,6 +234,7 @@ export default function Game({ navigation }) {
             tileTwoColour = getColour();
         }
 
+        setSelectedTile(null);
         setEmptyTiles(startingTiles.filter(key => key !== tileOneKey && key !== tileTwoKey && key !== blockedTileKey));
         setBlockedTile(blockedTileKey);
         setTiles({...initialTiles, ...{
@@ -236,6 +250,8 @@ export default function Game({ navigation }) {
         setGridsCleared(0);
         setGameOver(false);
         setShowRewardsMessage(false);
+        gameContext.quickPlay && setIsQuickPlayTimerFinished(false);
+        gameContext.quickPlay && setCountDownNumber(3);
     };
 
     const getPaletteTileSize = (qty, gap) => {
@@ -311,9 +327,9 @@ export default function Game({ navigation }) {
                 break;
             case 8:
                 setScore(score => score + 5);
-                setGridsCleared(prev => prev + 1);
+                !gameContext.quickPlay && setGridsCleared(prev => prev + 1);
                 setBonusPoints(5);
-                setShowBonus(true);
+                !gameContext.quickPlay && setShowBonus(true);
             default:
                 lastTile && setLastTile(false);
                 gridFull && setGridFull(false);
@@ -379,7 +395,7 @@ export default function Game({ navigation }) {
                     if ((consecutiveMatches - 1) >= 1) {
                         setScore(score => score + (consecutiveMatches - 1));
                         setBonusPoints(consecutiveMatches - 1);
-                        setShowBonus(true);
+                        !gameContext.quickPlay && setShowBonus(true);
                     }
 
                     consecutiveMatches - 1 > matches && setMatches(consecutiveMatches - 1);
@@ -390,7 +406,7 @@ export default function Game({ navigation }) {
                 if (gridFull) {
                     setGameOver(true);
                     setCanAddTile(false);
-                    saveGameData();
+                    !gameContext.quickPlay && saveGameData();
                 } else {
                     !tileAdded && setCanAddTile(true);
                 }
@@ -412,17 +428,23 @@ export default function Game({ navigation }) {
         }
     };
 
-    const handleHomePress = () => navigation.navigate('Home');
+    const handleOptionsPress = () => navigation.navigate('Options');
+
+    const quickPlayTimerFinished = () => {
+        setIsQuickPlayTimerFinished(true);
+        setGameOver(true);
+    };
 
     return (
         <ImageBackground source={gameContext.mode === 'dark' ? require('../assets/game-bg-dark.webp') : require('../assets/game-bg-light.webp')} resizeMode="cover" style={{backgroundColor: theme.bgColour, flex: 1}}>
             <View style={containerStyles}>
                 <View style={{...layoutStyles.spaceBetweenWrapper, ...layoutStyles.flexOne}}>
                     <View style={styles.bestScoreArea}>
-                        <Text style={{...styles.best, color: theme.textColour}}>{newHighScore ? 'New high score' : 'Best'}: </Text>
-                        <Text style={{...styles.bestScore, color: theme.textColour}}>{gameContext.highScore}</Text>
+                        <Text style={{...styles.best, color: theme.textColour}}>{newHighScore ? 'New high score: ' : `${gameContext.quickPlay ? 'Quick play best: ' : 'Best: '}`}</Text>
+                        <Text style={{...styles.bestScore, color: theme.textColour}}>{gameContext.quickPlay ? gameContext.quickPlayHighScore : gameContext.highScore}</Text>
                     </View>
-                    <View style={styles.scoreArea}>
+                    {(gameContext.quickPlay && countDownNumber < 1 && !gameOver) && <Timer quickPlayTimerFinished={quickPlayTimerFinished} />}
+                    {!gameContext.quickPlay &&  <View style={styles.scoreArea}>
                         <Text style={{...styles.score, color: theme.textColour}}>Score: </Text>
                         <Animated.Text style={{...styles.scoreTotal, color: theme.textColour,
                             transform: [{
@@ -438,10 +460,14 @@ export default function Game({ navigation }) {
                                 <Text style={{...styles.bonusText, ...styles.bonusPoints}}>{bonusPoints}</Text>
                             </Text>
                         </Animated.View>}
-                    </View>
+                    </View>}
                 </View>
                 <View style={{...layoutStyles.centerWrapper, ...layoutStyles.flexFour}}>
-                    <View style={styles.grid}>
+                    {(gameContext.quickPlay && countDownNumber > 0) && <CountDown gridSize={gridSize} number={countDownNumber} />}
+                    {(gameContext.quickPlay && gameOver) && <QuickPlayOver gridSize={gridSize}
+                                                                            score={score}
+                                                                            finishText={isQuickPlayTimerFinished ? `Time's up!` : `The grid's full.`} />}
+                    <View style={{...styles.grid, backgroundColor: theme.bgColour}}>
                         {Object.entries(tiles).map(([k, col]) => {
                             let tileColour =  gameContext.theme.tileGrads['blankColour'];
                             let tilePress = () => handleTilePress(k);
@@ -523,10 +549,10 @@ export default function Game({ navigation }) {
                     </View>
                     {gameOver && <View style={styles.postGameOptions}>
                                     <IconButton
-                                        path={require('../assets/home-icon.png')}
-                                        bgColour="yellow"
-                                        onPress={handleHomePress}
-                                        label="Go to home screen"
+                                        path={require('../assets/options-icon.png')}
+                                        bgColour="orange"
+                                        onPress={handleOptionsPress}
+                                        label="Go to options screen"
                                     />
                                     <IconButton
                                         path={require('../assets/play-icon.png')}
