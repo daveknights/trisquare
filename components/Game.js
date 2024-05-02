@@ -419,6 +419,10 @@ export default function Game({ navigation }) {
     const handleTilePress = key => !canAddTile && setSelectedTile(key);
 
     const handlePalettePress = colour => {
+        if (selectedColour) {
+            return;
+        }
+
         if (selectedTile) {
             emptyTiles.length === 1 && setGridFull(true);
             setSelectedColour(colour);
