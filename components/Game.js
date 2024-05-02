@@ -433,6 +433,7 @@ export default function Game({ navigation }) {
     const quickPlayTimerFinished = () => {
         setIsQuickPlayTimerFinished(true);
         setGameOver(true);
+        setSelectedTile(null);
     };
 
     return (
