@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Image } from 'react-native';
+import { StyleSheet, Text, View, Image, ImageBackground } from 'react-native';
 import { useContext } from 'react';
 import ColourButton from './ColourButton';
 import IconButton from './IconButton';
@@ -23,50 +23,52 @@ export default function Home({ navigation }) {
 
 
     return (
-        <View style={{...containerStyles, backgroundColor: theme.bgColour}}>
-            <View style={{...layoutStyles.centerWrapper, ...layoutStyles.flexTwo}}>
-                <Image
-                    style={styles.homescreenLogo}
-                    source={require('../assets/homescreen-logo.png')}
-                />
-                <Image
-                    style={styles.gameName}
-                    source={gameName}
-                />
-            </View>
-            <View style={{...layoutStyles.centerWrapper, ...layoutStyles.flexOne}}>
-                <View style={styles.bestScoreArea}>
-                    <Text style={{...styles.best, color: theme.textColour}}>Best: </Text>
-                    <Text style={{...styles.bestScore, color: theme.textColour}}>{gameContext.highScore}</Text>
-                </View>
-            </View>
-            <View style={{...layoutStyles.centerWrapper, ...layoutStyles.flexThree}}>
-                <ColourButton
-                    text="Play"
-                    bgColour="green"
-                    onPress={handlePlayPress}
-                />
-                <ColourButton
-                    text="Rewards"
-                    bgColour="yellow"
-                    onPress={handleRewardsPress}
-                />
-                <View style={styles.optionsInfo}>
-                    <IconButton
-                        path={require('../assets/options-icon.png')}
-                        bgColour="orange"
-                        onPress={handleOptionsPress}
-                        label="Options"
+        <ImageBackground source={gameContext.mode === 'dark' ? require('../assets/home-bg-dark.webp') : require('../assets/home-bg-light.webp')} resizeMode="cover" style={{backgroundColor: theme.bgColour, flex: 1}}>
+            <View style={containerStyles}>
+                <View style={{...layoutStyles.centerWrapper, ...layoutStyles.flexTwo}}>
+                    <Image
+                        style={styles.homescreenLogo}
+                        source={require('../assets/homescreen-logo.png')}
                     />
-                    <IconButton
-                        path={require('../assets/info-icon.png')}
-                        bgColour="blue"
-                        onPress={handleInfoPress}
-                        label="Instructions"
+                    <Image
+                        style={styles.gameName}
+                        source={gameName}
                     />
                 </View>
+                <View style={{...layoutStyles.centerWrapper, ...layoutStyles.flexOne}}>
+                    <View style={styles.bestScoreArea}>
+                        <Text style={{...styles.best, color: theme.textColour}}>Best: </Text>
+                        <Text style={{...styles.bestScore, color: theme.textColour}}>{gameContext.highScore}</Text>
+                    </View>
+                </View>
+                <View style={{...layoutStyles.centerWrapper, ...layoutStyles.flexThree}}>
+                    <ColourButton
+                        text="Play"
+                        bgColour="green"
+                        onPress={handlePlayPress}
+                    />
+                    <ColourButton
+                        text="Rewards"
+                        bgColour="yellow"
+                        onPress={handleRewardsPress}
+                    />
+                    <View style={styles.optionsInfo}>
+                        <IconButton
+                            path={require('../assets/options-icon.png')}
+                            bgColour="orange"
+                            onPress={handleOptionsPress}
+                            label="Options"
+                        />
+                        <IconButton
+                            path={require('../assets/info-icon.png')}
+                            bgColour="blue"
+                            onPress={handleInfoPress}
+                            label="Instructions"
+                        />
+                    </View>
+                </View>
             </View>
-        </View>
+        </ImageBackground>
     );
 };
 
