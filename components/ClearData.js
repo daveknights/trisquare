@@ -19,6 +19,7 @@ export default function ClearData({ navigation }) {
     useEffect(() => {
         if(dataCleared) {
             gameContext.setHighScore(0);
+            gameContext.setQuickPlayHighScore(0);
             gameContext.setAchievements({});
             gameContext.setPlayViolet(false);
             gameContext.setVioletUnlocked(false);
