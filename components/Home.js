@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Image, ImageBackground } from 'react-native';
+import { StyleSheet, Text, View, Image, ImageBackground, Dimensions } from 'react-native';
 import { useContext } from 'react';
 import ColourButton from './ColourButton';
 import IconButton from './IconButton';
@@ -56,12 +56,14 @@ export default function Home({ navigation }) {
                             bgColour="orange"
                             onPress={handleOptionsPress}
                             label="Options"
+                            width={(Dimensions.get('window').width - 160) / 2}
                         />
                         <IconButton
                             path={require('../assets/info-icon.png')}
                             bgColour="blue"
                             onPress={handleInfoPress}
                             label="Instructions"
+                            width={(Dimensions.get('window').width - 160) / 2}
                         />
                     </View>
                 </View>
