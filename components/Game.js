@@ -444,6 +444,7 @@ export default function Game({ navigation }) {
         <ImageBackground source={gameContext.mode === 'dark' ? require('../assets/game-bg-dark.webp') : require('../assets/game-bg-light.webp')} resizeMode="cover" style={{backgroundColor: theme.bgColour, flex: 1}}>
             <View style={containerStyles}>
                 <View style={{...layoutStyles.spaceBetweenWrapper, ...layoutStyles.flexOne}}>
+                    {(gameType === 'quickplay' && !gameOver) && <Text style={styles.quickPlayScore}>{score}</Text>}
                     <View style={styles.bestScoreArea}>
                         <Text style={{...styles.best, color: theme.textColour}}>{newHighScore ? 'New high score: ' : `${gameType === 'quickplay' ? 'Quick play best: ' : 'Best: '}`}</Text>
                         <Text style={{...styles.bestScore, color: theme.textColour}}>{gameType === 'quickplay' ? gameContext.quickPlayHighScore : gameContext.highScore}</Text>
@@ -647,6 +648,20 @@ const styles = StyleSheet.create({
     },
     bonusPoints: {
         fontWeight: 'bold',
+    },
+    quickPlayScore: {
+        backgroundColor: colours.lightBlue,
+        borderColor: colours.primary,
+        borderWidth: 1,
+        borderRadius: 15,
+        color: colours.primary,
+        fontSize: 20,
+        fontWeight: 'bold',
+        paddingBottom: 6,
+        paddingTop: 6,
+        position: 'absolute',
+        textAlign: 'center',
+        width: 80,
     },
     postGameOptions: {
         flexDirection: 'row',
