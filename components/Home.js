@@ -84,10 +84,10 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
     },
     best: {
-        fontSize: 20,
+        fontSize: 24,
     },
     bestScore: {
-        fontSize: 20,
+        fontSize: 24,
         fontWeight: 'bold',
     },
     optionsInfo: {
