@@ -432,6 +432,8 @@ export default function Game({ navigation }) {
         }
     };
 
+    const handleHomePress = () => navigation.navigate('Home');
+
     const handleOptionsPress = () => navigation.navigate('Options');
 
     const quickPlayTimerFinished = () => {
@@ -555,16 +557,25 @@ export default function Game({ navigation }) {
                     </View>
                     {gameOver && <View style={styles.postGameOptions}>
                                     <IconButton
+                                        path={require('../assets/home-icon.png')}
+                                        bgColour="yellow"
+                                        onPress={handleHomePress}
+                                        label="Go to home screen"
+                                        width={70}
+                                    />
+                                    <IconButton
                                         path={require('../assets/options-icon.png')}
                                         bgColour="orange"
                                         onPress={handleOptionsPress}
                                         label="Go to options screen"
+                                        width={70}
                                     />
                                     <IconButton
                                         path={require('../assets/play-icon.png')}
                                         bgColour="green"
                                         onPress={startGame}
                                         label="Replay game"
+                                        width={90}
                                     />
                                 </View>}
                 </View>
