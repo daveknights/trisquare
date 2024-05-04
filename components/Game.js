@@ -63,7 +63,7 @@ export default function Game({ navigation }) {
     const [isQuickPlayTimerFinished, setIsQuickPlayTimerFinished] = useState(false);
     const gameContext = useContext(GameContext);
     const theme = gameContext.theme;
-    const playViolet = gameContext.playViolet;
+    const gameType = gameContext.gameType;
     const grow = useRef(new Animated.Value(0)).current;
     const scoreZoom = useRef(new Animated.Value(0)).current;
     const bonusZoom = useRef(new Animated.Value(0)).current;
@@ -222,7 +222,7 @@ export default function Game({ navigation }) {
 
     const getEmptyTile = () => emptyTiles[Math.floor(Math.random() * emptyTiles.length)];
 
-    const getColour = () => tileColours[Math.floor(Math.random() * (playViolet ? 6 : 5))];
+    const getColour = () => tileColours[Math.floor(Math.random() * (gameType === 'violet' ? 6 : 5))];
     // Initial grid state
     const startGame = () => {
         const startingTiles = shuffle([...Object.keys(initialTiles)]);
@@ -250,8 +250,8 @@ export default function Game({ navigation }) {
         setGridsCleared(0);
         setGameOver(false);
         setShowRewardsMessage(false);
-        gameContext.quickPlay && setIsQuickPlayTimerFinished(false);
-        gameContext.quickPlay && setCountDownNumber(3);
+        gameType === 'quickplay' && setIsQuickPlayTimerFinished(false);
+        gameType === 'quickplay' && setCountDownNumber(3);
     };
 
     const getPaletteTileSize = (qty, gap) => {
@@ -261,7 +261,7 @@ export default function Game({ navigation }) {
     };
 
     useEffect(() => {
-        if(playViolet) {
+        if(gameType === 'violet') {
             setPaletteTileSize(getPaletteTileSize(6, 15));
             tileColours.push('violet');
         } else {
@@ -271,7 +271,7 @@ export default function Game({ navigation }) {
         startGame();
 
         return () => tileColours.length === 6 && tileColours.pop();
-    }, []);
+    }, [gameType]);
     // Add new tile
     useEffect(() => {
         let timer;
@@ -327,9 +327,9 @@ export default function Game({ navigation }) {
                 break;
             case 8:
                 setScore(score => score + 5);
-                !gameContext.quickPlay && setGridsCleared(prev => prev + 1);
+                gameType !== 'quickplay' && setGridsCleared(prev => prev + 1);
                 setBonusPoints(5);
-                !gameContext.quickPlay && setShowBonus(true);
+                gameType !== 'quickplay' && setShowBonus(true);
             default:
                 lastTile && setLastTile(false);
                 gridFull && setGridFull(false);
@@ -395,7 +395,7 @@ export default function Game({ navigation }) {
                     if ((consecutiveMatches - 1) >= 1) {
                         setScore(score => score + (consecutiveMatches - 1));
                         setBonusPoints(consecutiveMatches - 1);
-                        !gameContext.quickPlay && setShowBonus(true);
+                        gameType !== 'quickplay' && setShowBonus(true);
                     }
 
                     consecutiveMatches - 1 > matches && setMatches(consecutiveMatches - 1);
@@ -406,7 +406,7 @@ export default function Game({ navigation }) {
                 if (gridFull) {
                     setGameOver(true);
                     setCanAddTile(false);
-                    !gameContext.quickPlay && saveGameData();
+                    gameType !== 'quickplay' && saveGameData();
                 } else {
                     !tileAdded && setCanAddTile(true);
                 }
@@ -445,11 +445,11 @@ export default function Game({ navigation }) {
             <View style={containerStyles}>
                 <View style={{...layoutStyles.spaceBetweenWrapper, ...layoutStyles.flexOne}}>
                     <View style={styles.bestScoreArea}>
-                        <Text style={{...styles.best, color: theme.textColour}}>{newHighScore ? 'New high score: ' : `${gameContext.quickPlay ? 'Quick play best: ' : 'Best: '}`}</Text>
-                        <Text style={{...styles.bestScore, color: theme.textColour}}>{gameContext.quickPlay ? gameContext.quickPlayHighScore : gameContext.highScore}</Text>
+                        <Text style={{...styles.best, color: theme.textColour}}>{newHighScore ? 'New high score: ' : `${gameType === 'quickplay' ? 'Quick play best: ' : 'Best: '}`}</Text>
+                        <Text style={{...styles.bestScore, color: theme.textColour}}>{gameType === 'quickplay' ? gameContext.quickPlayHighScore : gameContext.highScore}</Text>
                     </View>
-                    {(gameContext.quickPlay && countDownNumber < 1 && !gameOver) && <Timer quickPlayTimerFinished={quickPlayTimerFinished} />}
-                    {!gameContext.quickPlay &&  <View style={styles.scoreArea}>
+                    {(gameType === 'quickplay' && countDownNumber < 1 && !gameOver) && <Timer quickPlayTimerFinished={quickPlayTimerFinished} />}
+                    {gameType !== 'quickplay' &&  <View style={styles.scoreArea}>
                         <Text style={{...styles.score, color: theme.textColour}}>Score: </Text>
                         <Animated.Text style={{...styles.scoreTotal, color: theme.textColour,
                             transform: [{
@@ -468,8 +468,8 @@ export default function Game({ navigation }) {
                     </View>}
                 </View>
                 <View style={{...layoutStyles.centerWrapper, ...layoutStyles.flexFour}}>
-                    {(gameContext.quickPlay && countDownNumber > 0) && <CountDown gridSize={gridSize} number={countDownNumber} />}
-                    {(gameContext.quickPlay && gameOver) && <QuickPlayOver gridSize={gridSize}
+                    {(gameType === 'quickplay' && countDownNumber > 0) && <CountDown gridSize={gridSize} number={countDownNumber} />}
+                    {(gameType === 'quickplay' && gameOver) && <QuickPlayOver gridSize={gridSize}
                                                                             score={score}
                                                                             finishText={isQuickPlayTimerFinished ? `Time's up!` : `The grid's full.`} />}
                     <View style={{...styles.grid, backgroundColor: theme.bgColour}}>

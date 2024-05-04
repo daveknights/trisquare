@@ -21,7 +21,7 @@ export default function ClearData({ navigation }) {
             gameContext.setHighScore(0);
             gameContext.setQuickPlayHighScore(0);
             gameContext.setAchievements({});
-            gameContext.setPlayViolet(false);
+            gameContext.setGameType('blue');
             gameContext.setVioletUnlocked(false);
         }
     }, [dataCleared]);

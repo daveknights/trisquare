@@ -22,10 +22,9 @@ export default function App() {
     const [highScore, setHighScore] = useState(0);
     const [achievements, setAchievements] = useState({});
     const [violetUnlocked, setVioletUnlocked] = useState(false);
-    const [playViolet, setPlayViolet] = useState(false);
-    const [quickPlay, setQuickPlay] = useState(false);
     const [quickPlayHighScore, setQuickPlayHighScore] = useState(0);
     const [sfx, setSfx] = useState(true);
+    const [gameType, setGameType] = useState('blue');
 
     const headerStyles = {
         headerStyle: {
@@ -77,16 +76,14 @@ export default function App() {
                                     setHighScore: setHighScore,
                                     violetUnlocked: violetUnlocked,
                                     setVioletUnlocked: setVioletUnlocked,
-                                    playViolet: playViolet,
-                                    setPlayViolet: setPlayViolet,
-                                    quickPlay: quickPlay,
-                                    setQuickPlay: setQuickPlay,
                                     quickPlayHighScore: quickPlayHighScore,
                                     setQuickPlayHighScore: setQuickPlayHighScore,
                                     achievements: achievements,
                                     setAchievements: setAchievements,
                                     sfx: sfx,
-                                    setSfx: setSfx}}>
+                                    setSfx: setSfx,
+                                    gameType: gameType,
+                                    setGameType: setGameType}}>
             <NavigationContainer>
                 <Stack.Navigator>
                     <Stack.Screen name="Home"

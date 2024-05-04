@@ -17,7 +17,7 @@ export default function QuickPlayOver({ gridSize, score, finishText }) {
                 const triSquareData = await AsyncStorage.getItem('@triSquareData');
                 const updatedData = JSON.parse(triSquareData) || {};
 
-                if (gameContext.quickPlay) {
+                if (gameContext.gameType === 'quickplay') {
                     if (score > gameContext.quickPlayHighScore) {
                         updatedData.quickPlayHighScore = score;
                         gameContext.setQuickPlayHighScore(score);

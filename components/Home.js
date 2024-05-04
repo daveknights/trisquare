@@ -20,8 +20,6 @@ export default function Home({ navigation }) {
 
     const handleInfoPress = () => navigation.navigate('Instructions');
 
-
-
     return (
         <ImageBackground source={gameContext.mode === 'dark' ? require('../assets/home-bg-dark.webp') : require('../assets/home-bg-light.webp')} resizeMode="cover" style={{backgroundColor: theme.bgColour, flex: 1}}>
             <View style={containerStyles}>
