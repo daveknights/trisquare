@@ -43,7 +43,7 @@ export default function Timer({ quickPlayTimerFinished }) {
     return (
         <View style={styles.track}>
             <Animated.View style={{...styles.progress, transform: [{scaleX: timer}], backgroundColor: timer.interpolate({
-                inputRange: [0, 0.8, 0.9, 1],
+                inputRange: [0, 0.8, 0.8, 1],
                 outputRange: [colours.green, colours.green, colours.red, colours.red]
             })}}></Animated.View>
         </View>
