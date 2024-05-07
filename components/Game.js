@@ -248,6 +248,7 @@ export default function Game({ navigation }) {
         setNewHighScore(false);
         setMatches(0);
         setGridsCleared(0);
+        setGameOver(false);
         setShowRewardsMessage(false);
         gameType === 'quickplay' && setIsQuickPlayTimerFinished(false);
         gameType === 'quickplay' && setCountDownNumber(3);
