@@ -248,7 +248,6 @@ export default function Game({ navigation }) {
         setNewHighScore(false);
         setMatches(0);
         setGridsCleared(0);
-        setGameOver(false);
         setShowRewardsMessage(false);
         gameType === 'quickplay' && setIsQuickPlayTimerFinished(false);
         gameType === 'quickplay' && setCountDownNumber(3);
@@ -434,7 +433,10 @@ export default function Game({ navigation }) {
 
     const handleHomePress = () => navigation.navigate('Home');
 
-    const handleOptionsPress = () => navigation.navigate('Options');
+    const handleOptionsPress = () => {
+        setGameOver(false);
+        navigation.navigate('Options');
+    };
 
     const quickPlayTimerFinished = () => {
         setIsQuickPlayTimerFinished(true);
