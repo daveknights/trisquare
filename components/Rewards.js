@@ -58,7 +58,7 @@ export default function Rewards({ navigation }) {
                     {(Object.keys(achievements).length > 0 && Object.keys(achievements.matches).length > 0) && <View style={styles.rewardsRow}>
                         {achievements.matches.matches1 && <MatchesReward text="1" colour="bronze" />}
                         {achievements.matches.matches3 && <MatchesReward text="3" colour="silver" />}
-                        {achievements.matches.matches6 && <MatchesReward text="6" colour="gold" />}
+                        {achievements.matches.matches5 && <MatchesReward text="5" colour="gold" />}
                     </View>}
                     <TouchableOpacity style={styles.link} onPress={handleLinkToClearData}>
                         <Text style={{...styles.linkText, color: gameContext.theme.linkColour}}>Clear all game data</Text>

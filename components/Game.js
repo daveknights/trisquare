@@ -192,9 +192,9 @@ export default function Game({ navigation }) {
             }
 
             switch (true) {
-                case matches > 5 && !updatedData.achievements.matches.matches6:
-                    updatedData.achievements.matches.matches6 = true;
-                    newRewardData.matches = {text: 6, colour: 'gold'};
+                case matches > 4 && !updatedData.achievements.matches.matches6:
+                    updatedData.achievements.matches.matches5 = true;
+                    newRewardData.matches = {text: 5, colour: 'gold'};
                 case matches > 2 && !updatedData.achievements.matches.matches3:
                     updatedData.achievements.matches.matches3 = true;
                     !newRewardData.matches && (newRewardData.matches = {text: 3, colour: 'silver'});
