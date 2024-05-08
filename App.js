@@ -88,10 +88,10 @@ export default function App() {
                 <Stack.Navigator>
                     <Stack.Screen name="Home"
                         component={Home}
-                        options={{headerShown: false, animation: 'fade', ...headerStyles}} />
+                        options={{headerShown: false, animation: 'fade'}} />
                     <Stack.Screen name="Game"
                         component={Game}
-                        options={{headerShown: false, animation: 'fade', ...headerStyles}} />
+                        options={{headerShown: false, animation: 'fade'}} />
                     <Stack.Screen name="Rewards"
                         component={Rewards}
                         options={{...headerStyles, animation: 'slide_from_right'}} />
