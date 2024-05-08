@@ -97,7 +97,7 @@ export default function App() {
                         options={{...headerStyles, animation: 'slide_from_right'}} />
                     <Stack.Screen name="Options"
                         component={Options}
-                        options={{...headerStyles, animation: 'slide_from_right'}} />
+                        options={{headerShown: false, animation: 'fade'}} />
                     <Stack.Screen name="Instructions"
                         component={Instructions}
                         options={{...headerStyles, animation: 'slide_from_right'}} />
