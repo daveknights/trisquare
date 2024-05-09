@@ -6,7 +6,7 @@ import RewardMessage from './RewardMessage';
 import IconButton from './IconButton';
 import Timer from './Timer';
 import CountDown from './CountDown';
-import QuickPlayOver from './QuickPlayOver';
+import QuickPlayScore from './QuickPlayScore';
 import GameContext from '../context/gameContext';
 import containerStyles from '../defaults/containerStyles';
 import layoutStyles from '../defaults/layoutStyles';
@@ -416,7 +416,13 @@ export default function Game({ navigation }) {
         return () => clearTimeout(timer);
     }, [tiles]);
 
-    const handleTilePress = key => !canAddTile && setSelectedTile(key);
+    const handleTilePress = key => {
+        if (gameOver) {
+            return;
+        }
+
+        !canAddTile && setSelectedTile(key);
+    };
 
     const handlePalettePress = colour => {
         if (selectedColour) {
@@ -435,6 +441,7 @@ export default function Game({ navigation }) {
     const handleHomePress = () => navigation.navigate('Home');
 
     const handleOptionsPress = () => {
+        gameType === 'quickplay' && setCountDownNumber(3);
         setGameOver(false);
         navigation.navigate('Options');
     };
@@ -449,7 +456,7 @@ export default function Game({ navigation }) {
         <ImageBackground source={gameContext.mode === 'dark' ? require('../assets/game-bg-dark.webp') : require('../assets/game-bg-light.webp')} resizeMode="cover" style={{backgroundColor: theme.bgColour, flex: 1}}>
             <View style={containerStyles}>
                 <View style={{...layoutStyles.spaceBetweenWrapper, ...layoutStyles.flexOne}}>
-                    {(gameType === 'quickplay' && !gameOver) && <Text style={styles.quickPlayScore}>{score}</Text>}
+                        {gameType === 'quickplay' && <QuickPlayScore score={score} gameOver={gameOver} />}
                     <View style={styles.bestScoreArea}>
                         <Text style={{...styles.best, color: theme.textColour}}>{newHighScore ? 'New high score: ' : `${gameType === 'quickplay' ? 'Quick play best: ' : 'Best: '}`}</Text>
                         <Text style={{...styles.bestScore, color: theme.textColour}}>{gameType === 'quickplay' ? gameContext.quickPlayHighScore : gameContext.highScore}</Text>
@@ -475,9 +482,6 @@ export default function Game({ navigation }) {
                 </View>
                 <View style={{...layoutStyles.centerWrapper, ...layoutStyles.flexFour}}>
                     {(gameType === 'quickplay' && countDownNumber > 0) && <CountDown gridSize={gridSize} number={countDownNumber} />}
-                    {(gameType === 'quickplay' && gameOver) && <QuickPlayOver gridSize={gridSize}
-                                                                            score={score}
-                                                                            finishText={isQuickPlayTimerFinished ? `Time's up!` : `The grid's full.`} />}
                     <View style={{...styles.grid, backgroundColor: theme.bgColour}}>
                         {Object.entries(tiles).map(([k, col]) => {
                             let tileColour =  gameContext.theme.tileGrads['blankColour'];
@@ -548,7 +552,7 @@ export default function Game({ navigation }) {
                 </View>
                 <View style={{...layoutStyles.startWrapper, ...layoutStyles.flexTwo}}>
                     <View style={styles.colourPalette}>
-                        {gameOver ? <View style={styles.gameOver}><Text style={{...styles.gameOverText, color: theme.textColour}}>Game Over</Text></View>
+                        {gameOver ? <View style={styles.gameOver}><Text style={{...styles.gameOverText, color: theme.textColour}}>{gameType !== 'quickplay' ? 'Game Over' : isQuickPlayTimerFinished ? `Time's up!` : `The Grid's full`}</Text></View>
                             : tileColours.map(colour => colour !== 'blankColour' && <LinearGradient key={colour} colors={gameContext.theme.tileGrads[colour]}
                                                                                                 style={{...styles.paletteColour, width: paletteTileSize}}>
                                                     <TouchableOpacity onPress={() => handlePalettePress(colour)}
@@ -662,20 +666,6 @@ const styles = StyleSheet.create({
     },
     bonusPoints: {
         fontWeight: 'bold',
-    },
-    quickPlayScore: {
-        backgroundColor: colours.lightBlue,
-        borderColor: colours.primary,
-        borderWidth: 1,
-        borderRadius: 15,
-        color: colours.primary,
-        fontSize: 20,
-        fontWeight: 'bold',
-        paddingBottom: 6,
-        paddingTop: 6,
-        position: 'absolute',
-        textAlign: 'center',
-        width: 80,
     },
     postGameOptions: {
         flexDirection: 'row',

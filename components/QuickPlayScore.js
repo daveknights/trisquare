@@ -2,8 +2,9 @@ import { useEffect, useContext, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import GameContext from '../context/gameContext';
+import colours from "../defaults/colours";
 
-export default function QuickPlayOver({ gridSize, score, finishText }) {
+export default function QuickPlayScore({ score, gameOver }) {
     const [currentQPHighScore, setCurrentQPHighScore] = useState('');
     const gameContext = useContext(GameContext);
 
@@ -30,55 +31,42 @@ export default function QuickPlayOver({ gridSize, score, finishText }) {
             }
         }
 
-        saveData(score);
-    }, []);
+        if (gameOver && score > currentQPHighScore) {
+            saveData(score);
+        }
+    }, [gameOver]);
 
     return (
-        <View style={{...styles.quickPlayOver, height: gridSize, width: gridSize}}>
-            <View style={styles.quickPlayOverBG}>
-                <Text style={styles.text}>{finishText}</Text>
-                <Text style={{...styles.quickPlayScore, marginTop: 40}}>{score > currentQPHighScore ? 'High score' : 'You scored'}</Text>
-                <Text style={styles.quickPlayScore}>{score}</Text>
-            </View>
+        <View style={styles.quickPlayScoreView}>
+            <Text style={{...styles.quickPlayScoreHeading, paddingBottom: gameOver ? 5 : 0, paddingTop: gameOver ? 5 : 0}}>{gameOver && score > currentQPHighScore ? 'High score' : 'score'}</Text>
+            <Text style={{...styles.quickPlayScore, fontSize: gameOver ? 32 : 24}}>{score}</Text>
         </View>
     );
 };
 
 const styles = StyleSheet.create({
-    quickPlayOver: {
-        backgroundColor: 'rgba(0,4,6,0.7)',
-        borderRadius: 15,
-        padding: 30,
-        position: 'absolute',
-        zIndex: 1,
-    },
-    quickPlayOverBG: {
-        alignItems: 'center',
-        backgroundColor: colours.lightBlue,
-        borderRadius: 12,
-        height: '100%',
+    quickPlayScoreView: {
+        borderColor: colours.primary,
+        borderRadius: 8,
+        borderWidth: 1,
         overflow: 'hidden',
-        width: '100%',
+        position: 'absolute',
     },
-    text: {
+    quickPlayScoreHeading: {
         backgroundColor: colours.green,
-        borderBottomColor: colours.primary,
+        borderColor: colours.primary,
         borderBottomWidth: 1,
         color: colours.primary,
-        fontSize: 20,
-        fontWeight: 'bold',
-        paddingBottom: 12,
-        paddingLeft: 20,
-        paddingRight: 20,
-        paddingTop: 12,
         textAlign: 'center',
-        width: '100%',
+        width: 100,
     },
     quickPlayScore: {
+        backgroundColor: colours.lightBlue,
         color: colours.primary,
-        fontSize: 40,
-        paddingLeft: 20,
-        paddingRight: 20,
+        fontWeight: 'bold',
+        paddingBottom: 4,
+        paddingTop: 4,
         textAlign: 'center',
+        width: 100,
     },
 });
