@@ -326,10 +326,10 @@ export default function Game({ navigation }) {
                 setLastTile(true);
                 break;
             case 8:
-                setScore(score => score + 5);
+                !gameOver && setScore(score => score + 5);
                 gameType !== 'quickplay' && setGridsCleared(prev => prev + 1);
                 setBonusPoints(5);
-                gameType !== 'quickplay' && setShowBonus(true);
+                setShowBonus(true);
             default:
                 lastTile && setLastTile(false);
                 gridFull && setGridFull(false);
@@ -375,7 +375,7 @@ export default function Game({ navigation }) {
                             [`t${combo[0]}`]: '',
                             [`t${combo[1]}`]: ''
                         }));
-                        setScore(score => score + scoreIncrement);
+                        !gameOver && setScore(score => score + scoreIncrement);
                         !tileAdded && setCanAddTile(true);
                         setGridFull(false);
                         setConsecutiveMatches(prev => prev + 1);
@@ -393,9 +393,9 @@ export default function Game({ navigation }) {
 
                 if (!canAddTile && consecutiveMatches > 0) {
                     if ((consecutiveMatches - 1) >= 1) {
-                        setScore(score => score + (consecutiveMatches - 1));
+                        !gameOver && setScore(score => score + (consecutiveMatches - 1));
                         setBonusPoints(consecutiveMatches - 1);
-                        gameType !== 'quickplay' && setShowBonus(true);
+                        setShowBonus(true);
                     }
 
                     consecutiveMatches - 1 > matches && setMatches(consecutiveMatches - 1);
@@ -447,8 +447,8 @@ export default function Game({ navigation }) {
     };
 
     const quickPlayTimerFinished = () => {
-        setIsQuickPlayTimerFinished(true);
         setGameOver(true);
+        setIsQuickPlayTimerFinished(true);
         setSelectedTile(null);
     };
 
@@ -456,29 +456,35 @@ export default function Game({ navigation }) {
         <ImageBackground source={gameContext.mode === 'dark' ? require('../assets/game-bg-dark.webp') : require('../assets/game-bg-light.webp')} resizeMode="cover" style={{backgroundColor: theme.bgColour, flex: 1}}>
             <View style={containerStyles}>
                 <View style={{...layoutStyles.spaceBetweenWrapper, ...layoutStyles.flexOne}}>
+                    <View style={styles.scoreWrapper}>
                         {gameType === 'quickplay' && <QuickPlayScore score={score} gameOver={gameOver} />}
-                    <View style={styles.bestScoreArea}>
-                        <Text style={{...styles.best, color: theme.textColour}}>{newHighScore ? 'New high score: ' : `${gameType === 'quickplay' ? 'Quick play best: ' : 'Best: '}`}</Text>
-                        <Text style={{...styles.bestScore, color: theme.textColour}}>{gameType === 'quickplay' ? gameContext.quickPlayHighScore : gameContext.highScore}</Text>
-                    </View>
-                    {(gameType === 'quickplay' && countDownNumber < 1 && !gameOver) && <Timer quickPlayTimerFinished={quickPlayTimerFinished} />}
-                    {gameType !== 'quickplay' &&  <View style={styles.scoreArea}>
-                        <Text style={{...styles.score, color: theme.textColour}}>Score: </Text>
-                        <Animated.Text style={{...styles.scoreTotal, color: theme.textColour,
-                            transform: [{
-                                scale: scoreZoom.interpolate({
-                                    inputRange: [0, 0.5, 1],
-                                    outputRange: [1, 1.5, 1]})
-                            }]
-                        }}>
-                            {score}
-                        </Animated.Text>
+                        <View style={styles.scoreView}>
+                            {gameType !== 'quickplay' &&  <View style={styles.scoreArea}>
+                                <Text style={styles.scoreHeading}>Score</Text>
+                                <Animated.Text style={{...styles.scoreTotal,
+                                    transform: [{
+                                        scale: scoreZoom.interpolate({
+                                            inputRange: [0, 0.5, 1],
+                                            outputRange: [1, 1.5, 1]})
+                                    }]
+                                }}>
+                                    {score}
+                                </Animated.Text>
+                            </View>}
+                        </View>
+
                         {showBonus && <Animated.View style={{...styles.bonus, transform: [{scale: bonusZoom}]}}>
                             <Text style={styles.bonusText}>+
                                 <Text style={{...styles.bonusText, ...styles.bonusPoints}}>{bonusPoints}</Text>
                             </Text>
                         </Animated.View>}
-                    </View>}
+
+                        <View style={styles.bestScoreArea}>
+                            <Text style={{...styles.best, color: theme.textColour}}>{newHighScore ? 'New high score: ' : `${gameType === 'quickplay' ? 'Quick play best: ' : 'Best: '}`}</Text>
+                            <Text style={{...styles.bestScore, color: theme.textColour}}>{gameType === 'quickplay' ? gameContext.quickPlayHighScore : gameContext.highScore}</Text>
+                        </View>
+                    </View>
+                    {(gameType === 'quickplay' && countDownNumber < 1 && !gameOver) && <Timer quickPlayTimerFinished={quickPlayTimerFinished} />}
                 </View>
                 <View style={{...layoutStyles.centerWrapper, ...layoutStyles.flexFour}}>
                     {(gameType === 'quickplay' && countDownNumber > 0) && <CountDown gridSize={gridSize} number={countDownNumber} />}
@@ -592,6 +598,12 @@ export default function Game({ navigation }) {
 }
 
 const styles = StyleSheet.create({
+    scoreWrapper: {
+        flexDirection: 'row',
+    },
+    scoreView: {
+        flexDirection: 'row',
+    },
     grid: {
         borderRadius: 15,
         flexDirection: 'row',
@@ -636,27 +648,41 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     scoreArea: {
-        alignItems: 'center',
-        alignSelf: 'flex-start',
-        flexDirection: 'row',
-        justifyContent: 'center',
-        marginLeft: 16,
+        backgroundColor: colours.lightBlue,
+        borderColor: colours.primary,
+        borderRadius: 8,
+        borderWidth: 1,
+        overflow: 'hidden',
     },
-    score: {
-        fontSize: 30,
+    scoreHeading: {
+        backgroundColor: colours.green,
+        borderColor: colours.primary,
+        borderBottomWidth: 1,
+        color: colours.primary,
+        fontSize: 20,
+        paddingBottom: 5,
+        paddingTop: 3,
+        textAlign: 'center',
+        width: 100,
     },
     scoreTotal: {
+        color: colours.primary,
         fontSize: 30,
         fontWeight: 'bold',
+        paddingBottom:5,
+        paddingTop: 3,
+        textAlign: 'center',
+        width: 100,
     },
     bonus: {
         alignItems: 'center',
+        alignSelf: 'flex-end',
         backgroundColor: colours.green,
-        borderRadius: 18,
+        borderRadius: 15,
         height: 36,
         justifyContent: 'center',
         marginLeft: 10,
-        width: 60,
+        width: 56,
     },
     bonusText: {
         color: colours.skyBlue,

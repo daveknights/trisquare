@@ -38,7 +38,7 @@ export default function QuickPlayScore({ score, gameOver }) {
 
     return (
         <View style={styles.quickPlayScoreView}>
-            <Text style={{...styles.quickPlayScoreHeading, paddingBottom: gameOver ? 5 : 0, paddingTop: gameOver ? 5 : 0}}>{gameOver && score > currentQPHighScore ? 'High score' : 'score'}</Text>
+            <Text style={{...styles.quickPlayScoreHeading, fontSize: gameOver ? 18 : 15, paddingBottom: gameOver ? 5 : 3, paddingTop: gameOver ? 3 : 0}}>{gameOver && score > currentQPHighScore ? 'Hi-Score' : 'score'}</Text>
             <Text style={{...styles.quickPlayScore, fontSize: gameOver ? 32 : 24}}>{score}</Text>
         </View>
     );
@@ -50,7 +50,6 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         borderWidth: 1,
         overflow: 'hidden',
-        position: 'absolute',
     },
     quickPlayScoreHeading: {
         backgroundColor: colours.green,
@@ -64,8 +63,8 @@ const styles = StyleSheet.create({
         backgroundColor: colours.lightBlue,
         color: colours.primary,
         fontWeight: 'bold',
-        paddingBottom: 4,
-        paddingTop: 4,
+        paddingBottom: 5,
+        paddingTop: 3,
         textAlign: 'center',
         width: 100,
     },
