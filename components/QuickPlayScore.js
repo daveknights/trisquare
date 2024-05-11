@@ -9,10 +9,6 @@ export default function QuickPlayScore({ score, gameOver }) {
     const gameContext = useContext(GameContext);
 
     useEffect(() => {
-        setCurrentQPHighScore(gameContext.quickPlayHighScore);
-    }, []);
-
-    useEffect(() => {
         async function saveData() {
             try {
                 const triSquareData = await AsyncStorage.getItem('@triSquareData');
@@ -33,6 +29,10 @@ export default function QuickPlayScore({ score, gameOver }) {
 
         if (gameOver && score > currentQPHighScore) {
             saveData(score);
+        }
+
+        if (!gameOver) {
+            setCurrentQPHighScore(gameContext.quickPlayHighScore);
         }
     }, [gameOver]);
 

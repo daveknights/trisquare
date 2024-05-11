@@ -440,10 +440,7 @@ export default function Game({ navigation }) {
 
     const handleHomePress = () => navigation.navigate('Home');
 
-    const handleOptionsPress = () => {
-        gameContext.setGameType('blue');
-        navigation.navigate('Options');
-    };
+    const handleOptionsPress = () => navigation.navigate('Options');
 
     const quickPlayTimerFinished = () => {
         setGameOver(true);
@@ -483,10 +480,10 @@ export default function Game({ navigation }) {
                             <Text style={{...styles.bestScore, color: theme.textColour}}>{gameType === 'quickplay' ? gameContext.quickPlayHighScore : gameContext.highScore}</Text>
                         </View>
                     </View>
-                    {(gameType === 'quickplay' && countDownNumber < 1 && !gameOver) && <Timer quickPlayTimerFinished={quickPlayTimerFinished} />}
+                    {(gameType === 'quickplay' && countDownNumber === 0 && !gameOver) && <Timer quickPlayTimerFinished={quickPlayTimerFinished} />}
                 </View>
                 <View style={{...layoutStyles.centerWrapper, ...layoutStyles.flexFour}}>
-                    {(gameType === 'quickplay' && countDownNumber > 0) && <CountDown gridSize={gridSize} number={countDownNumber} />}
+                    {(gameType === 'quickplay' && countDownNumber > 0 && !gameOver) && <CountDown gridSize={gridSize} number={countDownNumber} />}
                     <View style={{...styles.grid, backgroundColor: theme.bgColour}}>
                         {Object.entries(tiles).map(([k, col]) => {
                             let tileColour =  gameContext.theme.tileGrads['blankColour'];
