@@ -1,4 +1,4 @@
-import { StyleSheet, Text, TouchableOpacity, View, Image, ScrollView, Dimensions } from 'react-native';
+import { BackHandler, StyleSheet, Text, TouchableOpacity, View, Image, ScrollView, Dimensions } from 'react-native';
 import { useContext, useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useHeaderHeight } from '@react-navigation/elements';
@@ -27,6 +27,12 @@ export default function Options({ navigation }) {
         borderColor: '#00b353',
         borderWidth: 5
     };
+
+    useEffect(() => {
+        const backHandler = BackHandler.addEventListener('hardwareBackPress', () => true);
+
+        return () => backHandler.remove();
+    });
 
     const playSound = async () => {
         const { sound } = await Audio.Sound.createAsync(require('../assets/reward.mp3'));
