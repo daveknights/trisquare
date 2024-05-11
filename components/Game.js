@@ -441,8 +441,7 @@ export default function Game({ navigation }) {
     const handleHomePress = () => navigation.navigate('Home');
 
     const handleOptionsPress = () => {
-        gameType === 'quickplay' && setCountDownNumber(3);
-        setGameOver(false);
+        gameContext.setGameType('blue');
         navigation.navigate('Options');
     };
 
