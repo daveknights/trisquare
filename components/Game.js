@@ -456,7 +456,7 @@ export default function Game({ navigation }) {
                         {gameType === 'quickplay' && <QuickPlayScore score={score} gameOver={gameOver} />}
                         <View style={styles.scoreView}>
                             {gameType !== 'quickplay' &&  <View style={styles.scoreArea}>
-                                <Text style={styles.scoreHeading}>Score</Text>
+                                <Text style={styles.scoreHeading}>{newHighScore ? 'Hi-Score' : 'Score'}</Text>
                                 <Animated.Text style={{...styles.scoreTotal,
                                     transform: [{
                                         scale: scoreZoom.interpolate({
@@ -476,7 +476,7 @@ export default function Game({ navigation }) {
                         </Animated.View>}
 
                         <View style={styles.bestScoreArea}>
-                            <Text style={{...styles.best, color: theme.textColour}}>{newHighScore ? 'New high score: ' : `${gameType === 'quickplay' ? 'Quick play best: ' : 'Best: '}`}</Text>
+                            <Text style={{...styles.best, color: theme.textColour}}>{gameType === 'quickplay' ? 'Quick play best: ' : 'Best: '}</Text>
                             <Text style={{...styles.bestScore, color: theme.textColour}}>{gameType === 'quickplay' ? gameContext.quickPlayHighScore : gameContext.highScore}</Text>
                         </View>
                     </View>

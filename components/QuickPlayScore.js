@@ -38,7 +38,7 @@ export default function QuickPlayScore({ score, gameOver }) {
 
     return (
         <View style={styles.quickPlayScoreView}>
-            <Text style={{...styles.quickPlayScoreHeading, fontSize: gameOver ? 18 : 15, paddingBottom: gameOver ? 5 : 3, paddingTop: gameOver ? 3 : 0}}>{gameOver && score > currentQPHighScore ? 'Hi-Score' : 'score'}</Text>
+            <Text style={{...styles.quickPlayScoreHeading, fontSize: gameOver ? 18 : 15, paddingBottom: gameOver ? 5 : 3, paddingTop: gameOver ? 3 : 0}}>{gameOver && score > currentQPHighScore ? 'Hi-Score' : 'Score'}</Text>
             <Text style={{...styles.quickPlayScore, fontSize: gameOver ? 32 : 24}}>{score}</Text>
         </View>
     );
