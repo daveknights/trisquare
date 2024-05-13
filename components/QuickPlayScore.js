@@ -31,10 +31,10 @@ export default function QuickPlayScore({ score, gameOver }) {
             saveData(score);
         }
 
-        if (!gameOver) {
+        if (!gameOver && score === 0) {
             setCurrentQPHighScore(gameContext.quickPlayHighScore);
         }
-    }, [gameOver]);
+    }, [gameOver, score]);
 
     return (
         <View style={styles.quickPlayScoreView}>
