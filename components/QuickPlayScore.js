@@ -4,7 +4,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import GameContext from '../context/gameContext';
 import colours from "../defaults/colours";
 
-export default function QuickPlayScore({ score, gameOver }) {
+export default function QuickPlayScore({ score, gameOver, quickPlayWasStarted }) {
     const [currentQPHighScore, setCurrentQPHighScore] = useState('');
     const gameContext = useContext(GameContext);
 
@@ -14,20 +14,16 @@ export default function QuickPlayScore({ score, gameOver }) {
                 const triSquareData = await AsyncStorage.getItem('@triSquareData');
                 const updatedData = JSON.parse(triSquareData) || {};
 
-                if (gameContext.gameType === 'quickplay') {
-                    if (score > gameContext.quickPlayHighScore) {
-                        updatedData.quickPlayHighScore = score;
-                        gameContext.setQuickPlayHighScore(score);
+                updatedData.quickPlayHighScore = score;
+                gameContext.setQuickPlayHighScore(score);
 
-                        await AsyncStorage.setItem('@triSquareData', JSON.stringify(updatedData));
-                    }
-                }
+                await AsyncStorage.setItem('@triSquareData', JSON.stringify(updatedData));
             } catch (error) {
                 console.log('There has been a problem saving: ' + error.message);
             }
         }
 
-        if (gameOver && score > currentQPHighScore) {
+        if (quickPlayWasStarted && gameOver && score > currentQPHighScore) {
             saveData(score);
         }
 

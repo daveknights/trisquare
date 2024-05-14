@@ -60,6 +60,7 @@ export default function Game({ navigation }) {
     const [sound, setSound] = useState();
     const [newTile, setNewTile] = useState(null);
     const [countDownNumber, setCountDownNumber] = useState(3);
+    const [quickPlayWasStarted, setQuickPlayWasStarted] = useState(false);
     const [isQuickPlayTimerFinished, setIsQuickPlayTimerFinished] = useState(false);
     const gameContext = useContext(GameContext);
     const theme = gameContext.theme;
@@ -247,11 +248,18 @@ export default function Game({ navigation }) {
         setScore(0);
         setNewHighScore(false);
         setMatches(0);
+        setConsecutiveMatches(0);
         setGridsCleared(0);
         setGameOver(false);
         setShowRewardsMessage(false);
-        gameType === 'quickplay' && setIsQuickPlayTimerFinished(false);
-        gameType === 'quickplay' && setCountDownNumber(3);
+
+        if(gameType === 'quickplay') {
+            setQuickPlayWasStarted(true);
+            setIsQuickPlayTimerFinished(false);
+            setCountDownNumber(3);
+        } else {
+            setQuickPlayWasStarted(false);
+        }
     };
 
     const getPaletteTileSize = (qty, gap) => {
@@ -453,7 +461,7 @@ export default function Game({ navigation }) {
             <View style={containerStyles}>
                 <View style={{...layoutStyles.spaceBetweenWrapper, ...layoutStyles.flexOne}}>
                     <View style={styles.scoreWrapper}>
-                        {gameType === 'quickplay' && <QuickPlayScore score={score} gameOver={gameOver} />}
+                        {(gameType === 'quickplay' && quickPlayWasStarted) && <QuickPlayScore quickPlayWasStarted={quickPlayWasStarted} score={score} gameOver={gameOver} />}
                         <View style={styles.scoreView}>
                             {gameType !== 'quickplay' &&  <View style={styles.scoreArea}>
                                 <Text style={styles.scoreHeading}>{newHighScore ? 'Hi-Score' : 'Score'}</Text>
