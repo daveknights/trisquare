@@ -284,7 +284,7 @@ export default function Game({ navigation }) {
     useEffect(() => {
         let timer;
 
-        if (canAddTile) {
+        if (canAddTile && !gameOver) {
             timer = setTimeout(() => {
                 const newColour = getColour();
                 let newBlockedTile;
