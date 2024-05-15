@@ -448,7 +448,10 @@ export default function Game({ navigation }) {
 
     const handleHomePress = () => navigation.navigate('Home');
 
-    const handleOptionsPress = () => navigation.navigate('Options');
+    const handleOptionsPress = () => {
+        gameContext.setGameType('');
+        navigation.navigate('Options');
+    };
 
     const quickPlayTimerFinished = () => {
         setGameOver(true);
