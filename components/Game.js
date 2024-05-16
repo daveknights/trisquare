@@ -226,39 +226,41 @@ export default function Game({ navigation }) {
     const getColour = () => tileColours[Math.floor(Math.random() * (gameType === 'violet' ? 6 : 5))];
     // Initial grid state
     const startGame = () => {
-        const startingTiles = shuffle([...Object.keys(initialTiles)]);
-        const [tileOneKey, tileTwoKey, blockedTileKey] = startingTiles.slice(0, -6);
-        const tileOneColour = getColour();
-        let tileTwoColour = getColour();
+        if (gameType) {
+            const startingTiles = shuffle([...Object.keys(initialTiles)]);
+            const [tileOneKey, tileTwoKey, blockedTileKey] = startingTiles.slice(0, -6);
+            const tileOneColour = getColour();
+            let tileTwoColour = getColour();
 
-        while (tileTwoColour === tileOneColour) {
-            tileTwoColour = getColour();
-        }
+            while (tileTwoColour === tileOneColour) {
+                tileTwoColour = getColour();
+            }
 
-        setSelectedTile(null);
-        setEmptyTiles(startingTiles.filter(key => key !== tileOneKey && key !== tileTwoKey && key !== blockedTileKey));
-        setBlockedTile(blockedTileKey);
-        setTiles({...initialTiles, ...{
-            [tileOneKey]: tileOneColour,
-            [tileTwoKey]: tileTwoColour,
-            [blockedTileKey]: 'blocked'
-        }});
-        setCanAddTile(false);
-        setNewTile(null);
-        setScore(0);
-        setNewHighScore(false);
-        setMatches(0);
-        setConsecutiveMatches(0);
-        setGridsCleared(0);
-        setGameOver(false);
-        setShowRewardsMessage(false);
+            setSelectedTile(null);
+            setEmptyTiles(startingTiles.filter(key => key !== tileOneKey && key !== tileTwoKey && key !== blockedTileKey));
+            setBlockedTile(blockedTileKey);
+            setTiles({...initialTiles, ...{
+                [tileOneKey]: tileOneColour,
+                [tileTwoKey]: tileTwoColour,
+                [blockedTileKey]: 'blocked'
+            }});
+            setCanAddTile(false);
+            setNewTile(null);
+            setScore(0);
+            setNewHighScore(false);
+            setMatches(0);
+            setConsecutiveMatches(0);
+            setGridsCleared(0);
+            setGameOver(false);
+            setShowRewardsMessage(false);
 
-        if(gameType === 'quickplay') {
-            setQuickPlayWasStarted(true);
-            setIsQuickPlayTimerFinished(false);
-            setCountDownNumber(3);
-        } else {
-            setQuickPlayWasStarted(false);
+            if(gameType === 'quickplay') {
+                setQuickPlayWasStarted(true);
+                setIsQuickPlayTimerFinished(false);
+                setCountDownNumber(3);
+            } else {
+                setQuickPlayWasStarted(false);
+            }
         }
     };
 
@@ -449,6 +451,7 @@ export default function Game({ navigation }) {
     const handleHomePress = () => navigation.navigate('Home');
 
     const handleOptionsPress = () => {
+        gameType === 'quickplay' && setQuickPlayWasStarted(false);
         gameContext.setGameType('');
         navigation.navigate('Options');
     };
