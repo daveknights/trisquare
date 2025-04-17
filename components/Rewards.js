@@ -39,14 +39,19 @@ export default function Rewards({ navigation }) {
                     {!Object.keys(achievements).length > 0 && <Text style={{...textStyles.text}}>All your achievement rewards will show here.</Text>}
                     {(Object.keys(achievements).length > 0 && Object.keys(achievements.scores).length > 0) && <Text style={{...textStyles.subHeading, alignSelf: 'center'}}>Points scored in a game</Text>}
                     {(Object.keys(achievements).length > 0 && Object.keys(achievements.scores).length > 0 && achievements.scores.score30) && <View style={styles.rewardsRow}>
-                        {achievements.scores.score30 && <PointsReward text="30" colour="bronze" />}
-                        {achievements.scores.score60 && <PointsReward text="60" colour="bronze" />}
-                        {achievements.scores.score90 && <PointsReward text="90" colour="silver" />}
+                        {achievements.scores.score30 && <PointsReward text="30" colour="red" />}
+                        {achievements.scores.score60 && <PointsReward text="60" colour="orange" />}
+                        {achievements.scores.score90 && <PointsReward text="90" colour="yellow" />}
                     </View>}
                     {(Object.keys(achievements).length > 0 && Object.keys(achievements.scores).length > 0 && achievements.scores.score120) && <View style={styles.rewardsRow}>
-                        {achievements.scores.score120 && <PointsReward text="120" colour="silver" />}
-                        {achievements.scores.score150 && <PointsReward text="150" colour="gold" />}
-                        {achievements.scores.score200 && <PointsReward text="200" colour="gold" />}
+                        {achievements.scores.score120 && <PointsReward text="120" colour="green" />}
+                        {achievements.scores.score150 && <PointsReward text="150" colour="blue" />}
+                        {achievements.scores.score200 && <PointsReward text="200" colour="violet" />}
+                    </View>}
+                    {(Object.keys(achievements).length > 0 && Object.keys(achievements.scores).length > 0 && achievements.scores.score250) && <View style={styles.rewardsRow}>
+                        {achievements.scores.score120 && <PointsReward text="250" colour="bronze" />}
+                        {achievements.scores.score150 && <PointsReward text="300" colour="silver" />}
+                        {achievements.scores.score200 && <PointsReward text="350" colour="gold" />}
                     </View>}
                     {(Object.keys(achievements).length > 0 && Object.keys(achievements.grids).length > 0) && <Text style={{...textStyles.subHeading}}>Grids cleared in a game</Text>}
                     {(Object.keys(achievements).length > 0 && Object.keys(achievements.grids).length > 0) && <View style={styles.rewardsRow}>

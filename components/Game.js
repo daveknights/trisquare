@@ -152,24 +152,33 @@ export default function Game({ navigation }) {
                 updatedData.highScore = score;
 
                 switch (true) {
+                    case score > 349 && !updatedData.achievements.scores.score350:
+                        updatedData.achievements.scores.score350 = true;
+                        newRewardData.score = {text: 350, colour: 'gold'};
+                    case score > 299 && !updatedData.achievements.scores.score300:
+                        updatedData.achievements.scores.score300 = true;
+                        !newRewardData.score && (newRewardData.score = {text: 300, colour: 'silver'});
+                    case score > 249 && !updatedData.achievements.scores.score250:
+                        updatedData.achievements.scores.score250 = true;
+                        !newRewardData.score && (newRewardData.score = {text: 250, colour: 'bronze'});
                     case score > 199 && !updatedData.achievements.scores.score200:
                         updatedData.achievements.scores.score200 = true;
-                        newRewardData.score = {text: 200, colour: 'gold'};
+                        !newRewardData.score && (newRewardData.score = {text: 200, colour: 'violet'});
                     case score > 149 && !updatedData.achievements.scores.score150:
                         updatedData.achievements.scores.score150 = true;
-                        !newRewardData.score && (newRewardData.score = {text: 150, colour: 'gold'});
+                        !newRewardData.score && (newRewardData.score = {text: 150, colour: 'blue'});
                     case score > 119 && !updatedData.achievements.scores.score120:
                         updatedData.achievements.scores.score120 = true;
-                        !newRewardData.score && (newRewardData.score = {text: 120, colour: 'silver'});
+                        !newRewardData.score && (newRewardData.score = {text: 120, colour: 'green'});
                     case score > 89 && !updatedData.achievements.scores.score90:
                         updatedData.achievements.scores.score90 = true;
-                        !newRewardData.score && (newRewardData.score = {text: 90, colour: 'silver'});
+                        !newRewardData.score && (newRewardData.score = {text: 90, colour: 'yelow'});
                     case score > 59 && !updatedData.achievements.scores.score60:
                         updatedData.achievements.scores.score60 = true;
-                        !newRewardData.score && (newRewardData.score = {text: 60, colour: 'bronze'});
+                        !newRewardData.score && (newRewardData.score = {text: 60, colour: 'orange'});
                     case score > 29 && !updatedData.achievements.scores.score30:
                         updatedData.achievements.scores.score30 = true;
-                        !newRewardData.score && (newRewardData.score = {text: 30, colour: 'bronze'});
+                        !newRewardData.score && (newRewardData.score = {text: 30, colour: 'red'});
                         newReward = true;
                         break;
                 }
@@ -647,6 +656,7 @@ const styles = StyleSheet.create({
         borderRadius: 4,
     },
     bestScoreArea: {
+        alignItems: 'center',
         flexDirection: 'row',
         marginLeft: 'auto',
     },
