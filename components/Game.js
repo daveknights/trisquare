@@ -172,7 +172,7 @@ export default function Game({ navigation }) {
                         !newRewardData.score && (newRewardData.score = {text: 120, colour: 'green'});
                     case score > 89 && !updatedData.achievements.scores.score90:
                         updatedData.achievements.scores.score90 = true;
-                        !newRewardData.score && (newRewardData.score = {text: 90, colour: 'yelow'});
+                        !newRewardData.score && (newRewardData.score = {text: 90, colour: 'yellow'});
                     case score > 59 && !updatedData.achievements.scores.score60:
                         updatedData.achievements.scores.score60 = true;
                         !newRewardData.score && (newRewardData.score = {text: 60, colour: 'orange'});
