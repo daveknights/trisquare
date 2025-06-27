@@ -3,6 +3,7 @@ import { useEffect, useState, useContext, useRef, useLayoutEffect } from 'react'
 import { StyleSheet, Text, View, Pressable, TouchableOpacity, Dimensions, Animated, ImageBackground } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import RewardMessage from './RewardMessage';
+import Combo from './Combo';
 import IconButton from './IconButton';
 import Timer from './Timer';
 import CountDown from './CountDown';
@@ -491,6 +492,8 @@ export default function Game({ navigation }) {
                                 </Animated.Text>
                             </View>}
                         </View>
+
+                        {consecutiveMatches > 1 && <Combo comboNumber={parseInt(consecutiveMatches) - 1} theme={theme}/>}
 
                         {showBonus && <Animated.View style={{...styles.bonus, transform: [{scale: bonusZoom}]}}>
                             <Text style={styles.bonusText}>+
