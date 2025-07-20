@@ -63,7 +63,8 @@ const styles = StyleSheet.create({
     },
     comboText: {
         borderRadius: 8,
-        padding: 16,
+        paddingHorizontal: 40,
+        paddingVertical: 16,
         fontSize: 24,
     },
     comboScore: {
