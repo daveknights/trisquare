@@ -38,6 +38,7 @@ const shuffle = arrayToShuffle => {
 };
 
 export default function Game({ navigation }) {
+    const [player, setPlayer] = useState('user');
     const [tiles, setTiles] = useState(initialTiles);
     const [emptyTiles, setEmptyTiles] = useState([...Object.keys(initialTiles)]);
     const [selectedTile, setSelectedTile] = useState(null);
@@ -297,6 +298,7 @@ export default function Game({ navigation }) {
         let timer;
 
         if (canAddTile && !gameOver) {
+            setPlayer('phone');
             timer = setTimeout(() => {
                 const newColour = getColour();
                 let newBlockedTile;
@@ -411,7 +413,7 @@ export default function Game({ navigation }) {
                 setSelectedColour('');
                 setSelectedTile(null);
 
-                if (!canAddTile && consecutiveMatches > 0) {
+                if (player === 'user' && !canAddTile && consecutiveMatches > 0) {
                     if ((consecutiveMatches - 1) >= 1) {
                         !gameOver && setScore(score => score + (consecutiveMatches - 1));
                         setBonusPoints(consecutiveMatches - 1);
@@ -451,6 +453,7 @@ export default function Game({ navigation }) {
 
         if (selectedTile) {
             emptyTiles.length === 1 && setGridFull(true);
+            setPlayer('user');
             setSelectedColour(colour);
             setTiles(prevTiles => ({...prevTiles, ...{[selectedTile]: colour}}));
             setEmptyTiles(emptyTiles.filter(key => key !== selectedTile));
