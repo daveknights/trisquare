@@ -2,23 +2,18 @@ import { useState, useEffect, useRef, useContext } from "react";
 import { Animated, StyleSheet, View } from "react-native";
 import GameContext from '../context/gameContext';
 import colours from "../defaults/colours";
-import { Audio } from 'expo-av';
+import { useAudioPlayer } from 'expo-audio';
+const sound  = require('../assets/quickplay.mp3');
 
 export default function Timer({ quickPlayTimerFinished }) {
-    const [sound, setSound] = useState();
     const gameContext = useContext(GameContext);
     const timer = useRef(new Animated.Value(0)).current;
+    const player = useAudioPlayer(sound);
 
-    const playMusic = async () => {
-        const { sound } = await Audio.Sound.createAsync(require('../assets/quickplay.mp3'));
-        setSound(sound);
-
-        await sound.playAsync();
+    const playMusic = () => {
+        player.seekTo(0);
+        player.play();
     }
-
-    useEffect(() => {
-        return sound? () => sound.unloadAsync() : undefined;
-    }, [sound]);
 
     useEffect(() => {
         gameContext.sfx && playMusic();

@@ -10,19 +10,19 @@ import buttonStyles from '../defaults/buttonStyles';
 import colours from '../defaults/colours';
 import layoutStyles from '../defaults/layoutStyles';
 import { darkTheme, lightTheme } from '../defaults/themes';
-import { Audio } from 'expo-av';
-
+import { useAudioPlayer } from 'expo-audio';
+const sound = require('../assets/reward.mp3');
 const { height } = Dimensions.get('window');
 
 export default function Options({ navigation }) {
     const [isDarkMode, setIsDarkMode] = useState(null);
     const [contentHeight, setContentHeight] = useState(0);
     const [scrollEnabled, setScrollEnabled] = useState(false);
-    const [sound, setSound] = useState();
     const headerHeight = useHeaderHeight();
     const gameContext = useContext(GameContext);
     const theme = gameContext.theme;
     const violetUnlocked = gameContext.violetUnlocked;
+    const player = useAudioPlayer(sound);
     const selectedOption = {
         borderColor: '#00b353',
         borderWidth: 5
@@ -34,16 +34,10 @@ export default function Options({ navigation }) {
         return () => backHandler.remove();
     });
 
-    const playSound = async () => {
-        const { sound } = await Audio.Sound.createAsync(require('../assets/reward.mp3'));
-        setSound(sound);
-
-        await sound.playAsync();
+    const playSound = () => {
+        player.seekTo(0);
+        player.play();
     }
-
-    useEffect(() => {
-        return sound? () => sound.unloadAsync() : undefined;
-    }, [sound]);
 
     const onContentSizeChange = (contentWidth, contentHeight) => {
         setContentHeight(contentHeight);

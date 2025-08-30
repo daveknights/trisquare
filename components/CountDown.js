@@ -2,27 +2,22 @@ import { useState, useEffect, useRef, useContext } from "react";
 import { Animated, StyleSheet, Text, View } from "react-native";
 import GameContext from '../context/gameContext';
 import colours from "../defaults/colours";
-import { Audio } from 'expo-av';
+import { useAudioPlayer } from 'expo-audio';
+const sound  = require('../assets/beep.mp3');
 
 export default function CountDown({ gridSize, number }) {
-    const [sound, setSound] = useState();
     const gameContext = useContext(GameContext);
     const countDownZoom = useRef(new Animated.Value(0)).current;
+    const player = useAudioPlayer(sound);
 
     const playBeep = async () => {
-        const { sound } = await Audio.Sound.createAsync(require('../assets/beep.mp3'));
-        setSound(sound);
-
-        await sound.playAsync();
+        player.seekTo(0);
+        player.play();
     }
 
     useEffect(() => {
         gameContext.sfx && playBeep();
     }, [number]);
-
-    useEffect(() => {
-        return sound? () => sound.unloadAsync() : undefined;
-    }, [sound]);
 
     useEffect(() => {
         countDownZoom.setValue(0);

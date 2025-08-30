@@ -12,7 +12,7 @@ import GameContext from '../context/gameContext';
 import containerStyles from '../defaults/containerStyles';
 import layoutStyles from '../defaults/layoutStyles';
 import colours from '../defaults/colours';
-import { Audio } from 'expo-av';
+import { useAudioPlayer } from 'expo-audio';
 const initialTiles = {'t1':'', 't2':'', 't3':'', 't4':'', 't5':'', 't6':'', 't7':'', 't8':'', 't9':''};
 const tileColours = ['red', 'orange', 'yellow', 'green', 'blue'];
 const combos = {
@@ -29,6 +29,8 @@ const combos = {
 const gridRemainder = Math.floor((Dimensions.get('window').width - 84)) % 3;
 const tileSize = Math.floor(((Dimensions.get('window').width - 84) - gridRemainder) / 3);
 const gridSize = (tileSize * 3) + 6;
+const matchSound = require('../assets/match.mp3');
+const rewardSound = require('../assets/reward.mp3');
 
 const shuffle = arrayToShuffle => {
     return arrayToShuffle.map(value => ({value, sort: Math.random()}))
@@ -59,7 +61,6 @@ export default function Game({ navigation }) {
     const [rewardData, setRewardData] = useState({});
     const [tileAdded, setTileAdded] = useState(false);
     const [paletteTileSize, setPaletteTileSize] = useState(null);
-    const [sound, setSound] = useState();
     const [newTile, setNewTile] = useState(null);
     const [countDownNumber, setCountDownNumber] = useState(3);
     const [quickPlayWasStarted, setQuickPlayWasStarted] = useState(false);
@@ -70,25 +71,15 @@ export default function Game({ navigation }) {
     const grow = useRef(new Animated.Value(0)).current;
     const scoreZoom = useRef(new Animated.Value(0)).current;
     const bonusZoom = useRef(new Animated.Value(0)).current;
+    const matchPlayer = useAudioPlayer(matchSound);
+    const rewardPlayer = useAudioPlayer(rewardSound);
 
-    const playSound = async (type) => {
-        let soundType;
+    const playSound = type => {
+        const player = type === 'match' ? matchPlayer : rewardPlayer;
 
-        if (type === 'match') {
-            soundType = require('../assets/match.mp3');
-        } else {
-            soundType = require('../assets/reward.mp3');
-        }
-
-        const { sound } = await Audio.Sound.createAsync(soundType);
-        setSound(sound);
-
-        await sound.playAsync();
+        player.seekTo(0);
+        player.play();
     }
-
-    useEffect(() => {
-        return sound? () => sound.unloadAsync() : undefined;
-    }, [sound]);
 
     useEffect(() => {
         scoreZoom.setValue(0);

@@ -13,7 +13,7 @@
     "@react-navigation/native": "^6.1.18",
     "@react-navigation/native-stack": "^6.11.0",
     "expo": "^53.0.22",
-    "expo-av": "^15.1.7",
+    "expo-audio": "^0.4.9",
     "expo-linear-gradient": "~14.1.5",
     "expo-status-bar": "~2.2.3",
     "react": "19.0.0",
