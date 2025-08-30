@@ -11,11 +11,13 @@ export default function RewardMessage({ rewards }) {
     const [rewardMsgVisible, setRewardMsgVisible] = useState(true);
 
     return (
-        <Modal animationType="fade"
-            transparent={true}
-            visible={rewardMsgVisible}
-            onRequestClose={() => setRewardMsgVisible(!rewardMsgVisible)}
-        >
+            <Modal animationType="fade"
+                transparent={true}
+                statusBarTranslucent={true}
+                navigationBarTranslucent={true}
+                visible={rewardMsgVisible}
+                onRequestClose={() => setRewardMsgVisible(!rewardMsgVisible)}
+            >
             <View style={styles.modal}>
                 <Pressable style={styles.rewardMessage} onPress={() => setRewardMsgVisible(!rewardMsgVisible)}>
                     <Text style={styles.heading}>Achievements</Text>
@@ -67,6 +69,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         flex: 1,
         justifyContent: 'center',
+        paddingTop: 30,
     },
     heading: {
         backgroundColor: colours.green,

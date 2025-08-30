@@ -477,6 +477,7 @@ export default function Game({ navigation }) {
 
     return (
         <ImageBackground source={gameContext.mode === 'dark' ? require('../assets/game-bg-dark.webp') : require('../assets/game-bg-light.webp')} resizeMode="cover" style={{backgroundColor: theme.bgColour, flex: 1}}>
+            {showRewardsMessage && <RewardMessage rewards={rewardData} />}
             <View style={containerStyles}>
                 <View style={{...layoutStyles.spaceBetweenWrapper, ...layoutStyles.flexOne}}>
                     <View style={styles.scoreWrapper}>
@@ -579,7 +580,6 @@ export default function Game({ navigation }) {
                                                                 </View>
                         })}
                     </View>
-                    {showRewardsMessage && <RewardMessage rewards={rewardData} />}
                 </View>
                 <View style={{...layoutStyles.startWrapper, ...layoutStyles.flexTwo}}>
                     <View style={styles.colourPalette}>
