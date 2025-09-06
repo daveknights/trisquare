@@ -25,6 +25,7 @@ export default function App() {
     const [quickPlayHighScore, setQuickPlayHighScore] = useState(0);
     const [sfx, setSfx] = useState(true);
     const [gameType, setGameType] = useState('blue');
+    const statusBarColour = mode === 'dark' ? 'light' : 'dark';
 
     const headerStyles = {
         headerStyle: {
@@ -106,7 +107,7 @@ export default function App() {
                         options={{title: 'Clear data', ...headerStyles, animation: 'slide_from_right'}} />
                 </Stack.Navigator>
             </NavigationContainer>
-            <StatusBar hidden />
+            <StatusBar style={statusBarColour} />
         </GameContext.Provider>
     </View>
     );
