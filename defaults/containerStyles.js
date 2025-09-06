@@ -2,5 +2,5 @@ export default containerStyles = {
     alignItems: 'center',
     flex: 1,
     paddingHorizontal: 24,
-    paddingTop: 48,
+    paddingVertical: 64,
 };
