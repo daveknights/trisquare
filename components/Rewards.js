@@ -33,7 +33,7 @@ export default function Rewards({ navigation }) {
     const handleLinkToClearData = () => navigation.navigate('ClearData');
 
     return (
-            <View style={{...containerStyles, backgroundColor: theme.bgColour}}>
+            <View style={{...containerStyles, backgroundColor: theme.bgColour, paddingBottom: 48, paddingTop: 24}}>
                 <ScrollView scrollEnabled={scrollEnabled} onContentSizeChange={onContentSizeChange} style={{width: '100%'}}>
                     <Text style={{...textStyles.heading}}>Your Achievements</Text>
                     {!Object.keys(achievements).length > 0 && <Text style={{...textStyles.text}}>All your achievement rewards will show here.</Text>}

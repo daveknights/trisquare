@@ -27,7 +27,7 @@ export default function Instructions() {
     textStyles.text.color = theme.textColour;
 
     return (
-        <View style={{...containerStyles, backgroundColor: theme.bgColour}}>
+        <View style={{...containerStyles, backgroundColor: theme.bgColour, paddingBottom: 48, paddingTop: 24}}>
             <ScrollView scrollEnabled={scrollEnabled} onContentSizeChange={onContentSizeChange} style={{width: '100%'}}>
                 <Text style={{...textStyles.heading}}>How to play</Text>
                 <Text style={{...textStyles.text}}>Select a free space on the grid, then choose a colour from the pallete.</Text>
