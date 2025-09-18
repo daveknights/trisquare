@@ -5,7 +5,7 @@ import PointsReward from './rewards/PointsReward';
 import GridsReward from './rewards/GridsReward';
 import MatchesReward from './rewards/MatchesReward';
 import colour from "../defaults/colour";
-import { themes } from "../defaults/themes";
+import themes from "../defaults/themes";
 
 export default function RewardMessage({ rewards }) {
     const [rewardMsgVisible, setRewardMsgVisible] = useState(true);
