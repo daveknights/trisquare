@@ -1,7 +1,7 @@
-import { useState, useEffect, useRef, useContext } from "react";
+import { useEffect, useRef, useContext } from "react";
 import { Animated, StyleSheet, View } from "react-native";
-import GameContext from '../context/gameContext';
-import colours from "../defaults/colours";
+import { GameContext } from '../context/gameContext';
+import colour from "../defaults/colour";
 import { useAudioPlayer } from 'expo-audio';
 const sound  = require('../assets/quickplay.mp3');
 
@@ -39,7 +39,7 @@ export default function Timer({ quickPlayTimerFinished }) {
         <View style={styles.track}>
             <Animated.View style={{...styles.progress, transform: [{scaleX: timer}], backgroundColor: timer.interpolate({
                 inputRange: [0, 0.8, 0.8, 1],
-                outputRange: [colours.green, colours.green, colours.red, colours.red]
+                outputRange: [colour.style.green, colour.style.green, colour.style.red, colour.style.red]
             })}}></Animated.View>
         </View>
     );
@@ -47,14 +47,14 @@ export default function Timer({ quickPlayTimerFinished }) {
 
 const styles = StyleSheet.create({
     track: {
-        backgroundColor: colours.grey,
+        backgroundColor: colour.style.grey,
         borderRadius: 8,
         height: 16,
         overflow: 'hidden',
         width: '100%',
     },
     progress: {
-        backgroundColor: colours.green,
+        backgroundColor: colour.style.green,
         height: 16,
         position: 'absolute',
         transformOrigin: 'left',

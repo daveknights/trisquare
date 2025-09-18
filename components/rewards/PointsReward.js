@@ -1,14 +1,14 @@
 import { StyleSheet, View, Text } from "react-native";
-import colours from "../../defaults/colours";
+import colour from "../../defaults/colour";
 
-export default function PointsReward({ text, colour }) {
+export default function PointsReward({ text, scoreColour }) {
     const elite = ['bronze', 'silver', 'gold'];
     let bgColour = '#fff';
-    let borColour = colours[colour];
+    let borColour = colour.style[scoreColour];
 
-    if (elite.includes(colour)) {
-        bgColour = colours[colour].backgroundColor;
-        borColour = colours[colour].borderColor;
+    if (elite.includes(scoreColour)) {
+        bgColour = colour.style[scoreColour].backgroundColor;
+        borColour = colour.style[scoreColour].borderColor;
     }
 
     return(
@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
         width: 80,
     },
     pointsRewardText: {
-        color: colours.primary,
+        color: colour.style.primary,
         fontSize: 18,
         fontWeight: 'bold',
     },

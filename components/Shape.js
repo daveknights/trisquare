@@ -1,5 +1,5 @@
 import { StyleSheet, View } from 'react-native';
-import colours from '../defaults/colours';
+import colour from '../defaults/colour';
 
 export default function Shape({ cols, rotation }) {
     return (
@@ -18,8 +18,8 @@ const styles = StyleSheet.create({
         gap: 1,
     },
     tile: {
-        backgroundColor: colours.green,
-        borderColor: colours.primary,
+        backgroundColor: colour.style.green,
+        borderColor: colour.style.primary,
         borderWidth: 1,
         height: 24,
         width: 24,

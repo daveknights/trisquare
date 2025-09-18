@@ -4,9 +4,9 @@ import { useState, useContext, useEffect } from 'react';
 import PointsReward from './rewards/PointsReward';
 import GridsReward from './rewards/GridsReward';
 import MatchesReward from './rewards/MatchesReward';
-import GameContext from '../context/gameContext';
-import containerStyles from '../defaults/containerStyles';
-import textStyles from '../defaults/textStyles';
+import { GameContext } from '../context/gameContext';
+import container from '../defaults/container';
+import text from '../defaults/text';
 
 const { height } = Dimensions.get('window');
 
@@ -26,44 +26,44 @@ export default function Rewards({ navigation }) {
         (!scrollEnabled && contentHeight > (height - headerHeight)) && setScrollEnabled(true);
     }, [contentHeight]);
 
-    textStyles.heading.color = theme.textColour;
-    textStyles.subHeading.color = theme.textColour;
-    textStyles.text.color = theme.textColour;
+    text.style.heading.color = theme.textColour;
+    text.style.subHeading.color = theme.textColour;
+    text.style.text.color = theme.textColour;
 
     const handleLinkToClearData = () => navigation.navigate('ClearData');
 
     return (
-            <View style={{...containerStyles, backgroundColor: theme.bgColour, paddingBottom: 48, paddingTop: 24}}>
+            <View style={{...container.style, backgroundColor: theme.bgColour, paddingBottom: 48, paddingTop: 24}}>
                 <ScrollView scrollEnabled={scrollEnabled} onContentSizeChange={onContentSizeChange} style={{width: '100%'}}>
-                    <Text style={{...textStyles.heading}}>Your Achievements</Text>
-                    {!Object.keys(achievements).length > 0 && <Text style={{...textStyles.text}}>All your achievement rewards will show here.</Text>}
-                    {(Object.keys(achievements).length > 0 && Object.keys(achievements.scores).length > 0) && <Text style={{...textStyles.subHeading, alignSelf: 'center'}}>Points scored in a game</Text>}
+                    <Text style={{...text.style.heading}}>Your Achievements</Text>
+                    {!Object.keys(achievements).length > 0 && <Text style={{...text.style.text}}>All your achievement rewards will show here.</Text>}
+                    {(Object.keys(achievements).length > 0 && Object.keys(achievements.scores).length > 0) && <Text style={{...text.style.subHeading, alignSelf: 'center'}}>Points scored in a game</Text>}
                     {(Object.keys(achievements).length > 0 && Object.keys(achievements.scores).length > 0 && achievements.scores.score30) && <View style={styles.rewardsRow}>
-                        {achievements.scores.score30 && <PointsReward text="30" colour="red" />}
-                        {achievements.scores.score60 && <PointsReward text="60" colour="orange" />}
-                        {achievements.scores.score90 && <PointsReward text="90" colour="yellow" />}
+                        {achievements.scores.score30 && <PointsReward text="30" scoreColour="red" />}
+                        {achievements.scores.score60 && <PointsReward text="60" scoreColour="orange" />}
+                        {achievements.scores.score90 && <PointsReward text="90" scoreColour="yellow" />}
                     </View>}
                     {(Object.keys(achievements).length > 0 && Object.keys(achievements.scores).length > 0 && achievements.scores.score120) && <View style={styles.rewardsRow}>
-                        {achievements.scores.score120 && <PointsReward text="120" colour="green" />}
-                        {achievements.scores.score150 && <PointsReward text="150" colour="blue" />}
-                        {achievements.scores.score200 && <PointsReward text="200" colour="violet" />}
+                        {achievements.scores.score120 && <PointsReward text="120" scoreColour="green" />}
+                        {achievements.scores.score150 && <PointsReward text="150" scoreColour="blue" />}
+                        {achievements.scores.score200 && <PointsReward text="200" scoreColour="violet" />}
                     </View>}
                     {(Object.keys(achievements).length > 0 && Object.keys(achievements.scores).length > 0 && achievements.scores.score250) && <View style={styles.rewardsRow}>
-                        {achievements.scores.score120 && <PointsReward text="250" colour="bronze" />}
-                        {achievements.scores.score150 && <PointsReward text="300" colour="silver" />}
-                        {achievements.scores.score200 && <PointsReward text="350" colour="gold" />}
+                        {achievements.scores.score120 && <PointsReward text="250" scoreColour="bronze" />}
+                        {achievements.scores.score150 && <PointsReward text="300" scoreColour="silver" />}
+                        {achievements.scores.score200 && <PointsReward text="350" scoreColour="gold" />}
                     </View>}
-                    {(Object.keys(achievements).length > 0 && Object.keys(achievements.grids).length > 0) && <Text style={{...textStyles.subHeading}}>Grids cleared in a game</Text>}
+                    {(Object.keys(achievements).length > 0 && Object.keys(achievements.grids).length > 0) && <Text style={{...text.style.subHeading}}>Grids cleared in a game</Text>}
                     {(Object.keys(achievements).length > 0 && Object.keys(achievements.grids).length > 0) && <View style={styles.rewardsRow}>
-                        {achievements.grids.grids1 && <GridsReward text="1" colour="bronze" />}
-                        {achievements.grids.grids3 && <GridsReward text="3" colour="silver" />}
-                        {achievements.grids.grids6 && <GridsReward text="6" colour="gold" />}
+                        {achievements.grids.grids1 && <GridsReward text="1" scoreColour="bronze" />}
+                        {achievements.grids.grids3 && <GridsReward text="3" scoreColour="silver" />}
+                        {achievements.grids.grids6 && <GridsReward text="6" scoreColour="gold" />}
                     </View>}
-                    {(Object.keys(achievements).length > 0 && Object.keys(achievements.matches).length > 0) && <Text style={{...textStyles.subHeading}}>Consecutive matches</Text>}
+                    {(Object.keys(achievements).length > 0 && Object.keys(achievements.matches).length > 0) && <Text style={{...text.style.subHeading}}>Consecutive matches</Text>}
                     {(Object.keys(achievements).length > 0 && Object.keys(achievements.matches).length > 0) && <View style={styles.rewardsRow}>
-                        {achievements.matches.matches1 && <MatchesReward text="1" colour="bronze" />}
-                        {achievements.matches.matches3 && <MatchesReward text="3" colour="silver" />}
-                        {achievements.matches.matches5 && <MatchesReward text="5" colour="gold" />}
+                        {achievements.matches.matches1 && <MatchesReward text="1" scoreColour="bronze" />}
+                        {achievements.matches.matches3 && <MatchesReward text="3" scoreColour="silver" />}
+                        {achievements.matches.matches5 && <MatchesReward text="5" scoreColour="gold" />}
                     </View>}
                     <TouchableOpacity style={styles.link} onPress={handleLinkToClearData}>
                         <Text style={{...styles.linkText, color: gameContext.theme.linkColour}}>Clear all game data</Text>

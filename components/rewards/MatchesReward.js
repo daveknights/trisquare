@@ -1,25 +1,25 @@
 import { StyleSheet, View, Text } from "react-native";
 import { useContext } from "react";
-import GameContext from '../../context/gameContext';
-import colours from "../../defaults/colours";
+import { GameContext } from '../../context/gameContext';
+import colour from "../../defaults/colour";
 
-export default function MatchesReward({ text, colour, border = '' }) {
+export default function MatchesReward({ text, scoreColour, border = '' }) {
     const gameContext = useContext(GameContext);
     const theme = gameContext.theme;
     const borderColour = border ? border : theme.bgColour;
 
     return(
         <View style={styles.matchesReward}>
-            <View style={{...styles.tile, backgroundColor: colours[colour].borderColor}} />
+            <View style={{...styles.tile, backgroundColor: colour.style[scoreColour].borderColor}} />
             <View style={{...styles.tile,
                             ...styles.middleTile,
-                            backgroundColor: colours[colour].borderColor,
+                            backgroundColor: colour.style[scoreColour].borderColor,
                             borderColor: borderColour}} />
             <View style={{...styles.tile,
                             ...styles.frontTile,
-                            ...colours[colour],
-                            borderBottomColor: colours[colour].borderColor,
-                            borderLeftColor: colours[colour].borderColor}}>
+                            ...colour.style[scoreColour],
+                            borderBottomColor: colour.style[scoreColour].borderColor,
+                            borderLeftColor: colour.style[scoreColour].borderColor}}>
                 <Text style={styles.matchesRewardText}>{text}+</Text>
             </View>
         </View>
@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
         width: 60,
     },
     middleTile: {
-        backgroundColor: colours.blue,
+        backgroundColor: colour.style.blue,
         borderWidth: 1,
         left: 10,
         position: 'absolute',
@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
         top: 20,
     },
     matchesRewardText: {
-        color: colours.primary,
+        color: colour.style.primary,
         fontSize: 18,
         fontWeight: 'bold',
     },

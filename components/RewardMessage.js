@@ -4,8 +4,8 @@ import { useState } from "react";
 import PointsReward from './rewards/PointsReward';
 import GridsReward from './rewards/GridsReward';
 import MatchesReward from './rewards/MatchesReward';
-import colours from "../defaults/colours";
-import { darkTheme } from "../defaults/themes";
+import colour from "../defaults/colour";
+import { themes } from "../defaults/themes";
 
 export default function RewardMessage({ rewards }) {
     const [rewardMsgVisible, setRewardMsgVisible] = useState(true);
@@ -25,7 +25,7 @@ export default function RewardMessage({ rewards }) {
                             if (key === 'score') {
                                 return <View key={key} style={styles.reward}>
                                             <View style={styles.badge}>
-                                                <PointsReward text={data.text} colour={data.colour} />
+                                                <PointsReward text={data.text} scoreColour={data.colour} />
                                             </View>
                                             <Text style={styles.rewardType}>Points</Text>
                                     </View>;
@@ -33,7 +33,7 @@ export default function RewardMessage({ rewards }) {
                             if (key === 'grids') {
                                 return <View key={key} style={styles.reward}>
                                             <View style={styles.badge}>
-                                                <GridsReward text={data.text} colour={data.colour} />
+                                                <GridsReward text={data.text} scoreColour={data.colour} />
                                             </View>
                                             <Text style={styles.rewardType}>Grids cleared</Text>
                                     </View>;
@@ -41,7 +41,7 @@ export default function RewardMessage({ rewards }) {
                             if (key === 'matches') {
                                 return <View key={key} style={styles.reward}>
                                             <View style={styles.badge}>
-                                                <MatchesReward text={data.text} colour={data.colour} border={colours.primary} />
+                                                <MatchesReward text={data.text} scoreColour={data.colour} border={colour.style.primary} />
                                             </View>
                                             <Text style={styles.rewardType}>Consecutive matches</Text>
                                     </View>;
@@ -49,7 +49,7 @@ export default function RewardMessage({ rewards }) {
                             if (key === 'violet') {
                                 return <View key={key} style={styles.reward}>
                                             <View style={styles.badge}>
-                                                <LinearGradient colors={darkTheme.tileGrads.violet} style={styles.violetTile}>
+                                                <LinearGradient colors={themes.dark.tileGrads.violet} style={styles.violetTile}>
                                                 </LinearGradient>
                                             </View>
                                             <Text style={styles.rewardType}>Violet unlocked</Text>
@@ -72,8 +72,8 @@ const styles = StyleSheet.create({
         paddingTop: 30,
     },
     heading: {
-        backgroundColor: colours.green,
-        color: colours.primary,
+        backgroundColor: colour.style.green,
+        color: colour.style.primary,
         fontSize: 20,
         fontWeight: 'bold',
         paddingBottom: 12,
@@ -83,22 +83,22 @@ const styles = StyleSheet.create({
     },
     reward: {
         alignItems: 'center',
-        backgroundColor: colours.lightBlue,
-        borderTopColor: colours.primary,
+        backgroundColor: colour.style.lightBlue,
+        borderTopColor: colour.style.primary,
         borderTopWidth: 1,
         flexDirection: 'row',
         width: 280,
     },
     badge: {
         alignItems: 'center',
-        backgroundColor: colours.primary,
+        backgroundColor: colour.style.primary,
         justifyContent: 'center',
         height: 120,
         marginRight: 15,
         width: 120,
     },
     rewardType: {
-        color: colours.primary,
+        color: colour.style.primary,
         fontSize: 18,
         fontWeight: 'bold',
         paddingRight: 15,

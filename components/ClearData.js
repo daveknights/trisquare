@@ -2,19 +2,19 @@ import { StyleSheet, Text, View, Dimensions } from 'react-native';
 import { useState, useContext, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import ColourButton from './ColourButton';
-import GameContext from '../context/gameContext';
-import containerStyles from '../defaults/containerStyles';
-import textStyles from '../defaults/textStyles';
-import colours from '../defaults/colours';
-import layoutStyles from '../defaults/layoutStyles';
+import { GameContext } from '../context/gameContext';
+import container from '../defaults/container';
+import text from '../defaults/text';
+import colour from '../defaults/colour';
+import layout from '../defaults/layout';
 
 export default function ClearData({ navigation }) {
     const [dataCleared, setDataCleared] = useState(false);
     const gameContext = useContext(GameContext);
     const theme = gameContext.theme;
 
-    textStyles.heading.color = theme.textColour;
-    textStyles.text.color = theme.textColour;
+    text.style.heading.color = theme.textColour;
+    text.style.text.color = theme.textColour;
 
     useEffect(() => {
         if(dataCleared) {
@@ -39,19 +39,19 @@ export default function ClearData({ navigation }) {
     const handleHomePress = () => navigation.navigate('Home');
 
     return (
-        <View style={{...containerStyles, backgroundColor: theme.bgColour}}>
-            <View style={{...layoutStyles.flexOne, ...layoutStyles.startWrapper}}>
-                <Text style={{...textStyles.heading}}>Clear game data</Text>
-                <Text style={{...textStyles.text}}>Please be aware that this will remove all the game data from your device
+        <View style={{...container.style, backgroundColor: theme.bgColour}}>
+            <View style={{...layout.style.flexOne, ...layout.style.startWrapper}}>
+                <Text style={{...text.style.heading}}>Clear game data</Text>
+                <Text style={{...text.style.text}}>Please be aware that this will remove all the game data from your device
                     until you next play TriSquare and can't be undone.</Text>
-                <Text style={{...textStyles.text}}>This includes your high score, levels unlocked and rewards.</Text>
+                <Text style={{...text.style.text}}>This includes your high score, levels unlocked and rewards.</Text>
                 <View style={styles.highScoreInfo}>
-                    <Text style={{...textStyles.text}}>Your current high score is: </Text>
-                    <Text style={{...textStyles.text, fontWeight: 'bold'}}>{gameContext.highScore}</Text>
+                    <Text style={{...text.style.text}}>Your current high score is: </Text>
+                    <Text style={{...text.style.text, fontWeight: 'bold'}}>{gameContext.highScore}</Text>
                 </View>
                 {gameContext.quickPlayHighScore > 0 && <View style={styles.highScoreInfo}>
-                    <Text style={{...textStyles.text}}>Your current quick play high score is: </Text>
-                    <Text style={{...textStyles.text, fontWeight: 'bold'}}>{gameContext.quickPlayHighScore}</Text>
+                    <Text style={{...text.style.text}}>Your current quick play high score is: </Text>
+                    <Text style={{...text.style.text, fontWeight: 'bold'}}>{gameContext.quickPlayHighScore}</Text>
                 </View>}
                 <View style={styles.buttons}>
                     <ColourButton
@@ -78,10 +78,10 @@ const styles = StyleSheet.create({
         marginTop: 50,
     },
     dataCleared: {
-        backgroundColor: colours.messageBg,
-        borderColor: colours.green,
+        backgroundColor: colour.style.messageBg,
+        borderColor: colour.style.green,
         borderWidth: 2,
-        color: colours.primary,
+        color: colour.style.primary,
         fontSize: 16,
         fontWeight: 'bold',
         marginTop: 10,

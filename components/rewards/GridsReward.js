@@ -1,14 +1,14 @@
 import { StyleSheet, View, Text } from "react-native";
-import colours from "../../defaults/colours";
+import colour from "../../defaults/colour";
 
-export default function GridsReward({ text, colour }) {
+export default function GridsReward({ text, scoreColour }) {
     return(
         <View style={{...styles.gridsReward}}>
             {[...Array(9).keys()].map(tile => {
                 return (
                     <View key={tile}>
-                        <View style={{...styles.gridTile, backgroundColor: colours[colour].borderColor}}></View>
-                        {tile === 8 && <View style={{...styles.textBg, ...colours[colour]}}>
+                        <View style={{...styles.gridTile, backgroundColor: colour.style[scoreColour].borderColor}}></View>
+                        {tile === 8 && <View style={{...styles.textBg, ...colour.style[scoreColour]}}>
                                         <Text style={styles.gridsRewardText}>{text}+</Text>
                                     </View>}
                     </View>
@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
         width: 64,
     },
     gridsRewardText: {
-        color: colours.primary,
+        color: colour.style.primary,
         fontSize: 18,
         fontWeight: 'bold',
     },

@@ -2,9 +2,9 @@ import { StyleSheet, Text, View, Image, ImageBackground, Dimensions } from 'reac
 import { useContext } from 'react';
 import ColourButton from './ColourButton';
 import IconButton from './IconButton';
-import GameContext from '../context/gameContext';
-import containerStyles from '../defaults/containerStyles';
-import layoutStyles from '../defaults/layoutStyles';
+import { GameContext } from '../context/gameContext';
+import container from '../defaults/container';
+import layout from '../defaults/layout';
 
 export default function Home({ navigation }) {
     const gameContext = useContext(GameContext);
@@ -22,8 +22,8 @@ export default function Home({ navigation }) {
 
     return (
         <ImageBackground source={gameContext.mode === 'dark' ? require('../assets/home-bg-dark.webp') : require('../assets/home-bg-light.webp')} resizeMode="cover" style={{backgroundColor: theme.bgColour, flex: 1}}>
-            <View style={containerStyles}>
-                <View style={{...layoutStyles.centerWrapper, ...layoutStyles.flexTwo}}>
+            <View style={container.style}>
+                <View style={{...layout.style.centerWrapper, ...layout.style.flexTwo}}>
                     <Image
                         style={styles.homescreenLogo}
                         source={require('../assets/homescreen-logo.png')}
@@ -33,13 +33,13 @@ export default function Home({ navigation }) {
                         source={gameName}
                     />
                 </View>
-                <View style={{...layoutStyles.centerWrapper, ...layoutStyles.flexOne}}>
+                <View style={{...layout.style.centerWrapper, ...layout.style.flexOne}}>
                     <View style={styles.bestScoreArea}>
                         <Text style={{...styles.best, color: theme.textColour}}>Best: </Text>
                         <Text style={{...styles.bestScore, color: theme.textColour}}>{gameContext.highScore}</Text>
                     </View>
                 </View>
-                <View style={{...layoutStyles.centerWrapper, ...layoutStyles.flexThree}}>
+                <View style={{...layout.style.centerWrapper, ...layout.style.flexThree}}>
                     <ColourButton
                         text="Play"
                         bgColour="green"

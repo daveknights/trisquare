@@ -1,8 +1,8 @@
 import { useEffect, useContext, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import GameContext from '../context/gameContext';
-import colours from "../defaults/colours";
+import { GameContext } from '../context/gameContext';
+import colour from "../defaults/colour";
 
 export default function QuickPlayScore({ score, gameOver, quickPlayWasStarted }) {
     const [currentQPHighScore, setCurrentQPHighScore] = useState('');
@@ -42,22 +42,22 @@ export default function QuickPlayScore({ score, gameOver, quickPlayWasStarted })
 
 const styles = StyleSheet.create({
     quickPlayScoreView: {
-        borderColor: colours.primary,
+        borderColor: colour.style.primary,
         borderRadius: 8,
         borderWidth: 1,
         overflow: 'hidden',
     },
     quickPlayScoreHeading: {
-        backgroundColor: colours.green,
-        borderColor: colours.primary,
+        backgroundColor: colour.style.green,
+        borderColor: colour.style.primary,
         borderBottomWidth: 1,
-        color: colours.primary,
+        color: colour.style.primary,
         textAlign: 'center',
         width: 100,
     },
     quickPlayScore: {
-        backgroundColor: colours.lightBlue,
-        color: colours.primary,
+        backgroundColor: colour.style.lightBlue,
+        color: colour.style.primary,
         fontWeight: 'bold',
         paddingBottom: 5,
         paddingTop: 3,

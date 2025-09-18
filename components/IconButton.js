@@ -1,9 +1,9 @@
 import { StyleSheet, TouchableOpacity, Image } from 'react-native';
-import colours from '../defaults/colours';
+import colour from '../defaults/colour';
 
 export default function IconButton({ path, bgColour, onPress, label, width }) {
     return (
-        <TouchableOpacity style={{...styles.button, backgroundColor: colours[bgColour], width: width}} onPress={onPress}
+        <TouchableOpacity style={{...styles.button, backgroundColor: colour.style[bgColour], width: width}} onPress={onPress}
             accessible={true}
             accessibilityLabel={label}>
             <Image
@@ -16,7 +16,7 @@ export default function IconButton({ path, bgColour, onPress, label, width }) {
 const styles = StyleSheet.create({
     button: {
         alignItems: 'center',
-        borderColor: colours.primary,
+        borderColor: colour.style.primary,
         borderRadius: 15,
         borderWidth: 1,
         paddingBottom: 15,

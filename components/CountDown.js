@@ -1,8 +1,9 @@
-import { useState, useEffect, useRef, useContext } from "react";
+import { useEffect, useRef, useContext } from "react";
 import { Animated, StyleSheet, Text, View } from "react-native";
-import GameContext from '../context/gameContext';
-import colours from "../defaults/colours";
+import { GameContext } from '../context/gameContext';
 import { useAudioPlayer } from 'expo-audio';
+import colour from "../defaults/colour";
+
 const sound  = require('../assets/beep.mp3');
 
 export default function CountDown({ gridSize, number }) {
@@ -53,17 +54,17 @@ const styles = StyleSheet.create({
     },
     countDownBG: {
         alignItems: 'center',
-        backgroundColor: colours.lightBlue,
+        backgroundColor: colour.style.lightBlue,
         borderRadius: 12,
         height: '100%',
         overflow: 'hidden',
         width: '100%',
     },
     text: {
-        backgroundColor: colours.green,
-        borderBottomColor: colours.primary,
+        backgroundColor: colour.style.green,
+        borderBottomColor: colour.style.primary,
         borderBottomWidth: 1,
-        color: colours.primary,
+        color: colour.style.primary,
         fontSize: 20,
         fontWeight: 'bold',
         paddingBottom: 12,
@@ -74,7 +75,7 @@ const styles = StyleSheet.create({
         width: '100%',
     },
     countDownText: {
-        color: colours.primary,
+        color: colour.style.primary,
         fontSize: 70,
         marginTop: 40,
     }

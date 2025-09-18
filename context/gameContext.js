@@ -1,6 +1,6 @@
-import React from "react";
+import { createContext } from "react"
 
-export default scoreContext = React.createContext({
+export const GameContext = createContext({
     mode: '',
     setMode: () => {},
     theme: {},

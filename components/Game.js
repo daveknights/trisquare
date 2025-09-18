@@ -1,6 +1,7 @@
 import { LinearGradient } from 'expo-linear-gradient';
-import { useEffect, useState, useContext, useRef, useLayoutEffect } from 'react';
+import { useEffect, useState, useContext, useRef } from 'react';
 import { StyleSheet, Text, View, Pressable, TouchableOpacity, Dimensions, Animated, ImageBackground } from 'react-native';
+import { useAudioPlayer } from 'expo-audio';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import RewardMessage from './RewardMessage';
 import Combo from './Combo';
@@ -8,11 +9,10 @@ import IconButton from './IconButton';
 import Timer from './Timer';
 import CountDown from './CountDown';
 import QuickPlayScore from './QuickPlayScore';
-import GameContext from '../context/gameContext';
-import containerStyles from '../defaults/containerStyles';
-import layoutStyles from '../defaults/layoutStyles';
-import colours from '../defaults/colours';
-import { useAudioPlayer } from 'expo-audio';
+import { GameContext } from '../context/gameContext';
+import container from '../defaults/container';
+import layout from '../defaults/layout';
+import colour from '../defaults/colour';
 const initialTiles = {'t1':'', 't2':'', 't3':'', 't4':'', 't5':'', 't6':'', 't7':'', 't8':'', 't9':''};
 const tileColours = ['red', 'orange', 'yellow', 'green', 'blue'];
 const combos = {
@@ -90,7 +90,7 @@ export default function Game({ navigation }) {
         }).start();
     }, [score]);
 
-    useLayoutEffect(() => {
+    useEffect(() => {
         grow.setValue(0);
         Animated.timing(grow, {
             toValue: 1,
@@ -99,7 +99,7 @@ export default function Game({ navigation }) {
         }).start();
     }, [newTile]);
 
-    useLayoutEffect(() => {
+    useEffect(() => {
         bonusZoom.setValue(0);
         Animated.timing(bonusZoom, {
             toValue: 1,
@@ -469,8 +469,8 @@ export default function Game({ navigation }) {
     return (
         <ImageBackground source={gameContext.mode === 'dark' ? require('../assets/game-bg-dark.webp') : require('../assets/game-bg-light.webp')} resizeMode="cover" style={{backgroundColor: theme.bgColour, flex: 1}}>
             {showRewardsMessage && <RewardMessage rewards={rewardData} />}
-            <View style={containerStyles}>
-                <View style={{...layoutStyles.spaceBetweenWrapper, ...layoutStyles.flexOne}}>
+            <View style={container.style}>
+                <View style={{...layout.style.spaceBetweenWrapper, ...layout.style.flexOne}}>
                     <View style={styles.scoreWrapper}>
                         {(gameType === 'quickplay' && quickPlayWasStarted) && <QuickPlayScore quickPlayWasStarted={quickPlayWasStarted} score={score} gameOver={gameOver} />}
                         <View style={styles.scoreView}>
@@ -503,7 +503,7 @@ export default function Game({ navigation }) {
                     </View>
                     {(gameType === 'quickplay' && countDownNumber === 0 && !gameOver) && <Timer quickPlayTimerFinished={quickPlayTimerFinished} />}
                 </View>
-                <View style={{...layoutStyles.centerWrapper, ...layoutStyles.flexFour}}>
+                <View style={{...layout.style.centerWrapper, ...layout.style.flexFour}}>
                     {(gameType === 'quickplay' && countDownNumber > 0 && !gameOver) && <CountDown gridSize={gridSize} number={countDownNumber} />}
                     <View style={{...styles.grid, backgroundColor: theme.bgColour}}>
                         {Object.entries(tiles).map(([k, col]) => {
@@ -572,7 +572,7 @@ export default function Game({ navigation }) {
                         })}
                     </View>
                 </View>
-                <View style={{...layoutStyles.startWrapper, ...layoutStyles.flexTwo}}>
+                <View style={{...layout.style.startWrapper, ...layout.style.flexTwo}}>
                     <View style={styles.colourPalette}>
                         {gameOver ? <View style={styles.gameOver}><Text style={{...styles.gameOverText, color: theme.textColour}}>{gameType !== 'quickplay' ? 'Game Over' : isQuickPlayTimerFinished ? `Time's up!` : `The Grid's full`}</Text></View>
                             : tileColours.map(colour => colour !== 'blankColour' && <LinearGradient key={colour} colors={gameContext.theme.tileGrads[colour]}
@@ -665,17 +665,17 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     scoreArea: {
-        backgroundColor: colours.lightBlue,
-        borderColor: colours.primary,
+        backgroundColor: colour.style.lightBlue,
+        borderColor: colour.style.primary,
         borderRadius: 8,
         borderWidth: 1,
         overflow: 'hidden',
     },
     scoreHeading: {
-        backgroundColor: colours.green,
-        borderColor: colours.primary,
+        backgroundColor: colour.style.green,
+        borderColor: colour.style.primary,
         borderBottomWidth: 1,
-        color: colours.primary,
+        color: colour.style.primary,
         fontSize: 20,
         paddingBottom: 5,
         paddingTop: 3,
@@ -683,7 +683,7 @@ const styles = StyleSheet.create({
         width: 100,
     },
     scoreTotal: {
-        color: colours.primary,
+        color: colour.style.primary,
         fontSize: 30,
         fontWeight: 'bold',
         paddingBottom:5,
@@ -694,7 +694,7 @@ const styles = StyleSheet.create({
     bonus: {
         alignItems: 'center',
         alignSelf: 'flex-end',
-        backgroundColor: colours.green,
+        backgroundColor: colour.style.green,
         borderRadius: 15,
         height: 36,
         justifyContent: 'center',
@@ -702,7 +702,7 @@ const styles = StyleSheet.create({
         width: 56,
     },
     bonusText: {
-        color: colours.skyBlue,
+        color: colour.style.skyBlue,
         fontSize: 20,
         letterSpacing: 1,
         lineHeight: 24,
@@ -716,7 +716,7 @@ const styles = StyleSheet.create({
         marginTop: 30,
     },
     button: {
-        borderColor: colours.primary,
+        borderColor: colour.style.primary,
         borderRadius: 15,
         borderWidth: 1,
         paddingBottom: 12,

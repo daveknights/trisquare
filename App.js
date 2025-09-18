@@ -1,23 +1,24 @@
 import { StatusBar } from 'expo-status-bar';
 import { useEffect, useState } from 'react';
 import { View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import GameContext from './context/gameContext';
+import { GameContext } from './context/gameContext';
 import Home from './components/Home';
 import Game from './components/Game';
 import Rewards from './components/Rewards';
 import Instructions from './components/Instructions';
 import Options from './components/Options';
 import ClearData from './components/ClearData';
-import { darkTheme, lightTheme } from './defaults/themes';
+import themes from './defaults/themes';
 
 const Stack = createNativeStackNavigator();
 
 export default function App() {
     const [mode, setMode] = useState('dark');
-    const [theme, setTheme] = useState(darkTheme);
+    const [theme, setTheme] = useState(themes.dark);
     const [plays, setPlays] = useState(0);
     const [highScore, setHighScore] = useState(0);
     const [achievements, setAchievements] = useState({});
@@ -47,7 +48,7 @@ export default function App() {
                 allData.violetUnlocked && setVioletUnlocked(true);
 
                 if (allData.mode) {
-                    allData.mode === 'light' ? setTheme(lightTheme) : setTheme(darkTheme);
+                    allData.mode === 'light' ? setTheme(lightTheme) : setTheme(themes.dark);
 
                     setMode(allData.mode);
                 }
@@ -68,47 +69,49 @@ export default function App() {
     }, []);
 
     return (
-    <View style={{backgroundColor: theme.bgColour, flex: 1}}>
-        <GameContext.Provider value={{mode: mode, setMode: setMode,
-                                    theme: theme, setTheme: setTheme,
-                                    plays: plays,
-                                    setPlays: setPlays,
-                                    highScore: highScore,
-                                    setHighScore: setHighScore,
-                                    violetUnlocked: violetUnlocked,
-                                    setVioletUnlocked: setVioletUnlocked,
-                                    quickPlayHighScore: quickPlayHighScore,
-                                    setQuickPlayHighScore: setQuickPlayHighScore,
-                                    achievements: achievements,
-                                    setAchievements: setAchievements,
-                                    sfx: sfx,
-                                    setSfx: setSfx,
-                                    gameType: gameType,
-                                    setGameType: setGameType}}>
-            <NavigationContainer>
-                <Stack.Navigator>
-                    <Stack.Screen name="Home"
-                        component={Home}
-                        options={{headerShown: false, animation: 'fade'}} />
-                    <Stack.Screen name="Game"
-                        component={Game}
-                        options={{headerShown: false, animation: 'fade'}} />
-                    <Stack.Screen name="Rewards"
-                        component={Rewards}
-                        options={{...headerStyles, animation: 'slide_from_right'}} />
-                    <Stack.Screen name="Options"
-                        component={Options}
-                        options={{headerShown: false, animation: 'fade'}} />
-                    <Stack.Screen name="Instructions"
-                        component={Instructions}
-                        options={{...headerStyles, animation: 'slide_from_right'}} />
-                    <Stack.Screen name="ClearData"
-                        component={ClearData}
-                        options={{title: 'Clear data', ...headerStyles, animation: 'slide_from_right'}} />
-                </Stack.Navigator>
-            </NavigationContainer>
-            <StatusBar style={statusBarColour} />
-        </GameContext.Provider>
-    </View>
+        <SafeAreaView style={{ backgroundColor: theme.bgColour, flex: 1 }}>
+            <View style={{backgroundColor: theme.bgColour, flex: 1}}>
+                <GameContext value={{mode: mode, setMode: setMode,
+                                            theme: theme, setTheme: setTheme,
+                                            plays: plays,
+                                            setPlays: setPlays,
+                                            highScore: highScore,
+                                            setHighScore: setHighScore,
+                                            violetUnlocked: violetUnlocked,
+                                            setVioletUnlocked: setVioletUnlocked,
+                                            quickPlayHighScore: quickPlayHighScore,
+                                            setQuickPlayHighScore: setQuickPlayHighScore,
+                                            achievements: achievements,
+                                            setAchievements: setAchievements,
+                                            sfx: sfx,
+                                            setSfx: setSfx,
+                                            gameType: gameType,
+                                            setGameType: setGameType}}>
+                    <NavigationContainer>
+                        <Stack.Navigator>
+                            <Stack.Screen name="Home"
+                                component={Home}
+                                options={{headerShown: false, animation: 'fade'}} />
+                            <Stack.Screen name="Game"
+                                component={Game}
+                                options={{headerShown: false, animation: 'fade'}} />
+                            <Stack.Screen name="Rewards"
+                                component={Rewards}
+                                options={{...headerStyles, animation: 'slide_from_right'}} />
+                            <Stack.Screen name="Options"
+                                component={Options}
+                                options={{headerShown: false, animation: 'fade'}} />
+                            <Stack.Screen name="Instructions"
+                                component={Instructions}
+                                options={{...headerStyles, animation: 'slide_from_right'}} />
+                            <Stack.Screen name="ClearData"
+                                component={ClearData}
+                                options={{title: 'Clear data', ...headerStyles, animation: 'slide_from_right'}} />
+                        </Stack.Navigator>
+                    </NavigationContainer>
+                    <StatusBar style={statusBarColour} />
+                </GameContext>
+            </View>
+        </SafeAreaView>
     );
 }
