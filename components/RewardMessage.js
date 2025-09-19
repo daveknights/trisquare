@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         flex: 1,
         justifyContent: 'center',
-        paddingTop: 30,
+        paddingTop: 50,
     },
     heading: {
         backgroundColor: colour.style.green,
