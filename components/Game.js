@@ -643,6 +643,10 @@ const styles = StyleSheet.create({
         height: 56,
         position: 'absolute',
         width: 6,
+        top: '50%',
+        left: '50%',
+        marginTop: -28,
+        marginLeft: -3,
     },
     colourPalette: {
         flexDirection: 'row',
@@ -714,15 +718,6 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         gap: 20,
         marginTop: 30,
-    },
-    button: {
-        borderColor: colour.style.primary,
-        borderRadius: 15,
-        borderWidth: 1,
-        paddingBottom: 12,
-        paddingLeft: 50,
-        paddingRight: 50,
-        paddingTop: 12,
     },
     buttonIcon: {
         height: 24,
