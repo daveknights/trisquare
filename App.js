@@ -48,7 +48,7 @@ export default function App() {
                 allData.violetUnlocked && setVioletUnlocked(true);
 
                 if (allData.mode) {
-                    allData.mode === 'light' ? setTheme(lightTheme) : setTheme(themes.dark);
+                    allData.mode === 'light' ? setTheme(themes.light) : setTheme(themes.dark);
 
                     setMode(allData.mode);
                 }

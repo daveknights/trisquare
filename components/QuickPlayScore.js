@@ -24,7 +24,7 @@ export default function QuickPlayScore({ score, gameOver, quickPlayWasStarted })
         }
 
         if (quickPlayWasStarted && gameOver && score > currentQPHighScore) {
-            saveData(score);
+            saveData();
         }
 
         if (!gameOver && score === 0) {

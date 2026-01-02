@@ -49,9 +49,9 @@ export default function Rewards({ navigation }) {
                         {achievements.scores.score200 && <PointsReward text="200" scoreColour="violet" />}
                     </View>}
                     {(Object.keys(achievements).length > 0 && Object.keys(achievements.scores).length > 0 && achievements.scores.score250) && <View style={styles.rewardsRow}>
-                        {achievements.scores.score120 && <PointsReward text="250" scoreColour="bronze" />}
-                        {achievements.scores.score150 && <PointsReward text="300" scoreColour="silver" />}
-                        {achievements.scores.score200 && <PointsReward text="350" scoreColour="gold" />}
+                        {achievements.scores.score250 && <PointsReward text="250" scoreColour="bronze" />}
+                        {achievements.scores.score300 && <PointsReward text="300" scoreColour="silver" />}
+                        {achievements.scores.score350 && <PointsReward text="350" scoreColour="gold" />}
                     </View>}
                     {(Object.keys(achievements).length > 0 && Object.keys(achievements.grids).length > 0) && <Text style={{...text.style.subHeading}}>Grids cleared in a game</Text>}
                     {(Object.keys(achievements).length > 0 && Object.keys(achievements.grids).length > 0) && <View style={styles.rewardsRow}>

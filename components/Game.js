@@ -645,8 +645,6 @@ const styles = StyleSheet.create({
         width: 6,
         top: '50%',
         left: '50%',
-        marginTop: -28,
-        marginLeft: -3,
     },
     colourPalette: {
         flexDirection: 'row',
