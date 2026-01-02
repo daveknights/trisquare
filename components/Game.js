@@ -524,10 +524,10 @@ export default function Game({ navigation }) {
                             }
 
                             if (col === 'blocked') {
-                                blocked = <>
-                                            <View style={{...styles.blocked, backgroundColor: theme.bgColour, transform: [{rotate: '45deg'}]}} />
-                                            <View style={{...styles.blocked, backgroundColor: theme.bgColour, transform: [{rotate: '-45deg'}]}} />
-                                        </>;
+                                blocked = <View style={styles.blockedContainer}>
+                                            <View style={{...styles.blocked, backgroundColor: theme.bgColour, transform: [{translateX: -3}, {translateY: -28}, {rotate: '45deg'}]}} />
+                                            <View style={{...styles.blocked, backgroundColor: theme.bgColour, transform: [{translateX: -3}, {translateY: -28}, {rotate: '-45deg'}]}} />
+                                        </View>;
                                 tilePress = null;
                             } else if (col) {
                                 tileColour = gameContext.theme.tileGrads[col];
@@ -638,6 +638,15 @@ const styles = StyleSheet.create({
         overflow: 'hidden',
         position: 'relative',
         width: tileSize,
+    },
+    blockedContainer: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        width: '100%',
+        height: '100%',
+        justifyContent: 'center',
+        alignItems: 'center',
     },
     blocked: {
         height: 56,
