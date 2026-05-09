@@ -1,4 +1,5 @@
 import { StyleSheet, Text, View, TouchableOpacity, ScrollView } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 import { useContext } from 'react';
 import PointsReward from './rewards/PointsReward';
 import GridsReward from './rewards/GridsReward';
@@ -6,6 +7,7 @@ import MatchesReward from './rewards/MatchesReward';
 import { GameContext } from '../context/gameContext';
 import container from '../defaults/container';
 import text from '../defaults/text';
+import themes from '../defaults/themes';
 
 export default function Rewards({ navigation }) {
     const gameContext = useContext(GameContext);
@@ -51,8 +53,13 @@ export default function Rewards({ navigation }) {
                         {achievements.grids.grids3 && <GridsReward text="3" scoreColour="silver" />}
                         {achievements.grids.grids6 && <GridsReward text="6" scoreColour="gold" />}
                     </View>}
-                    {(Object.keys(achievements).length > 0 && achievements.tShape) && <Text style={{...text.style.subHeading}}>Special achievements</Text>}
-                    {(Object.keys(achievements).length > 0 && achievements.tShape) && <View style={styles.rewardsRow}>
+                    {(Object.keys(achievements).length > 0 && (achievements.violetUnlocked || achievements.tShape)) && <Text style={{...text.style.subHeading}}>Special achievements</Text>}
+                    {(Object.keys(achievements).length > 0 && (achievements.violetUnlocked || achievements.tShape)) && <View style={styles.rewardsRow}>
+                        {achievements.violetUnlocked && <View style={styles.badge}>
+                            <LinearGradient colors={theme.tileGrads.violet} style={styles.violetTile}>
+                                <Text style={{color: themes.dark.bgColour, ...styles.violetText}}>Violet</Text>
+                            </LinearGradient>
+                        </View>}
                         {achievements.tShape && <PointsReward text="T" scoreColour="gold" />}
                     </View>}
                     <TouchableOpacity style={styles.link} onPress={handleLinkToClearData}>
@@ -71,6 +78,24 @@ const styles = StyleSheet.create({
         marginBottom: 30,
         marginTop: 10,
         width: '100%',
+    },
+    badge: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        height: 80,
+        width: 80,
+    },
+    violetTile: {
+        alignItems: 'center',
+        borderRadius: 4,
+        display: 'flex',
+        height: 80,
+        justifyContent: 'center',
+        width: 80,
+    },
+    violetText: {
+        fontSize: 16,
+        fontWeight: 'bold',
     },
     link: {
         paddingBottom: 11,
