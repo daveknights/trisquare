@@ -53,17 +53,21 @@ export default function Rewards({ navigation }) {
                         {achievements.scores.score300 && <PointsReward text="300" scoreColour="silver" />}
                         {achievements.scores.score350 && <PointsReward text="350" scoreColour="gold" />}
                     </View>}
+                    {(Object.keys(achievements).length > 0 && Object.keys(achievements.matches).length > 0) && <Text style={{...text.style.subHeading}}>Consecutive matches</Text>}
+                    {(Object.keys(achievements).length > 0 && Object.keys(achievements.matches).length > 0) && <View style={styles.rewardsRow}>
+                        {achievements.matches.matches1 && <MatchesReward text="1" scoreColour="bronze" />}
+                        {achievements.matches.matches3 && <MatchesReward text="3" scoreColour="silver" />}
+                        {achievements.matches.matches5 && <MatchesReward text="5" scoreColour="gold" />}
+                    </View>}
                     {(Object.keys(achievements).length > 0 && Object.keys(achievements.grids).length > 0) && <Text style={{...text.style.subHeading}}>Grids cleared in a game</Text>}
                     {(Object.keys(achievements).length > 0 && Object.keys(achievements.grids).length > 0) && <View style={styles.rewardsRow}>
                         {achievements.grids.grids1 && <GridsReward text="1" scoreColour="bronze" />}
                         {achievements.grids.grids3 && <GridsReward text="3" scoreColour="silver" />}
                         {achievements.grids.grids6 && <GridsReward text="6" scoreColour="gold" />}
                     </View>}
-                    {(Object.keys(achievements).length > 0 && Object.keys(achievements.matches).length > 0) && <Text style={{...text.style.subHeading}}>Consecutive matches</Text>}
-                    {(Object.keys(achievements).length > 0 && Object.keys(achievements.matches).length > 0) && <View style={styles.rewardsRow}>
-                        {achievements.matches.matches1 && <MatchesReward text="1" scoreColour="bronze" />}
-                        {achievements.matches.matches3 && <MatchesReward text="3" scoreColour="silver" />}
-                        {achievements.matches.matches5 && <MatchesReward text="5" scoreColour="gold" />}
+                    {(Object.keys(achievements).length > 0 && achievements.tShape) && <Text style={{...text.style.subHeading}}>Special achievements</Text>}
+                    {(Object.keys(achievements).length > 0 && achievements.tShape) && <View style={styles.rewardsRow}>
+                        {achievements.tShape && <PointsReward text="T" scoreColour="gold" />}
                     </View>}
                     <TouchableOpacity style={styles.link} onPress={handleLinkToClearData}>
                         <Text style={{...styles.linkText, color: gameContext.theme.linkColour}}>Clear all game data</Text>

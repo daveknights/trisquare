@@ -46,6 +46,14 @@ export default function RewardMessage({ rewards }) {
                                             <Text style={styles.rewardType}>Consecutive matches</Text>
                                     </View>;
                             }
+                            if (key === 'tShape') {
+                                return <View key={key} style={styles.reward}>
+                                            <View style={styles.badge}>
+                                                <PointsReward text={data.text} scoreColour={data.colour} />
+                                            </View>
+                                            <Text style={styles.rewardType}>T-Shape matched</Text>
+                                    </View>;
+                            }
                             if (key === 'violet') {
                                 return <View key={key} style={styles.reward}>
                                             <View style={styles.badge}>

@@ -3,6 +3,7 @@ import colour from "../../defaults/colour";
 
 export default function PointsReward({ text, scoreColour }) {
     const elite = ['bronze', 'silver', 'gold'];
+    const tStyle = text === 'T' ? {color: colour.style[scoreColour].borderColor, fontSize: 36} : {};
     let bgColour = '#fff';
     let borColour = colour.style[scoreColour];
 
@@ -13,7 +14,7 @@ export default function PointsReward({ text, scoreColour }) {
 
     return(
         <View style={{...styles.pointsReward, ...{borderColor: borColour, backgroundColor: bgColour}}}>
-            <Text style={styles.pointsRewardText}>{text}+</Text>
+            <Text style={{...styles.pointsRewardText, ...tStyle}}>{text}{text !== 'T' && '+'}</Text>
         </View>
     );
 };
