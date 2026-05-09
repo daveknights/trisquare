@@ -11,7 +11,8 @@ export default {
             'green': ['#abffb1', '#73ff7b'],
             'blue': ['#abd3ff', '#73afff'],
             'violet': ['#e6abff', '#cf73ff'],
-            'blankColour': ['#0e2444', '#0e2444']
+            'blankColour': ['#0e2444', '#0e2444'],
+            'gold': ['#ffee99', '#d4af37']
         },
     },
     light: {
@@ -26,7 +27,8 @@ export default {
             'green': ['#79f27f', '#50e558'],
             'blue': ['#73afff', '#5091e5'],
             'violet': ['#cf73ff', '#b150e5'],
-            'blankColour': ['#0e2444', '#0e2444']
+            'blankColour': ['#0e2444', '#0e2444'],
+            'gold': ['#ffee99', '#d4af37']
         },
     }
 };

@@ -15,6 +15,7 @@ import layout from '../defaults/layout';
 import colour from '../defaults/colour';
 const initialTiles = {'t1':'', 't2':'', 't3':'', 't4':'', 't5':'', 't6':'', 't7':'', 't8':'', 't9':''};
 const tileColours = ['red', 'orange', 'yellow', 'green', 'blue'];
+const tShape = ['t1', 't2', 't3', 't5', 't8'];
 const combos = {
     t1: [[2,3], [2,4], [2,5], [4,5], [4,7]],
     t2: [[1,3], [1,4], [1,5], [3,5], [3,6], [4,5], [5,6], [5,8]],
@@ -30,6 +31,7 @@ const gridRemainder = Math.floor((Dimensions.get('window').width - 84)) % 3;
 const tileSize = Math.floor(((Dimensions.get('window').width - 84) - gridRemainder) / 3);
 const gridSize = (tileSize * 3) + 6;
 const matchSound = require('../assets/match.mp3');
+const tMatchSound = require('../assets/tmatch.mp3');
 const rewardSound = require('../assets/reward.mp3');
 
 const shuffle = arrayToShuffle => {
@@ -65,20 +67,54 @@ export default function Game({ navigation }) {
     const [countDownNumber, setCountDownNumber] = useState(3);
     const [quickPlayWasStarted, setQuickPlayWasStarted] = useState(false);
     const [isQuickPlayTimerFinished, setIsQuickPlayTimerFinished] = useState(false);
+    const [highlightedTiles, setHighlightedTiles] = useState([]);
     const gameContext = useContext(GameContext);
     const theme = gameContext.theme;
     const gameType = gameContext.gameType;
     const grow = useRef(new Animated.Value(0)).current;
     const scoreZoom = useRef(new Animated.Value(0)).current;
     const bonusZoom = useRef(new Animated.Value(0)).current;
+    const highlightScales = useRef({
+        t1: new Animated.Value(1),
+        t2: new Animated.Value(1),
+        t3: new Animated.Value(1),
+        t5: new Animated.Value(1),
+        t8: new Animated.Value(1),
+    }).current;
+    const highlightOpacities = useRef({
+        t1: new Animated.Value(1),
+        t2: new Animated.Value(1),
+        t3: new Animated.Value(1),
+        t5: new Animated.Value(1),
+        t8: new Animated.Value(1),
+    }).current;
     const matchPlayer = useAudioPlayer(matchSound);
+    const tMatchPlayer = useAudioPlayer(tMatchSound);
     const rewardPlayer = useAudioPlayer(rewardSound);
 
     const playSound = type => {
-        const player = type === 'match' ? matchPlayer : rewardPlayer;
+        try {
+            let player;
 
-        player.seekTo(0);
-        player.play();
+            switch (type) {
+                case 'match':
+                    player = matchPlayer;
+                    break;
+                case 'tmatch':
+                    player = tMatchPlayer;
+                    break;
+                case 'reward':
+                    player = rewardPlayer;
+                    break;
+            }
+
+            if (player) {
+                player.seekTo(0);
+                player.play();
+            }
+        } catch (error) {
+            // Silent fail - audio player may not be ready
+        }
     }
 
     useEffect(() => {
@@ -107,6 +143,37 @@ export default function Game({ navigation }) {
             useNativeDriver: true,
         }).start();
     }, [showBonus]);
+
+    useEffect(() => {
+        if (highlightedTiles.length > 0) {
+            const fullSequence = tShape.reduce((acc, tile) => {
+                return acc.concat([
+                    Animated.timing(highlightScales[tile], {
+                        toValue: 1.15,
+                        duration: 20,
+                        useNativeDriver: true,
+                    }),
+                    Animated.timing(highlightScales[tile], {
+                        toValue: 1,
+                        duration: 10,
+                        useNativeDriver: true,
+                    }),
+                    Animated.timing(highlightOpacities[tile], {
+                        toValue: 0,
+                        duration: 20,
+                        useNativeDriver: true,
+                    })
+                ]);
+            }, []);
+
+            Animated.sequence(fullSequence).start();
+        } else {
+            Object.keys(highlightScales).forEach(key => {
+                highlightScales[key].setValue(1);
+                highlightOpacities[key].setValue(1);
+            });
+        }
+    }, [highlightedTiles]);
 
     useEffect(() => {
         const countDown = setInterval(() => {
@@ -192,6 +259,12 @@ export default function Game({ navigation }) {
                     !newRewardData.grids && (newRewardData.grids = {text: 1, colour: 'bronze'});
                     newReward = true;
                     break;
+            }
+
+            if (!updatedData.achievements.tShape) {
+                updatedData.achievements.tShape = true;
+                newRewardData.tShape = {text: 'T', colour: 'gold'};
+                newReward = true;
             }
 
             switch (true) {
@@ -371,6 +444,43 @@ export default function Game({ navigation }) {
         if (selectedColour && selectedTile) {
             let comboMatch = false;
 
+            // Check for T shape match
+            const tShapeMatch = tShape.every(num => tiles[num] === selectedColour);
+
+            if (tShapeMatch) {
+                gameContext.sfx && playSound('tmatch');
+
+                // Highlight the T shape tiles in gold
+                setHighlightedTiles(tShape);
+
+                timer = setTimeout(() => {
+                    setHighlightedTiles([]);
+                    setSelectedTile(null);
+                    setSelectedColour('');
+                    setEmptyTiles([...emptyTiles, ...tShape]);
+                    setTiles(prevTiles => {
+                        const updatedTiles = {...prevTiles};
+
+                        tShape.forEach(num => {
+                            updatedTiles[num] = '';
+                        });
+
+                        return updatedTiles;
+                    });
+                    !gameOver && setScore(score => score + 10);
+                    bonusZoom.setValue(0);
+                    setBonusPoints(10);
+                    setShowBonus(true);
+                    !tileAdded && setCanAddTile(true);
+                    setGridFull(false);
+                    setConsecutiveMatches(prev => prev + 1);
+                    clearTimeout(timer);
+                }, 600);
+
+                return;
+            }
+
+            // Check for other combos
             for (const combo of combos[selectedTile]) {
                 const selected = selectedTile;
                 const scoreIncrement = selectedColour === 'violet' ? 2 : 1;
@@ -513,6 +623,7 @@ export default function Game({ navigation }) {
                             let blocked = null;
                             let selected = null;
                             let growStyles = null;
+                            let isHighlighted = highlightedTiles.includes(k);
 
                             if (k === newTile) {
                                 growStyles = {
@@ -530,7 +641,7 @@ export default function Game({ navigation }) {
                                         </View>;
                                 tilePress = null;
                             } else if (col) {
-                                tileColour = gameContext.theme.tileGrads[col];
+                                tileColour = isHighlighted ? gameContext.theme.tileGrads['gold'] : gameContext.theme.tileGrads[col];
                                 tilePress = null;
                             }
 
@@ -564,11 +675,11 @@ export default function Game({ navigation }) {
                                                                     style={{...styles.tile, backgroundColor: gameContext.theme.gridColour, ...borderRadius, ...selected}}>
                                                                     {blocked}
                                                                 </Pressable> :
-                                                                <View key={k} style={{...styles.tile, ...borderRadius, backgroundColor: gameContext.theme.gridColour}}>
-                                                                    <Animated.View style={growStyles}>
+                                                                <Animated.View key={k} style={{...styles.tile, ...borderRadius, backgroundColor: gameContext.theme.gridColour, transform: isHighlighted ? [{scale: highlightScales[k]}] : []}}>
+                                                                    <Animated.View style={{...growStyles, opacity: isHighlighted ? highlightOpacities[k] : 1}}>
                                                                         <LinearGradient colors={tileColour} style={styles.tile} />
                                                                     </Animated.View>
-                                                                </View>
+                                                                </Animated.View>
                         })}
                     </View>
                 </View>
