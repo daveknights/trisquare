@@ -1,7 +1,6 @@
-import { BackHandler, StyleSheet, Text, TouchableOpacity, View, Image, ScrollView, Dimensions } from 'react-native';
+import { BackHandler, StyleSheet, Text, TouchableOpacity, View, Image, ScrollView } from 'react-native';
 import { useContext, useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useHeaderHeight } from '@react-navigation/elements';
 import { useAudioPlayer } from 'expo-audio';
 import { GameContext } from '../context/gameContext';
 import ColourButton from './ColourButton';
@@ -12,13 +11,9 @@ import colour from '../defaults/colour';
 import layout from '../defaults/layout';
 import themes from '../defaults/themes';
 const sound = require('../assets/reward.mp3');
-const { height } = Dimensions.get('window');
 
 export default function Options({ navigation }) {
     const [isDarkMode, setIsDarkMode] = useState(null);
-    const [contentHeight, setContentHeight] = useState(0);
-    const [scrollEnabled, setScrollEnabled] = useState(false);
-    const headerHeight = useHeaderHeight();
     const gameContext = useContext(GameContext);
     const theme = gameContext.theme;
     const violetUnlocked = gameContext.violetUnlocked;
@@ -38,14 +33,6 @@ export default function Options({ navigation }) {
         player.seekTo(0);
         player.play();
     }
-
-    const onContentSizeChange = (contentWidth, contentHeight) => {
-        setContentHeight(contentHeight);
-    };
-
-    useEffect(() => {
-        (!scrollEnabled && contentHeight > (height - headerHeight)) && setScrollEnabled(true);
-    }, [contentHeight]);
 
     useEffect(() => {
         gameContext.mode === 'dark' ? setIsDarkMode(true) : setIsDarkMode(false);
@@ -95,8 +82,8 @@ export default function Options({ navigation }) {
     text.style.text.color = theme.textColour;
 
     return (
-        <View style={{...container.style, backgroundColor: theme.bgColour, paddingBottom: 48, paddingTop: 24}}>
-            <ScrollView scrollEnabled={scrollEnabled} onContentSizeChange={onContentSizeChange} style={{width: '100%'}}>
+        <View style={{...container.style, backgroundColor: theme.bgColour, paddingBottom: 30, paddingTop: 24}}>
+            <ScrollView style={{width: '100%'}}>
                 <View style={{...layout.style.centerWrapper}}>
                     <Text style={{...text.style.heading}}>Game options</Text>
                     <Text style={{...text.style.subHeading, color: theme.textColour}}>Mode</Text>

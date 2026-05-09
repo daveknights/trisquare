@@ -1,6 +1,5 @@
-import { StyleSheet, Text, View, TouchableOpacity, Dimensions, ScrollView } from 'react-native';
-import { useHeaderHeight } from '@react-navigation/elements';
-import { useState, useContext, useEffect } from 'react';
+import { StyleSheet, Text, View, TouchableOpacity, ScrollView } from 'react-native';
+import { useContext } from 'react';
 import PointsReward from './rewards/PointsReward';
 import GridsReward from './rewards/GridsReward';
 import MatchesReward from './rewards/MatchesReward';
@@ -8,23 +7,10 @@ import { GameContext } from '../context/gameContext';
 import container from '../defaults/container';
 import text from '../defaults/text';
 
-const { height } = Dimensions.get('window');
-
 export default function Rewards({ navigation }) {
-    const [contentHeight, setContentHeight] = useState(0);
-    const [scrollEnabled, setScrollEnabled] = useState(false);
-    const headerHeight = useHeaderHeight();
     const gameContext = useContext(GameContext);
     const theme = gameContext.theme;
     const achievements = gameContext.achievements;
-
-    const onContentSizeChange = (contentWidth, contentHeight) => {
-        setContentHeight(contentHeight);
-    };
-
-    useEffect(() => {
-        (!scrollEnabled && contentHeight > (height - headerHeight)) && setScrollEnabled(true);
-    }, [contentHeight]);
 
     text.style.heading.color = theme.textColour;
     text.style.subHeading.color = theme.textColour;
@@ -33,8 +19,8 @@ export default function Rewards({ navigation }) {
     const handleLinkToClearData = () => navigation.navigate('ClearData');
 
     return (
-            <View style={{...container.style, backgroundColor: theme.bgColour, paddingBottom: 48, paddingTop: 24}}>
-                <ScrollView scrollEnabled={scrollEnabled} onContentSizeChange={onContentSizeChange} style={{width: '100%'}}>
+            <View style={{...container.style, backgroundColor: theme.bgColour, paddingBottom: 30, paddingTop: 24}}>
+                <ScrollView style={{width: '100%'}}>
                     <Text style={{...text.style.heading}}>Your Achievements</Text>
                     {!Object.keys(achievements).length > 0 && <Text style={{...text.style.text}}>All your achievement rewards will show here.</Text>}
                     {(Object.keys(achievements).length > 0 && Object.keys(achievements.scores).length > 0) && <Text style={{...text.style.subHeading, alignSelf: 'center'}}>Points scored in a game</Text>}
