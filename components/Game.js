@@ -68,6 +68,7 @@ export default function Game({ navigation }) {
     const [quickPlayWasStarted, setQuickPlayWasStarted] = useState(false);
     const [isQuickPlayTimerFinished, setIsQuickPlayTimerFinished] = useState(false);
     const [highlightedTiles, setHighlightedTiles] = useState([]);
+    const [tShapeMatched, setTShapeMatched] = useState(false);
     const gameContext = useContext(GameContext);
     const theme = gameContext.theme;
     const gameType = gameContext.gameType;
@@ -194,18 +195,18 @@ export default function Game({ navigation }) {
             updatedData.plays = gameContext.plays + 1;
             gameContext.setPlays(gameContext.plays + 1);
 
-            if (score >= 100 && !updatedData.violetUnlocked) {
-                updatedData.violetUnlocked = true;
-                newRewardData.violet = true;
-                gameContext.setVioletUnlocked(true);
-            }
-
             if(!updatedData.achievements) {
                 updatedData.achievements = {
                     scores: {},
                     grids: {},
                     matches: {}
                 };
+            }
+
+            if (score >= 100 && !updatedData.achievements.violetUnlocked) {
+                updatedData.achievements.violetUnlocked = true;
+                newRewardData.violet = true;
+                gameContext.setVioletUnlocked(true);
             }
 
             if (score > gameContext.highScore) {
@@ -261,7 +262,7 @@ export default function Game({ navigation }) {
                     break;
             }
 
-            if (!updatedData.achievements.tShape) {
+            if (!updatedData.achievements.tShape && tShapeMatched) {
                 updatedData.achievements.tShape = true;
                 newRewardData.tShape = {text: 'T', colour: 'gold'};
                 newReward = true;
@@ -328,6 +329,7 @@ export default function Game({ navigation }) {
             setGridsCleared(0);
             setGameOver(false);
             setShowRewardsMessage(false);
+            setTShapeMatched(false);
 
             if(gameType === 'quickplay') {
                 setQuickPlayWasStarted(true);
@@ -449,6 +451,7 @@ export default function Game({ navigation }) {
 
             if (tShapeMatch) {
                 gameContext.sfx && playSound('tmatch');
+                setTShapeMatched(true);
 
                 // Highlight the T shape tiles in gold
                 setHighlightedTiles(tShape);

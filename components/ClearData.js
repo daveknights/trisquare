@@ -23,6 +23,7 @@ export default function ClearData({ navigation }) {
             gameContext.setAchievements({});
             gameContext.setGameType('blue');
             gameContext.setVioletUnlocked(false);
+            gameContext.setTShapeMatch(false);
         }
     }, [dataCleared]);
 

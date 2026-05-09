@@ -23,6 +23,7 @@ export default function App() {
     const [highScore, setHighScore] = useState(0);
     const [achievements, setAchievements] = useState({});
     const [violetUnlocked, setVioletUnlocked] = useState(false);
+    const [tShapeMatch, setTShapeMatch] = useState(false);
     const [quickPlayHighScore, setQuickPlayHighScore] = useState(0);
     const [sfx, setSfx] = useState(true);
     const [gameType, setGameType] = useState('blue');
@@ -79,6 +80,8 @@ export default function App() {
                                             setHighScore: setHighScore,
                                             violetUnlocked: violetUnlocked,
                                             setVioletUnlocked: setVioletUnlocked,
+                                            tShapeMatch: tShapeMatch,
+                                            setTShapeMatch: setTShapeMatch,
                                             quickPlayHighScore: quickPlayHighScore,
                                             setQuickPlayHighScore: setQuickPlayHighScore,
                                             achievements: achievements,

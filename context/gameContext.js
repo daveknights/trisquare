@@ -11,6 +11,8 @@ export const GameContext = createContext({
     setHighScore: () => {},
     violetUnlocked: false,
     setVioletUnlocked: () => {},
+    tShapeMatch: false,
+    setTShapeMatch: () => {},
     quickPlayHighScore: 0,
     setQuickPlayHighScore: () => {},
     achievements: {},
