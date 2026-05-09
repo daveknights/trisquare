@@ -49,7 +49,7 @@ export default function Instructions() {
                     </View>
                 </View>
                 <Text style={{...text.style.text}}>A new tile is added to the grid and the blocked square changes place after every turn.</Text>
-                <Text style={{...text.style.text}}>Get bonus points for consecutive pattern matches and clearing the grid.</Text>
+                <Text style={{...text.style.text}}>Get bonus points for consecutive pattern matches, clearing the grid and matching T-shapes.</Text>
                 <Text style={{...text.style.text}}>The game ends when you can no longer make a shape of 3 matching tiles.</Text>
             </ScrollView>
         </View>
